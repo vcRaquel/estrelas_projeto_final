@@ -109,4 +109,14 @@ public class AutorControllerTest {
         Mockito.verify(autorService, Mockito.times(1)).deletarAutor(Mockito.anyInt());
     }
 
+    @Test //TDD
+    public void testarDeletarAutorNaoEncontrado() throws Exception {
+        Mockito.doThrow(AutorNaoEncontradoException.class).when(autorService).deletarAutor(Mockito.anyInt());
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/autores/"+ autor.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
+
+    }
+
 }
