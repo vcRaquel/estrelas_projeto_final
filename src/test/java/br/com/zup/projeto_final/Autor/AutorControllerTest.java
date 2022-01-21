@@ -32,5 +32,18 @@ public class AutorControllerTest {
     private Autor autor;
     private AutorDTO autorDTO;
 
+    @BeforeEach
+    public void setup(){
+        autor = new Autor();
+        autor.setNome("Clarice Lispector");
+        autor.setId(1);
+
+        autorDTO = new AutorDTO();
+        autorDTO.setNome("Clarice Lispector");
+
+
+        objectMapper = new ObjectMapper();
+    }
+
 
 }
