@@ -58,6 +58,17 @@ public class AutorControllerTest {
         AutorDTO autorResposta = objectMapper.readValue(jsonResposta, AutorDTO.class);
     }
 
+    @Test //TDD
+    public void testarCadastroDeAutorValidacaoNome() throws Exception{
+        autorDTO.setNome("");
+        Mockito.when((autorService.salvarAutor(Mockito.any(Autor.class)))).thenReturn(autor);
+        String json = objectMapper.writeValueAsString(autorDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/autores")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+    }
+
     @Test
     public void testarExibicaoDeAutores() throws Exception{
         Mockito.when(autorService.buscarAutores()).thenReturn(Arrays.asList(autor));
