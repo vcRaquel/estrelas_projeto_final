@@ -28,5 +28,19 @@ public class AutorController {
         return autorDTO;
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<AutorDTO> exibirAutores(){
+        List<AutorDTO> autoresDTO = new ArrayList<>();
+
+        for (Autor autor: autorService.buscarAutores()){
+            AutorDTO autorDTO = new AutorDTO(autor.getNome());
+            autoresDTO.add(autorDTO);
+        }
+
+        return autoresDTO;
+    }
+
+
 
 }
