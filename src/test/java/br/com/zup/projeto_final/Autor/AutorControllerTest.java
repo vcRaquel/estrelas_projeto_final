@@ -58,5 +58,20 @@ public class AutorControllerTest {
         AutorDTO autorResposta = objectMapper.readValue(jsonResposta, AutorDTO.class);
     }
 
+    @Test
+    public void testarExibicaoDeAutores() throws Exception{
+        Mockito.when(autorService.buscarAutores()).thenReturn(Arrays.asList(autor));
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/autores")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        List<AutorDTO> autores = objectMapper.readValue(jsonResposta, new TypeReference<List<AutorDTO>>()
+        {});
+    }
+
+
 
 }
