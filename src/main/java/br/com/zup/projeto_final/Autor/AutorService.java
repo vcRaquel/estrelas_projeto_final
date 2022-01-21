@@ -21,5 +21,19 @@ public class AutorService {
         return (List<Autor>)autores;
     }
 
+    public Autor atualizarAutor(int id, Autor autor){
+        Optional<Autor> autorOptional = autorRepository.findById(id);
+
+        if (autorOptional.isEmpty()){
+            throw new AutorNaoEncontradoException("Autor não cadastrado, por gentileza efetue o cadastro primeiro.");
+
+        }
+        Autor autorParaAtualizar = autorOptional.get();
+        //regra do que pode ser atualizado no Autor
+
+        autorRepository.save(autorParaAtualizar);
+        return autorParaAtualizar;
+    }
+
 
 }
