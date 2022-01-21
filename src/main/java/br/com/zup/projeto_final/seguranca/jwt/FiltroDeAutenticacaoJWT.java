@@ -1,5 +1,6 @@
 package br.com.zup.projeto_final.seguranca.jwt;
 
+import br.com.zup.projeto_final.Usuario.LoginDTO;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.seguranca.UsuarioLogado;
 import br.com.zup.projeto_final.seguranca.jwt.exceptions.AcessoNegadoException;
@@ -32,7 +33,7 @@ public class FiltroDeAutenticacaoJWT extends UsernamePasswordAuthenticationFilte
         ObjectMapper objectMapper = new ObjectMapper();
 
         try{
-            Usuario login =  objectMapper.readValue(request.getInputStream(), Usuario.class);
+            LoginDTO login =  objectMapper.readValue(request.getInputStream(), LoginDTO.class);
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     login.getEmail(), login.getSenha(), new ArrayList<>()
