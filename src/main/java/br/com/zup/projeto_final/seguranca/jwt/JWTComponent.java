@@ -4,6 +4,7 @@ import br.com.zup.projeto_final.seguranca.jwt.exceptions.TokenInvalidoException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -11,8 +12,10 @@ import java.util.Date;
 
 @Component
 public class JWTComponent {
-    private final String segredo = "teste";
-    private final Long milissegundo = 600000L;
+    @Value("${jwt.segredo}")
+    private String segredo;
+    @Value("${jwt.milissegundos}")
+    private Long milissegundo;
 
     public String gerarToken(String username, String id) {
         Date vencimento = new Date(System.currentTimeMillis() + milissegundo);
