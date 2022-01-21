@@ -41,6 +41,13 @@ public class AutorController {
         return autoresDTO;
     }
 
+    @PutMapping(path = {"/{id}"})
+    @ResponseStatus(HttpStatus.OK)
+    public AutorDTO atualizarAutor (@PathVariable int id, @RequestBody AutorDTO autorDTO){
+        Autor autor = autorService.atualizarAutor(id, modelMapper.map(autorDTO, Autor.class));
+        return autorDTO;
+    }
+
 
 
 }
