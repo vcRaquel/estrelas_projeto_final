@@ -72,6 +72,20 @@ public class AutorControllerTest {
         {});
     }
 
+    @Test
+    public void testarAtualizarAutor() throws Exception {
+        Mockito.when(autorService.atualizarAutor(Mockito.anyInt(),Mockito.any(Autor.class))).thenReturn(autor);
+        String json = objectMapper.writeValueAsString(autorDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/autores/1")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        AutorDTO autorResposta = objectMapper.readValue(jsonResposta, AutorDTO.class);
+
+    }
+
 
 
 }
