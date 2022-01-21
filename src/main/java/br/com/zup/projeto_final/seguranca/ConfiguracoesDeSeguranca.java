@@ -48,5 +48,10 @@ public class ConfiguracoesDeSeguranca extends WebSecurityConfigurerAdapter {
         cors.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
         return cors;
     }
+
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 }
 
