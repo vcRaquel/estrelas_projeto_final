@@ -35,5 +35,8 @@ public class AutorService {
         return autorParaAtualizar;
     }
 
+    public void deletarAutor(int id){
+        autorRepository.deleteById(id);
+    }
 
 }
