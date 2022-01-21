@@ -1,5 +1,6 @@
 package br.com.zup.projeto_final.seguranca.jwt;
 
+import br.com.zup.projeto_final.seguranca.jwt.exceptions.TokenInvalidoException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,6 +30,20 @@ public class JWTComponent {
             return claims;
         } catch (Exception e) {
             throw new TokenInvalidoException();
+        }
+    }
+
+    public boolean tokenValido(String token) {
+        try {
+            Claims claims = pegarClaims(token);
+            Date dataAtual = new Date(System.currentTimeMillis());
+
+            String username = claims.getSubject();
+            Date vencimentoToken = claims.getExpiration();
+
+            return username != null && vencimentoToken != null && dataAtual.before(vencimentoToken);
+        } catch (TokenInvalidoException e) {
+            return false;
         }
     }
 
