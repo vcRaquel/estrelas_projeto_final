@@ -9,4 +9,8 @@ public class AutorDTO {
     public AutorDTO(String nome) {
         this.nome = nome;
     }
+
+    public AutorDTO() {
+
+    }
 }
