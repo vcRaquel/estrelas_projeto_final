@@ -45,5 +45,18 @@ public class AutorControllerTest {
         objectMapper = new ObjectMapper();
     }
 
+    @Test
+    public void testarCadastroDeAutor() throws Exception{
+        Mockito.when(autorService.salvarAutor(Mockito.any(Autor.class))).thenReturn(autor);
+        String json = objectMapper.writeValueAsString(autorDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/autores")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect((MockMvcResultMatchers.status().is(201)));
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        AutorDTO autorResposta = objectMapper.readValue(jsonResposta, AutorDTO.class);
+    }
+
 
 }
