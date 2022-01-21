@@ -20,6 +20,27 @@ public class ConfiguracoesDeSeguranca extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    private static final String[] ENDPOINT_POST_PUBLICO = {
+            "/livros",
+            "/usuarios"
+
+    };
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.cors().configurationSource(configurarCORS());
+
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, ENDPOINT_POST_PUBLICO)
+                .permitAll()
+                .anyRequest()
+                .authenticated();
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+    }
 
     @Bean
     CorsConfigurationSource configurarCORS() {
