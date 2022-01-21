@@ -16,4 +16,10 @@ public class AutorService {
         autorRepository.save(autor);
     }
 
+    public List<Autor> buscarAutores(){
+        Iterable<Autor> autores = autorRepository.findAll();
+        return (List<Autor>)autores;
+    }
+
+
 }
