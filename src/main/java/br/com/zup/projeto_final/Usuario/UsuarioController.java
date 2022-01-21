@@ -1,5 +1,7 @@
 package br.com.zup.projeto_final.Usuario;
 
+import br.com.zup.projeto_final.Usuario.Usuario;
+import br.com.zup.projeto_final.Usuario.UsuarioService;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import org.modelmapper.ModelMapper;
@@ -56,5 +58,6 @@ public class UsuarioController {
     public void deletarUsuario(@PathVariable int id){
         usuarioService.deletarusuario(id);
     }
+
 
 }

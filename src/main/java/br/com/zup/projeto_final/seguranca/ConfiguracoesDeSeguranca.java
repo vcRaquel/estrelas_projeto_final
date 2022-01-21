@@ -1,5 +1,8 @@
 package br.com.zup.projeto_final.seguranca;
 
+import br.com.zup.projeto_final.seguranca.jwt.FiltroDeAutenticacaoJWT;
+import br.com.zup.projeto_final.seguranca.jwt.FiltroDeAutorizacaoJWT;
+import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +22,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class ConfiguracoesDeSeguranca extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private JWTComponent jwtComponent;
 
     private static final String[] ENDPOINT_POST_PUBLICO = {
-            "/livros",
+            "/autor",
             "/usuarios"
 
     };
@@ -39,6 +44,8 @@ public class ConfiguracoesDeSeguranca extends WebSecurityConfigurerAdapter {
                 .authenticated();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilter(new FiltroDeAutenticacaoJWT(jwtComponent, authenticationManager()));
+        http.addFilter(new FiltroDeAutorizacaoJWT(authenticationManager(), jwtComponent, userDetailsService));
 
     }
 
