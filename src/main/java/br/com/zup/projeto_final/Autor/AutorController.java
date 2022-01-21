@@ -20,5 +20,13 @@ public class AutorController {
     @Autowired
     ModelMapper modelMapper;
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public AutorDTO cadastrarAutor (@RequestBody AutorDTO autorDTO){
+        Autor autor = modelMapper.map(autorDTO, Autor.class);
+        autorService.salvarAutor(autor);
+        return autorDTO;
+    }
+
 
 }
