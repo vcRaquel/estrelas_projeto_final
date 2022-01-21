@@ -1,4 +1,6 @@
 package br.com.zup.projeto_final.Autor;
 
-public interface AutorRepository {
+import org.springframework.data.repository.CrudRepository;
+
+public interface AutorRepository extends CrudRepository <Autor, Integer>{
 }
