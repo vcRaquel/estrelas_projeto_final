@@ -48,6 +48,10 @@ public class AutorController {
         return autorDTO;
     }
 
-
+    @DeleteMapping(path = {"/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarAutor (@PathVariable int id){
+        autorService.deletarAutor(id);
+    }
 
 }
