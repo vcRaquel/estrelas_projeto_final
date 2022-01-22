@@ -21,4 +21,8 @@ public class UsuarioService {
         return (List<Usuario>)usuarios ;
     }
 
+    public Usuario atualizarUsuario(int id, Usuario usuario){
+        return usuarioRepository.save(usuario);
+    }
+
 }
