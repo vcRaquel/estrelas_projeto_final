@@ -63,4 +63,16 @@ public class UsuarioControllerTest {
         UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class);
     }
 
+    @Test //TDD
+    public void testarCadastroDeUsuarioValidacaoNome() throws Exception {
+        usuarioDTO.setNome("");
+        Mockito.when((usuarioService.salvarUsuario(Mockito.any(Usuario.class)))).thenReturn(usuario);
+        String json = objectMapper.writeValueAsString(usuarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/usuarios")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+    }
+
+
 }
