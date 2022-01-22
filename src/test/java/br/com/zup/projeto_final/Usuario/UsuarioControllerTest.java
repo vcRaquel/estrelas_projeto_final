@@ -3,6 +3,7 @@ package br.com.zup.projeto_final.Usuario;
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 @WebMvcTest({UsuarioController.class, ConversorModelMapper.class})
@@ -72,6 +76,21 @@ public class UsuarioControllerTest {
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/usuarios")
                         .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(422));
+    }
+
+    @Test
+    public void testarExibicaoDeUsuario() throws Exception {
+        Mockito.when(usuarioService.buscarUsuarios()).thenReturn(Arrays.asList(usuario));
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/usuarios")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        List<UsuarioSaidaDTO> usuarios = objectMapper.readValue(jsonResposta,
+                new TypeReference<List<UsuarioSaidaDTO>>(){});
+
     }
 
 
