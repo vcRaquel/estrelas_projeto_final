@@ -1,6 +1,7 @@
 package br.com.zup.projeto_final.Usuario;
 
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -81,7 +82,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void testarExibicaoDeUsuario() throws Exception {
+    public void testarExibicaoDeUsuarios() throws Exception {
         Mockito.when(usuarioService.buscarUsuarios()).thenReturn(Arrays.asList(usuario));
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/usuarios")
@@ -119,6 +120,16 @@ public class UsuarioControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is(204));
 
         Mockito.verify(usuarioService, Mockito.times(1)).deletarusuario(Mockito.anyInt());
+
+    }
+
+    @Test //TDD
+    public void testarDeletarUsuarioNaoEncontrado() throws Exception {
+        Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService).deletarusuario(Mockito.anyInt());
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/" + usuario.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
 
     }
 
