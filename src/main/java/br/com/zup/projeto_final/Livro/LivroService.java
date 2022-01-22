@@ -8,4 +8,10 @@ public class LivroService {
     @Autowired
     LivroRepository livroRepository;
 
+    public Livro salvarLivro (Livro livro) {
+        livroRepository.save(livro);
+        return livro;
+    }
+
+
 }
