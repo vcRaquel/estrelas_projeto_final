@@ -93,5 +93,20 @@ public class UsuarioControllerTest {
 
     }
 
+    @Test
+    public void testarAtualizarUsuario() throws Exception {
+        Mockito.when(usuarioService.atualizarUsuario(Mockito.anyInt(), Mockito.any(Usuario.class))).thenReturn(usuario);
+        String json = objectMapper.writeValueAsString(usuarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/usuarios/1")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class);
+
+
+    }
+
 
 }
