@@ -50,8 +50,8 @@ public class UsuarioControllerTest {
         usuarioSaidaDTO.setNome("Zupper");
         usuarioSaidaDTO.setEmail("usuario@email.com");
 
-
         objectMapper = new ObjectMapper();
+
     }
 
     @Test
@@ -65,6 +65,7 @@ public class UsuarioControllerTest {
 
         String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
         UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class);
+
     }
 
     @Test //TDD
@@ -76,6 +77,7 @@ public class UsuarioControllerTest {
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/usuarios")
                         .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(422));
+
     }
 
     @Test
@@ -105,8 +107,19 @@ public class UsuarioControllerTest {
         String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
         UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class);
 
-
     }
 
+    @Test
+    public void testarDeletarUsuario() throws Exception {
+        usuario.setId(1);
+        Mockito.doNothing().when(usuarioService).deletarusuario(Mockito.anyInt());
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/" + usuario.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(204));
+
+        Mockito.verify(usuarioService, Mockito.times(1)).deletarusuario(Mockito.anyInt());
+
+    }
 
 }
