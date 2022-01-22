@@ -34,5 +34,8 @@ public class LivroService {
         return livroParaAtualizar;
     }
 
+    public void deletarLivro (String nome) {
+        livroRepository.deleteById(nome);
+    }
 
 }
