@@ -8,12 +8,14 @@ import br.com.zup.projeto_final.Textos.Review;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "livros")
 @Data
 public class Livro {
+    @Id
     private String nome;
     private Autor autores;
     private Genero genero;
