@@ -41,4 +41,13 @@ public class UsuarioController {
         return usuarios;
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UsuarioSaidaDTO atualizarUsuario(@PathVariable int id, @RequestBody UsuarioDTO usuarioDTO) throws Exception{
+        Usuario usuario = usuarioService.atualizarUsuario(id, modelMapper.map(usuarioDTO, Usuario.class));
+
+        return modelMapper.map(usuario, UsuarioSaidaDTO.class);
+
+    }
+
 }
