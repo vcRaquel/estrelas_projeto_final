@@ -1,10 +1,14 @@
 package br.com.zup.projeto_final.seguranca;
 
+import lombok.Data;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@Data
 public class UsuarioLogado implements UserDetails {
     private String id;
     private String email;
@@ -13,33 +17,6 @@ public class UsuarioLogado implements UserDetails {
     public UsuarioLogado(String id, String email, String senha) {
         this.id = id;
         this.email = email;
-        this.senha = senha;
-    }
-
-    public UsuarioLogado() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
         this.senha = senha;
     }
 
