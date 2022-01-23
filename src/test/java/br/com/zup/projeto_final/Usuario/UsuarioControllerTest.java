@@ -46,6 +46,7 @@ public class UsuarioControllerTest {
         usuarioDTO = new UsuarioDTO();
         usuarioDTO.setEmail("usuario@email.com");
         usuarioDTO.setNome("Zupper");
+        usuarioDTO.setSenha("aviao11");
 
         usuarioSaidaDTO = new UsuarioSaidaDTO();
         usuarioSaidaDTO.setNome("Zupper");
