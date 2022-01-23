@@ -8,4 +8,11 @@ public class UsuarioSaidaDTO {
     private String email;
     //private List<Livro> interesse
 
+    public UsuarioSaidaDTO() {
+
+    }
+
+    public UsuarioSaidaDTO(String nome, String email) {
+    }
+
 }
