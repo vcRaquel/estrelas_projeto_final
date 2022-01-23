@@ -13,9 +13,9 @@ public class UsuarioDTO {
     @Size(min = 2,message = "O nome não pode ter menos de 2 caracteres")
     private String nome;
     @Email
-    @NotNull
+    @NotBlank
     private String email;
-    @NotNull
+    @NotBlank
     private String senha;
     //private List<Livro> interesse
 
