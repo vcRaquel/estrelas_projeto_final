@@ -45,7 +45,8 @@ public class FiltroDeAutenticacaoJWT extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+                                            Authentication authResult) throws IOException, ServletException {
         UsuarioLogado usuarioLogado = (UsuarioLogado) authResult.getPrincipal();
         String username = usuarioLogado.getUsername();
         String id = usuarioLogado.getId();
