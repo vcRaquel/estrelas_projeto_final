@@ -10,16 +10,11 @@ import lombok.Data;
 @Data
 public class LivroDTO {
 
-    public class Livro {
-        private String nome;
-        //private Autor autores;
-        private Genero genero;
-        private Tags tags;
-        //private Review review;
-        //private Comentario comentario;
-        private  boolean lido;
-        private  int curtidas;
-    }
+    private String nome;
+    private Genero genero;
+    private Tags tags;
+    private boolean lido;
+    private int curtidas;
 
     public LivroDTO() {
     }
