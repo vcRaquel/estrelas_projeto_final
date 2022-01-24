@@ -7,16 +7,14 @@ import br.com.zup.projeto_final.Textos.Comentario;
 import br.com.zup.projeto_final.Textos.Review;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "livros")
 @Data
 public class Livro {
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     //private Autor autores;
@@ -26,6 +24,5 @@ public class Livro {
     //private Comentario comentario;
     private  boolean lido;
     private  int curtidas;
-
 
 }
