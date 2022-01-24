@@ -33,4 +33,11 @@ public class LivroController {
     }
 
 
+
+    @DeleteMapping(path = {"/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarLivro (@PathVariable int id) {
+        livroService.deletarLivro(id);
+    }
+
 }
