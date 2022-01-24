@@ -10,12 +10,14 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 
 @Entity
 @Table(name = "livros")
 @Data
 public class Livro {
     @Id
+    private int id;
     private String nome;
     private Autor autores;
     private Genero genero;
