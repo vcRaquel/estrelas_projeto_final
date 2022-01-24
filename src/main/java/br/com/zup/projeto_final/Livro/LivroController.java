@@ -32,7 +32,12 @@ public class LivroController {
         return livrosDTO;
     }
 
-
+    @PutMapping (path = {"/{id}"})
+    @ResponseStatus(HttpStatus.OK)
+    public LivroDTO atualizarLivro (@PathVariable int id, @RequestBody LivroDTO livroDTO) {
+        Livro livro = livroService.atualizarLivro(id, modelMapper.map(livroDTO, Livro.class));
+        return livroDTO;
+    }
 
     @DeleteMapping(path = {"/{id}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
