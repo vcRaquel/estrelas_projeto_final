@@ -19,11 +19,11 @@ public class Livro {
     @Id
     private int id;
     private String nome;
-    private Autor autores;
+    //private Autor autores;
     private Genero genero;
     private Tags tags;
-    private Review review;
-    private Comentario comentario;
+    //private Review review;
+    //private Comentario comentario;
     private  boolean lido;
     private  int curtidas;
 

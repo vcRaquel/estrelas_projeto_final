@@ -22,8 +22,8 @@ public class LivroService {
         return (List<Livro>) livros;
     }
 
-    public Livro atualizarLivro (String nome, Livro livro){
-        Optional<Livro> livroOptional = livroRepository.findById(nome);
+    public Livro atualizarLivro (int id, Livro livro){
+        Optional<Livro> livroOptional = livroRepository.findById(id);
 
         if (livroOptional.isEmpty()) {
             throw new LivroNaoEncontradoException("Livro não cadastrado.");
@@ -31,11 +31,19 @@ public class LivroService {
 
         Livro livroParaAtualizar = livroOptional.get();
         livroRepository.save(livroParaAtualizar);
+
+        livroParaAtualizar.setNome(livro.getNome());
+        livroParaAtualizar.setTags(livro.getTags());
+        livroParaAtualizar.setLido(livro.isLido());
+        livroParaAtualizar.setGenero(livro.getGenero());
+        livroParaAtualizar.setCurtidas(livro.getCurtidas());
+
+
         return livroParaAtualizar;
     }
 
-    public void deletarLivro (String nome) {
-        livroRepository.deleteById(nome);
+    public void deletarLivro (int id) {
+        livroRepository.deleteById(id);
     }
 
 }
