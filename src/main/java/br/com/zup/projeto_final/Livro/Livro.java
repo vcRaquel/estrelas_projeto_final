@@ -24,7 +24,7 @@ public class Livro {
     @OneToOne (cascade = CascadeType.PERSIST)
     private Review review;
     @OneToMany
-    private List<Comentario> comentario;
+    private List<Comentario> comentarios;
     private  boolean lido;
 
 }
