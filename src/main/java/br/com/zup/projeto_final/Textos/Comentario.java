@@ -12,6 +12,6 @@ public class Comentario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String texto;
-    private  int curtidas;
+
 
 }
