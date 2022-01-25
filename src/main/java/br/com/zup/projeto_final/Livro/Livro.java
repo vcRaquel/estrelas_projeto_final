@@ -26,6 +26,5 @@ public class Livro {
     @OneToMany
     private List<Comentario> comentario;
     private  boolean lido;
-    private  int curtidas;
 
 }
