@@ -5,6 +5,8 @@ import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoExce
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.ConfiguracoesDeSeguranca;
+import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
+import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,11 +32,15 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@WebMvcTest({UsuarioController.class, ConversorModelMapper.class})
+@WebMvcTest({UsuarioController.class, ConversorModelMapper.class, UsuarioLoginService.class, JWTComponent.class})
 
 public class UsuarioControllerTest {
     @MockBean
     UsuarioService usuarioService;
+    @MockBean
+    private UsuarioLoginService usuarioLoginService;
+    @MockBean
+    private JWTComponent jwtComponent;
 
 
     @Autowired
@@ -68,6 +74,7 @@ public class UsuarioControllerTest {
 
 
     @Test
+    @WithMockUser("user@user.com")
     public void testarCadastroDeUsuario() throws Exception {
 
         Mockito.when(usuarioService.salvarUsuario(Mockito.any(Usuario.class))).thenReturn(usuario);
@@ -83,6 +90,7 @@ public class UsuarioControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarCadastroDeUsuarioValidacaoNome() throws Exception {
         usuarioDTO.setNome("");
         Mockito.when((usuarioService.salvarUsuario(Mockito.any(Usuario.class)))).thenReturn(usuario);
@@ -95,6 +103,7 @@ public class UsuarioControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarCadastroDeUsuarioValidacaoEmail() throws Exception {
         usuarioDTO.setEmail("email");
         Mockito.when((usuarioService.salvarUsuario(Mockito.any(Usuario.class)))).thenReturn(usuario);
@@ -107,6 +116,7 @@ public class UsuarioControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarCadastroDeUsuarioValidacaoEmailNull() throws Exception {
         usuarioDTO.setEmail(null);
         Mockito.when((usuarioService.salvarUsuario(Mockito.any(Usuario.class)))).thenReturn(usuario);
@@ -119,6 +129,7 @@ public class UsuarioControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarCadastroDeUsuarioValidacaoEmailBlank() throws Exception {
         usuarioDTO.setEmail("");
         Mockito.when((usuarioService.salvarUsuario(Mockito.any(Usuario.class)))).thenReturn(usuario);
@@ -131,6 +142,7 @@ public class UsuarioControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarCadastroDeUsuarioValidacaoSenha() throws Exception {
         usuarioDTO.setSenha(null);
         Mockito.when((usuarioService.salvarUsuario(Mockito.any(Usuario.class)))).thenReturn(usuario);
@@ -143,6 +155,7 @@ public class UsuarioControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarCadastroDeUsuarioValidacaoSenhaBlank() throws Exception {
         usuarioDTO.setSenha("");
         Mockito.when((usuarioService.salvarUsuario(Mockito.any(Usuario.class)))).thenReturn(usuario);
@@ -155,6 +168,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
+    @WithMockUser("user@user.com")
     public void testarExibicaoDeUsuarios() throws Exception {
         Mockito.when(usuarioService.buscarUsuarios()).thenReturn(Arrays.asList(usuario));
 
@@ -170,6 +184,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
+    @WithMockUser("user@user.com")
     public void testarAtualizarUsuario() throws Exception {
         Mockito.when(usuarioService.atualizarUsuario(Mockito.anyString(), Mockito.any(Usuario.class))).thenReturn(usuario);
         String json = objectMapper.writeValueAsString(usuarioDTO);
@@ -184,6 +199,7 @@ public class UsuarioControllerTest {
     }
 
     @Test
+    @WithMockUser("user@user.com")
     public void testarDeletarUsuario() throws Exception {
         usuario.setId("1");
         Mockito.doNothing().when(usuarioService).deletarusuario(Mockito.anyString());
@@ -197,6 +213,7 @@ public class UsuarioControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarDeletarUsuarioNaoEncontrado() throws Exception {
         Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService).deletarusuario(Mockito.anyString());
 

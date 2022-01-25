@@ -3,6 +3,8 @@ package br.com.zup.projeto_final.Autor;
 import br.com.zup.projeto_final.Autor.customException.AutorNaoEncontradoException;
 import br.com.zup.projeto_final.Autor.dto.AutorDTO;
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
+import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -20,10 +23,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.List;
 
-@WebMvcTest({AutorController.class, ConversorModelMapper.class})
+@WebMvcTest({AutorController.class, ConversorModelMapper.class, UsuarioLoginService.class, JWTComponent.class})
 public class AutorControllerTest {
     @MockBean
     private AutorService autorService;
+    @MockBean
+    private UsuarioLoginService usuarioLoginService;
+    @MockBean
+    private JWTComponent jwtComponent;
+
 
     @Autowired
     MockMvc mockMvc;
@@ -46,6 +54,7 @@ public class AutorControllerTest {
     }
 
     @Test
+    @WithMockUser("user@user.com")
     public void testarCadastroDeAutor() throws Exception{
         Mockito.when(autorService.salvarAutor(Mockito.any(Autor.class))).thenReturn(autor);
         String json = objectMapper.writeValueAsString(autorDTO);
@@ -59,6 +68,7 @@ public class AutorControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarCadastroDeAutorValidacaoNome() throws Exception{
         autorDTO.setNome("");
         Mockito.when((autorService.salvarAutor(Mockito.any(Autor.class)))).thenReturn(autor);
@@ -70,6 +80,7 @@ public class AutorControllerTest {
     }
 
     @Test
+    @WithMockUser("user@user.com")
     public void testarExibicaoDeAutores() throws Exception{
         Mockito.when(autorService.buscarAutores()).thenReturn(Arrays.asList(autor));
 
@@ -84,6 +95,7 @@ public class AutorControllerTest {
     }
 
     @Test
+    @WithMockUser("user@user.com")
     public void testarAtualizarAutor() throws Exception {
         Mockito.when(autorService.atualizarAutor(Mockito.anyInt(),Mockito.any(Autor.class))).thenReturn(autor);
         String json = objectMapper.writeValueAsString(autorDTO);
@@ -98,6 +110,7 @@ public class AutorControllerTest {
     }
 
     @Test
+    @WithMockUser("user@user.com")
     public void testarDeletarAutor() throws Exception {
         autor.setId(1);
         Mockito.doNothing().when(autorService).deletarAutor(Mockito.anyInt());
@@ -110,6 +123,7 @@ public class AutorControllerTest {
     }
 
     @Test //TDD
+    @WithMockUser("user@user.com")
     public void testarDeletarAutorNaoEncontrado() throws Exception {
         Mockito.doThrow(AutorNaoEncontradoException.class).when(autorService).deletarAutor(Mockito.anyInt());
 
