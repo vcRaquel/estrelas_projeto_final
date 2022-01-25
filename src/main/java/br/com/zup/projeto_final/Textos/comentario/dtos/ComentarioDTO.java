@@ -1,2 +1,9 @@
-package br.com.zup.projeto_final.Textos.comentario.dtos;public class ComentarioDTO {
+package br.com.zup.projeto_final.Textos.comentario.dtos;
+
+import lombok.Data;
+
+@Data
+public class ComentarioDTO {
+
+    private String texto;
 }
