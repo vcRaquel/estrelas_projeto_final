@@ -1,5 +1,6 @@
 package br.com.zup.projeto_final.Livro;
 
+import br.com.zup.projeto_final.Usuario.UsuarioController;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import java.util.List;
 public class LivroController {
     @Autowired
     LivroService livroService;
+    @Autowired
+    UsuarioController usuarioController;
 
     @Autowired
     ModelMapper modelMapper;
@@ -21,7 +24,8 @@ public class LivroController {
     @ResponseStatus(HttpStatus.CREATED)
     public LivroDTO cadastrarLivro(@RequestBody Livro livroDTO) {
         Livro livro = modelMapper.map(livroDTO, Livro.class);
-        livroService.salvarLivro(livro);
+        usuarioController.pegarId();
+        livroService.salvarLivro(livro, usuarioController.pegarId());
 
         return modelMapper.map(livro, LivroDTO.class);
     }
