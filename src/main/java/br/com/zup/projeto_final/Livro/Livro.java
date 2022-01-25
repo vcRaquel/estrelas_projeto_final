@@ -13,8 +13,9 @@ import javax.persistence.*;
 @Table(name = "livros")
 @Data
 public class Livro {
+
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     //private Autor autores;
