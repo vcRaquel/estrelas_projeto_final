@@ -7,22 +7,16 @@ import br.com.zup.projeto_final.Textos.Comentario;
 import br.com.zup.projeto_final.Textos.Review;
 import lombok.Data;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "livros")
 @Data
-public class Livro {
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
+public class LivroDTO {
+
     private String nome;
-    //private Autor autores;
     private Genero genero;
     private Tags tags;
-    //private Review review;
-    //private Comentario comentario;
-    private  boolean lido;
-    private  int curtidas;
+    private boolean lido;
+    private int curtidas;
+
+    public LivroDTO() {
+    }
 
 }
