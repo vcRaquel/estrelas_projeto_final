@@ -1,9 +1,8 @@
 package br.com.zup.projeto_final.Livro;
 
-import br.com.zup.projeto_final.Autor.Autor;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
-import br.com.zup.projeto_final.Textos.Comentario;
+import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Textos.Review;
 import lombok.Data;
 
@@ -22,7 +21,7 @@ public class Livro {
     private String autor;
     private Genero genero;
     private Tags tags;
-    @OneToOne
+    @OneToOne (cascade = CascadeType.PERSIST)
     private Review review;
     @OneToMany
     private List<Comentario> comentario;
