@@ -1,5 +1,6 @@
 package br.com.zup.projeto_final.Livro;
 
+import br.com.zup.projeto_final.Usuario.UsuarioService;
 import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,12 @@ import java.util.Optional;
 public class LivroService {
     @Autowired
     LivroRepository livroRepository;
+    @Autowired
+    UsuarioService usuarioService;
 
-    public Livro salvarLivro(Livro livro) {
+    public Livro salvarLivro(Livro livro, String idUsuario) {
         livroRepository.save(livro);
+        usuarioService.atualizarLivrosDoUsuario(idUsuario, livro);
         return livro;
     }
 
@@ -34,7 +38,6 @@ public class LivroService {
         // regra de negócio
 
         livroParaAtualizar.setNome(livro.getNome());
-        livroParaAtualizar.setCurtidas(livro.getCurtidas());
         livroParaAtualizar.setGenero(livro.getGenero());
         livroParaAtualizar.setLido(livro.isLido());
         livroParaAtualizar.setTags(livro.getTags());
@@ -45,8 +48,6 @@ public class LivroService {
         livroParaAtualizar.setTags(livro.getTags());
         livroParaAtualizar.setLido(livro.isLido());
         livroParaAtualizar.setGenero(livro.getGenero());
-        livroParaAtualizar.setCurtidas(livro.getCurtidas());
-
 
         return livroParaAtualizar;
     }
