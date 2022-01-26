@@ -1,6 +1,7 @@
 package br.com.zup.projeto_final.Usuario;
 
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
@@ -159,6 +160,19 @@ public class UsuarioControllerTest {
     }
 
     //testar cadastro de usuário que já existe
+    @Test
+    public void testarCadastroDeUsuarioQueJaExiste() throws Exception {
+        Mockito.doThrow(UsuarioJaCadastradoException.class).when(usuarioService)
+                .salvarUsuario(Mockito.any(Usuario.class));
+
+        String json = objectMapper.writeValueAsString(usuarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios").content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+
+    }
 
     @Test
     @WithMockUser("user@user.com")
@@ -232,7 +246,7 @@ public class UsuarioControllerTest {
     public void testarAtualizarUsuarioNaoEncontrado() throws Exception {
 
         Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService)
-                .atualizarUsuario(Mockito.anyString(),Mockito.any(Usuario.class));
+                .atualizarUsuario(Mockito.anyString(), Mockito.any(Usuario.class));
 
         String json = objectMapper.writeValueAsString(usuarioDTO);
 
