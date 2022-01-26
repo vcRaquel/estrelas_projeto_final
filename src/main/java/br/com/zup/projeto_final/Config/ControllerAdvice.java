@@ -1,4 +1,5 @@
 package br.com.zup.projeto_final.Config;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -14,9 +15,17 @@ import java.util.List;
 public class ControllerAdvice {
     @ExceptionHandler(UsuarioNaoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErroDeValidacao tratarClienteNaoEncontradoException(
-            UsuarioNaoEncontradoException clienteNaoEncontradoException) {
-        return new ErroDeValidacao(clienteNaoEncontradoException.getMessage());
+    public ErroDeValidacao tratarUsuarioNaoEncontradoException(
+            UsuarioNaoEncontradoException usuarioNaoEncontradoException) {
+        return new ErroDeValidacao(usuarioNaoEncontradoException.getMessage());
+
+    }
+
+    @ExceptionHandler(UsuarioJaCadastradoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroDeValidacao tratarUsuarioJaCadastradoException(
+            UsuarioJaCadastradoException usuarioJaCadastradoException) {
+        return new ErroDeValidacao(usuarioJaCadastradoException.getMessage());
 
     }
 
@@ -29,7 +38,6 @@ public class ControllerAdvice {
             ErroDeValidacao mensagem = new ErroDeValidacao(referencia.getDefaultMessage());
             erros.add(mensagem);
         }
-
         return erros;
 
     }
