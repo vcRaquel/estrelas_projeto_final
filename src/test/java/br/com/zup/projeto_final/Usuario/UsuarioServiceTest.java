@@ -1,6 +1,7 @@
 package br.com.zup.projeto_final.Usuario;
 
 import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,6 +81,22 @@ public class UsuarioServiceTest {
 
 
     //testar exibir usuário que não existe
+    @Test
+    public void testarExibirUsuarioNaoEncontrado(){
+        Mockito.when(usuarioRepository.save(Mockito.any()))
+                .thenReturn(usuario);
+
+        Mockito.when(usuarioRepository.findById(Mockito.anyString()))
+                .thenReturn(Optional.empty());
+
+        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () ->{
+            usuarioService.buscarUsuario("0");
+        });
+
+        Assertions.assertEquals("Usuário não encontrado", exception.getMessage());
+
+    }
+
 
     //testar atualizar usuário
 
