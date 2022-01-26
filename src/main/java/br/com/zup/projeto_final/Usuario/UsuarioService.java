@@ -1,11 +1,14 @@
 
 package br.com.zup.projeto_final.Usuario;
 
+import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -16,11 +19,16 @@ public class UsuarioService {
     private BCryptPasswordEncoder encoder;
 
     public Usuario salvarUsuario(Usuario usuario) {
-        String senhaEscondida = encoder.encode(usuario.getSenha());
+        if (usuarioExistePorEmail(usuario.getEmail())) {
+            throw new UsuarioJaCadastradoException("Usuário já cadastrado");
+        } else {
+            String senhaEscondida = encoder.encode(usuario.getSenha());
 
-        usuario.setSenha(senhaEscondida);
-        usuarioRepository.save(usuario);
-        return usuario;
+            usuario.setSenha(senhaEscondida);
+            usuarioRepository.save(usuario);
+            return usuario;
+        }
+
     }
 
     public List<Usuario> buscarUsuarios() {
@@ -28,11 +36,38 @@ public class UsuarioService {
         return (List<Usuario>)usuarios ;
     }
 
-    public Usuario atualizarUsuario(String id, Usuario usuario){
-        return usuarioRepository.save(usuario);
+    public Usuario buscarUsuario(String id) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        if (!usuarioOptional.isEmpty()) {
+            return usuarioOptional.get();
+        } else {
+            throw new UsuarioNaoEncontradoException("Usuário não encontrado");
+        }
+
+    }
+
+    public boolean usuarioExistePorEmail(String email) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+        if (!usuarioOptional.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public Usuario atualizarUsuario(String id, Usuario usuario) {
+        Usuario usuarioParaAtualizar = buscarUsuario(id);
+        usuarioParaAtualizar.setNome(usuario.getNome());
+        usuarioParaAtualizar.setEmail(usuario.getEmail());
+
+        usuarioRepository.save(usuarioParaAtualizar);
+        return usuarioParaAtualizar;
+
     }
 
     public void deletarusuario(String id){
+        buscarUsuario(id);
         usuarioRepository.deleteById(id);
     }
 

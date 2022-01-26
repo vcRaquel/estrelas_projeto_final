@@ -1,36 +1,29 @@
 package br.com.zup.projeto_final.Usuario;
 
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
-import br.com.zup.projeto_final.seguranca.ConfiguracoesDeSeguranca;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
-
 
 @WebMvcTest({UsuarioController.class, ConversorModelMapper.class, UsuarioLoginService.class, JWTComponent.class})
 
@@ -41,7 +34,6 @@ public class UsuarioControllerTest {
     private UsuarioLoginService usuarioLoginService;
     @MockBean
     private JWTComponent jwtComponent;
-
 
     @Autowired
     MockMvc mockMvc;
@@ -167,6 +159,21 @@ public class UsuarioControllerTest {
 
     }
 
+    //testar cadastro de usuário que já existe
+    @Test
+    public void testarCadastroDeUsuarioQueJaExiste() throws Exception {
+        Mockito.doThrow(UsuarioJaCadastradoException.class).when(usuarioService)
+                .salvarUsuario(Mockito.any(Usuario.class));
+
+        String json = objectMapper.writeValueAsString(usuarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/usuarios").content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+
+    }
+
     @Test
     @WithMockUser("user@user.com")
     public void testarExibicaoDeUsuarios() throws Exception {
@@ -179,7 +186,42 @@ public class UsuarioControllerTest {
 
         String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
         List<UsuarioSaidaDTO> usuarios = objectMapper.readValue(jsonResposta,
-                new TypeReference<List<UsuarioSaidaDTO>>(){});
+                new TypeReference<List<UsuarioSaidaDTO>>() {
+                });
+
+    }
+
+    //testar exibir usuario por id
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarExibicaoDeUsuario() throws Exception {
+
+        Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/usuarios/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        UsuarioSaidaDTO usuario = objectMapper.readValue(jsonResposta,
+                UsuarioSaidaDTO.class);
+
+    }
+
+    //testar exibição de usuario que não existe
+    @Test //TDD
+    @WithMockUser("user@user.com")
+    public void testarExibirUsuarioNaoEncontrado() throws Exception {
+
+        Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService)
+                .buscarUsuario(Mockito.anyString());
+
+        String json = objectMapper.writeValueAsString(usuarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/usuarios/0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
 
     }
 
@@ -198,10 +240,26 @@ public class UsuarioControllerTest {
 
     }
 
+    //testar atualizar usuario que não existe
+    @Test //TDD
+    @WithMockUser("user@user.com")
+    public void testarAtualizarUsuarioNaoEncontrado() throws Exception {
+
+        Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService)
+                .atualizarUsuario(Mockito.anyString(), Mockito.any(Usuario.class));
+
+        String json = objectMapper.writeValueAsString(usuarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+                        .put("/usuarios/0").content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
+
+    }
+
     @Test
     @WithMockUser("user@user.com")
     public void testarDeletarUsuario() throws Exception {
-        usuario.setId("1");
         Mockito.doNothing().when(usuarioService).deletarusuario(Mockito.anyString());
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/" + usuario.getId())
