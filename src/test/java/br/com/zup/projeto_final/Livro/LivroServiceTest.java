@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class LivroServiceTest {
@@ -53,6 +54,16 @@ public class LivroServiceTest {
         List<Livro> livrosResposta = livroService.buscarLivros();
         Assertions.assertNotNull(livrosResposta);
         Mockito.verify(livroRepository, Mockito.times(1)).findAll();
+    }
+
+    @Test
+    public void testarBuscarLivro(){
+        Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
+        Livro livroResposta = livroService.buscarLivro(Mockito.anyInt());
+
+        Assertions.assertNotNull(livroResposta);
+        Assertions.assertEquals(Livro.class, livroResposta.getClass());
+        Assertions.assertEquals(livro.getId(), livroResposta.getId());
     }
 
 }
