@@ -4,33 +4,25 @@ import br.com.zup.projeto_final.Components.ConversorModelMapper;
 import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
-import br.com.zup.projeto_final.seguranca.ConfiguracoesDeSeguranca;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
-
 
 @WebMvcTest({UsuarioController.class, ConversorModelMapper.class, UsuarioLoginService.class, JWTComponent.class})
 
@@ -41,7 +33,6 @@ public class UsuarioControllerTest {
     private UsuarioLoginService usuarioLoginService;
     @MockBean
     private JWTComponent jwtComponent;
-
 
     @Autowired
     MockMvc mockMvc;
@@ -180,6 +171,23 @@ public class UsuarioControllerTest {
         String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
         List<UsuarioSaidaDTO> usuarios = objectMapper.readValue(jsonResposta,
                 new TypeReference<List<UsuarioSaidaDTO>>(){});
+
+    }
+
+    //testar exibir usuario por id
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarExibicaoDeUsuario() throws Exception {
+
+        Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/usuarios/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        UsuarioSaidaDTO usuario = objectMapper.readValue(jsonResposta,
+                UsuarioSaidaDTO.class);
 
     }
 
