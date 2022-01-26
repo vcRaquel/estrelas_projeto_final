@@ -1,4 +1,5 @@
 package br.com.zup.projeto_final.Livro;
+
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
@@ -74,6 +75,17 @@ public class LivroService {
             livroMaisComentado = null;
         }
         return livrosOrdenados;
+
+    }
+
+    public Livro buscarLivro(int id) {
+        Optional<Livro> livroOptional = livroRepository.findById(id);
+        if (!livroOptional.isEmpty()) {
+            return livroOptional.get();
+        } else {
+            throw new LivroNaoEncontradoException("Livro não encontrado");
+        }
+
     }
 
     public Livro atualizarLivro(int id, Livro livro) {
@@ -85,7 +97,6 @@ public class LivroService {
         }
 
         Livro livroParaAtualizar = livroOptional.get();
-        // regra de negócio
 
         livroParaAtualizar.setNome(livro.getNome());
         livroParaAtualizar.setGenero(livro.getGenero());
@@ -94,11 +105,11 @@ public class LivroService {
 
         livroRepository.save(livroParaAtualizar);
 
-
         return livroParaAtualizar;
     }
 
     public void deletarLivro(int id) {
+        buscarLivro(id);
         livroRepository.deleteById(id);
     }
 
