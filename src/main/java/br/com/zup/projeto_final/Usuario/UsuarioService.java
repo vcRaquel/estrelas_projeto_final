@@ -2,6 +2,7 @@
 package br.com.zup.projeto_final.Usuario;
 
 import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,17 @@ public class UsuarioService {
         Iterable<Usuario> usuarios = usuarioRepository.findAll();
         return (List<Usuario>)usuarios ;
     }
+
+    public Usuario buscarUsuario(String id) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        if (!usuarioOptional.isEmpty()) {
+            return usuarioOptional.get();
+        } else {
+            throw new UsuarioNaoEncontradoException("Usuário não encontrado");
+        }
+
+    }
+
 
     public boolean usuarioExistePorEmail(String email) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
