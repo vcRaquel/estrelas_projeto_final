@@ -130,6 +130,16 @@ public class UsuarioServiceTest {
     }
 
     //testar deletar usuario
+    @Test
+    public void testarDeletarUsuarioSucesso(){
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        Mockito.doNothing().when(usuarioRepository).deleteById(Mockito.anyString());
+
+        usuarioService.deletarusuario(Mockito.anyString());
+
+        Mockito.verify(usuarioRepository, Mockito.times(1)).deleteById(Mockito.anyString());
+
+    }
 
     //testar deletar usuário que não existe
 
