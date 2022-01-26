@@ -3,6 +3,8 @@ package br.com.zup.projeto_final.Livro;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,4 +30,15 @@ public class LivroServiceTest {
         livro.setTags(Tags.LEITURA_LEVE);
 
     }
+
+    @Test
+    public void testarSalvarLivro(){
+        Mockito.when(livroRepository.save(livro)).thenAnswer(objto -> objto.getArgument(0,Livro.class));
+
+        livroService.salvarLivro(livro);
+
+        Mockito.verify(livroRepository, Mockito.times(1)).save(livro);
+        
+    }
+
 }
