@@ -1,5 +1,7 @@
 package br.com.zup.projeto_final.Usuario;
 
+import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -38,6 +40,18 @@ public class UsuarioServiceTest {
     }
 
     //testar salvar usuário repetido
+    @Test
+    public void testarSalvarUsuarioRepetido(){
+        Mockito.when(usuarioRepository.save(usuario))
+                .thenThrow(new UsuarioJaCadastradoException("Usuário já cadastrado"));
+
+        UsuarioJaCadastradoException exception = Assertions.assertThrows(UsuarioJaCadastradoException.class, () ->{
+            usuarioService.salvarUsuario(usuario);
+        });
+
+
+    }
+
 
     //testar exibir usuários
 
