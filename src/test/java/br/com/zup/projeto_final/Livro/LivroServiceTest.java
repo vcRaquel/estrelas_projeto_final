@@ -2,12 +2,16 @@ package br.com.zup.projeto_final.Livro;
 
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootTest
 public class LivroServiceTest {
@@ -38,7 +42,17 @@ public class LivroServiceTest {
         livroService.salvarLivro(livro);
 
         Mockito.verify(livroRepository, Mockito.times(1)).save(livro);
-        
+
+    }
+    //testar salvar livro repetido
+
+    @Test
+    public void testarBuscarLivros(){
+        List<Livro> livros = Arrays.asList(livro);
+        Mockito.when(livroRepository.findAll()).thenReturn(livros);
+        List<Livro> livrosResposta = livroService.buscarLivros();
+        Assertions.assertNotNull(livrosResposta);
+        Mockito.verify(livroRepository, Mockito.times(1)).findAll();
     }
 
 }
