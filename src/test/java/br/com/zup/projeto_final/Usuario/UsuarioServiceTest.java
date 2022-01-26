@@ -37,4 +37,20 @@ public class UsuarioServiceTest {
 
     }
 
+    //testar salvar usuário repetido
+
+    //testar exibir usuários
+
+    //testar exibir usuário
+
+    //testar exibir usuário que não existe
+
+    //testar atualizar usuário
+
+    //testar atualizar usuário que não existe
+
+    //testar deletar usuario
+
+    //testar deletar usuário que não existe
+
 }
