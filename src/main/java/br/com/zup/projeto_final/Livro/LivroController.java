@@ -42,6 +42,18 @@ public class LivroController {
         return livrosDTO;
     }
 
+    @GetMapping
+    public List<LivroDTO> exibirTodosOsLivros() {
+        List<LivroDTO> livrosDTOS = new ArrayList<>();
+
+        for (Livro livro : livroService.exibirTodosOsLivros()) {
+            LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
+            livrosDTOS.add(livroDTO);
+        }
+
+        return livrosDTOS;
+    }
+
     @PutMapping(path = {"/{id}"})
     @ResponseStatus(HttpStatus.OK)
     public LivroDTO atualizarLivro(@PathVariable int id, @RequestBody LivroDTO livroDTO) {
