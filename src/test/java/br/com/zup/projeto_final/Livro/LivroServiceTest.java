@@ -66,4 +66,15 @@ public class LivroServiceTest {
         Assertions.assertEquals(livro.getId(), livroResposta.getId());
     }
 
+    //testar buscar livro que não existe
+
+    @Test
+    public void testarAtualizarLivro(){
+        Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
+
+        Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
+
+        livroService.atualizarLivro(Mockito.anyInt(), livro);
+    }
+
 }
