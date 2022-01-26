@@ -113,6 +113,21 @@ public class UsuarioServiceTest {
     }
 
     //testar atualizar usuário que não existe
+    @Test
+    public void testarAtualizarUsuarioNaoEncontrado(){
+        Mockito.when(usuarioRepository.save(Mockito.any()))
+                .thenReturn(usuario);
+
+        Mockito.when(usuarioRepository.findById(Mockito.anyString()))
+                .thenReturn(Optional.empty());
+
+        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () ->{
+            usuarioService.atualizarUsuario("0", usuario);
+        });
+
+        Assertions.assertEquals("Usuário não encontrado", exception.getMessage());
+
+    }
 
     //testar deletar usuario
 
