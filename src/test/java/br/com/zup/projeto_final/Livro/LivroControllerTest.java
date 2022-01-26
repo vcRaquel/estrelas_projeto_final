@@ -115,4 +115,20 @@ public class LivroControllerTest {
 
     }
 
+    //testar atualizar livro sem ser o usuario que cadastrou
+    //testar atualizar livro que não existe
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarDeletarLivro() throws Exception{
+        Mockito.doNothing().when(livroService).deletarLivro(Mockito.anyInt());
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/livros/" + livro.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(204));
+
+        Mockito.verify(livroService, Mockito.times(1)).deletarLivro(Mockito.anyInt());
+
+    }
+
 }
