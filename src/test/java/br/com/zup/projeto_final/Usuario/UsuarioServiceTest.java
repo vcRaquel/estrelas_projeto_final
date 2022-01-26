@@ -79,7 +79,6 @@ public class UsuarioServiceTest {
         Mockito.verify(usuarioRepository, Mockito.times(1)).findById(Mockito.anyString());
     }
 
-
     //testar exibir usuário que não existe
     @Test
     public void testarExibirUsuarioNaoEncontrado(){
@@ -97,8 +96,21 @@ public class UsuarioServiceTest {
 
     }
 
-
     //testar atualizar usuário
+    @Test
+    public void testarAtualizarUsuario() {
+
+        Mockito.when(usuarioRepository.save(Mockito.any()))
+                .thenReturn(usuario);
+
+        Mockito.when(usuarioRepository.findById(Mockito.anyString()))
+                .thenReturn(Optional.of(usuario));
+
+        usuarioService.atualizarUsuario(Mockito.anyString(), usuario);
+
+        Mockito.verify(usuarioRepository, Mockito.times(1)).save(Mockito.any());
+
+    }
 
     //testar atualizar usuário que não existe
 
