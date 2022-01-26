@@ -195,6 +195,21 @@ public class UsuarioControllerTest {
     }
 
     //testar exibição de usuario que não existe
+    @Test //TDD
+    @WithMockUser("user@user.com")
+    public void testarExibirUsuarioNaoEncontrado() throws Exception {
+
+        Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService)
+                .buscarUsuario(Mockito.anyString());
+
+        String json = objectMapper.writeValueAsString(usuarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/usuarios/0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
+
+    }
 
     @Test
     @WithMockUser("user@user.com")
