@@ -37,6 +37,10 @@ public class LivroService {
     }
 
     public List<Livro> exibirTodosOsLivros(Genero genero) {
+        if (genero != null) {
+            return livroRepository.findAllByGenero(genero);
+        }
+
         List<Livro> livros = (List<Livro>) livroRepository.findAll();
         return livros;
 
