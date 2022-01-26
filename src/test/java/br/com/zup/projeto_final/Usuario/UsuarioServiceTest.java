@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class UsuarioServiceTest {
@@ -65,6 +66,18 @@ public class UsuarioServiceTest {
     }
 
     //testar exibir usuário
+    @Test
+    public void testarBuscarUsuario(){
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        Usuario usuarioResposta = usuarioService.buscarUsuario(Mockito.anyString());
+
+        Assertions.assertNotNull(usuarioResposta);
+        Assertions.assertEquals(Usuario.class,usuarioResposta.getClass());
+        Assertions.assertEquals(usuario.getId(),usuarioResposta.getId());
+
+        Mockito.verify(usuarioRepository, Mockito.times(1)).findById(Mockito.anyString());
+    }
+
 
     //testar exibir usuário que não existe
 
