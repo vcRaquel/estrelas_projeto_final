@@ -8,6 +8,7 @@ import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+import java.util.List;
 
 @WebMvcTest({LivroController.class, ConversorModelMapper.class, UsuarioLoginService.class, JWTComponent.class})
 public class LivroControllerTest {
@@ -62,16 +66,34 @@ public class LivroControllerTest {
 
     @Test
     @WithMockUser("user@user.com")
-    public void testarCadastroDeLivro()throws Exception{
+    public void testarCadastroDeLivro() throws Exception {
         Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class))).thenReturn(livro);
         String json = objectMapper.writeValueAsString(livroDTO);
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/livros")
-                .content(json).contentType(MediaType.APPLICATION_JSON))
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(201));
 
         String jsonDeResposta = resultado.andReturn().getResponse().getContentAsString();
         LivroDTO livroDTO = objectMapper.readValue(jsonDeResposta, LivroDTO.class);
+    }
+    //testar validação nome
+    //testar validação genero
+    //testar validação livro repetido
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarExibirLivros() throws Exception{
+        Mockito.when(livroService.buscarLivros()).thenReturn(Arrays.asList(livro));
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/livros")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+        String jsonDeResposta = resultado.andReturn().getResponse().getContentAsString();
+        List<LivroDTO> livros = objectMapper.readValue(jsonDeResposta, new TypeReference<List<LivroDTO>>() {
+        });
     }
 
 }
