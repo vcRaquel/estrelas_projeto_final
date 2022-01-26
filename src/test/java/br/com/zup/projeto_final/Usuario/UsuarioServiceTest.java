@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.util.Assert;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,18 @@ public class UsuarioServiceTest {
     }
 
     @Test
+    public void testarUsuarioExistePorEmail(){
+        Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        Boolean resposta = usuarioService.usuarioExistePorEmail(Mockito.anyString());
+        Assertions.assertTrue(resposta);
+
+        Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+        resposta = usuarioService.usuarioExistePorEmail(Mockito.anyString());
+        Assertions.assertFalse(resposta);
+
+    }
+
+    @Test
     public void testarSalvarUsuario() {
         Mockito.when(usuarioRepository.save(usuario))
                 .thenAnswer(objto -> objto.getArgument(0, Usuario.class));
@@ -55,7 +68,6 @@ public class UsuarioServiceTest {
             usuarioService.salvarUsuario(usuario);
         });
 
-
     }
 
     //testar exibir usuários
@@ -74,10 +86,14 @@ public class UsuarioServiceTest {
         Usuario usuarioResposta = usuarioService.buscarUsuario(Mockito.anyString());
 
         Assertions.assertNotNull(usuarioResposta);
-        Assertions.assertEquals(Usuario.class,usuarioResposta.getClass());
-        Assertions.assertEquals(usuario.getId(),usuarioResposta.getId());
 
         Mockito.verify(usuarioRepository, Mockito.times(1)).findById(Mockito.anyString());
+
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> usuarioService.buscarUsuario(Mockito.anyString()));
+
+        Mockito.verify(usuarioRepository, Mockito.times(2)).findById(Mockito.anyString());
+
     }
 
     //testar exibir usuário que não existe
