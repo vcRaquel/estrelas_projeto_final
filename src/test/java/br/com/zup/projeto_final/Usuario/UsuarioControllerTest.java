@@ -170,7 +170,8 @@ public class UsuarioControllerTest {
 
         String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
         List<UsuarioSaidaDTO> usuarios = objectMapper.readValue(jsonResposta,
-                new TypeReference<List<UsuarioSaidaDTO>>(){});
+                new TypeReference<List<UsuarioSaidaDTO>>() {
+                });
 
     }
 
@@ -191,6 +192,8 @@ public class UsuarioControllerTest {
 
     }
 
+    //testar exibição de usuario que não existe
+
     @Test
     @WithMockUser("user@user.com")
     public void testarAtualizarUsuario() throws Exception {
@@ -206,10 +209,11 @@ public class UsuarioControllerTest {
 
     }
 
+    //testar atualizar usuario que não existe
+
     @Test
     @WithMockUser("user@user.com")
     public void testarDeletarUsuario() throws Exception {
-        usuario.setId("1");
         Mockito.doNothing().when(usuarioService).deletarusuario(Mockito.anyString());
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/" + usuario.getId())
