@@ -57,9 +57,16 @@ public class UsuarioService {
 
     }
 
-    public Usuario atualizarUsuario(String id, Usuario usuario){
-        return usuarioRepository.save(usuario);
+    public Usuario atualizarUsuario(String id, Usuario usuario) {
+        Usuario usuarioParaAtualizar = buscarUsuario(id);
+        usuarioParaAtualizar.setNome(usuario.getNome());
+        usuarioParaAtualizar.setEmail(usuario.getEmail());
+
+        usuarioRepository.save(usuarioParaAtualizar);
+        return usuarioParaAtualizar;
+
     }
+
 
     public void deletarusuario(String id){
         usuarioRepository.deleteById(id);
