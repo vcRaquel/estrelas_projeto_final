@@ -158,6 +158,8 @@ public class UsuarioControllerTest {
 
     }
 
+    //testar cadastro de usuário que já existe
+
     @Test
     @WithMockUser("user@user.com")
     public void testarExibicaoDeUsuarios() throws Exception {
@@ -210,6 +212,21 @@ public class UsuarioControllerTest {
     }
 
     //testar atualizar usuario que não existe
+    @Test //TDD
+    @WithMockUser("user@user.com")
+    public void testarAtualizarUsuarioNaoEncontrado() throws Exception {
+
+        Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService)
+                .atualizarUsuario(Mockito.anyString(),Mockito.any(Usuario.class));
+
+        String json = objectMapper.writeValueAsString(usuarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+                        .put("/usuarios/0").content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
+
+    }
 
     @Test
     @WithMockUser("user@user.com")
