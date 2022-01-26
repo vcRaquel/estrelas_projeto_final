@@ -6,6 +6,8 @@ import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoExce
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 
@@ -29,6 +31,10 @@ public class UsuarioService {
 
     }
 
+    public List<Usuario> buscarUsuarios() {
+        Iterable<Usuario> usuarios = usuarioRepository.findAll();
+        return (List<Usuario>)usuarios ;
+    }
 
     public Usuario buscarUsuario(String id) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
