@@ -83,7 +83,7 @@ public class LivroControllerTest {
 
     @Test
     @WithMockUser("user@user.com")
-    public void testarExibirLivros() throws Exception{
+    public void testarExibirLivros() throws Exception {
         Mockito.when(livroService.buscarLivros()).thenReturn(Arrays.asList(livro));
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/livros")
@@ -94,6 +94,25 @@ public class LivroControllerTest {
         String jsonDeResposta = resultado.andReturn().getResponse().getContentAsString();
         List<LivroDTO> livros = objectMapper.readValue(jsonDeResposta, new TypeReference<List<LivroDTO>>() {
         });
+
+    }
+
+    //testar buscar livro por id
+    //testar buscar livro que não existe
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarAtualizarLivro() throws Exception {
+        Mockito.when(livroService.atualizarLivro(Mockito.anyInt(), Mockito.any(Livro.class))).thenReturn(livro);
+        String json = objectMapper.writeValueAsString(livroDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/livros/1")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        LivroDTO livroResposta = objectMapper.readValue(jsonResposta, LivroDTO.class);
+
     }
 
 }
