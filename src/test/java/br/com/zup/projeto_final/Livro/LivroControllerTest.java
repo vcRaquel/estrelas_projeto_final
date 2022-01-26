@@ -3,8 +3,7 @@ package br.com.zup.projeto_final.Livro;
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
-import br.com.zup.projeto_final.Usuario.Usuario;
-import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
+import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
@@ -128,6 +127,17 @@ public class LivroControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is(204));
 
         Mockito.verify(livroService, Mockito.times(1)).deletarLivro(Mockito.anyInt());
+
+    }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarDeletarLivroNaoEncontrado() throws Exception {
+        Mockito.doThrow(LivroNaoEncontradoException.class).when(livroService).deletarLivro(Mockito.anyInt());
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/livros/" + livro.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
 
     }
 
