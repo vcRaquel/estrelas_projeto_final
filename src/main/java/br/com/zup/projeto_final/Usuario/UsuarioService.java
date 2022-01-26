@@ -46,7 +46,6 @@ public class UsuarioService {
 
     }
 
-
     public boolean usuarioExistePorEmail(String email) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
         if (!usuarioOptional.isEmpty()) {
@@ -67,8 +66,8 @@ public class UsuarioService {
 
     }
 
-
     public void deletarusuario(String id){
+        buscarUsuario(id);
         usuarioRepository.deleteById(id);
     }
 
