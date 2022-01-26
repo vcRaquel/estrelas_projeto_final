@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootTest
 public class UsuarioServiceTest {
     @MockBean
@@ -52,8 +55,14 @@ public class UsuarioServiceTest {
 
     }
 
-
     //testar exibir usuários
+    @Test
+    public void testarBuscarUsuarios() {
+        List<Usuario> usuarios = Arrays.asList(usuario);
+        Mockito.when(usuarioRepository.findAll()).thenReturn(usuarios);
+        List<Usuario> usuariosResposta = usuarioService.buscarUsuarios();
+        Mockito.verify(usuarioRepository, Mockito.times(1)).findAll();
+    }
 
     //testar exibir usuário
 
