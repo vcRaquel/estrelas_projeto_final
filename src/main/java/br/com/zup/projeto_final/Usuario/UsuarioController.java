@@ -21,7 +21,7 @@ public class UsuarioController {
     ModelMapper modelMapper;
 
 
-    private String pegarId() {
+    public String pegarId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UsuarioLogado usuarioLogado = (UsuarioLogado) principal;
         return usuarioLogado.getId();

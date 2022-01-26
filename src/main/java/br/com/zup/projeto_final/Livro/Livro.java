@@ -1,13 +1,13 @@
 package br.com.zup.projeto_final.Livro;
 
-import br.com.zup.projeto_final.Autor.Autor;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
-import br.com.zup.projeto_final.Textos.Comentario;
+import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Textos.Review;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "livros")
@@ -18,12 +18,13 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
-    //private Autor autores;
+    private String autor;
     private Genero genero;
     private Tags tags;
-    //private Review review;
-    //private Comentario comentario;
+    @OneToOne (cascade = CascadeType.PERSIST)
+    private Review review;
+    @OneToMany
+    private List<Comentario> comentarios;
     private  boolean lido;
-    private  int curtidas;
 
 }
