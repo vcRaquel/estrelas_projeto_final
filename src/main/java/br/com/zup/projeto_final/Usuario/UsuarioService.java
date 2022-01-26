@@ -1,6 +1,7 @@
 
 package br.com.zup.projeto_final.Usuario;
 
+import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,16 @@ public class UsuarioService {
     private BCryptPasswordEncoder encoder;
 
     public Usuario salvarUsuario(Usuario usuario) {
-        String senhaEscondida = encoder.encode(usuario.getSenha());
+        if (usuarioExistePorEmail(usuario.getEmail())) {
+            throw new UsuarioJaCadastradoException("Usuário já cadastrado");
+        } else {
+            String senhaEscondida = encoder.encode(usuario.getSenha());
 
-        usuario.setSenha(senhaEscondida);
-        usuarioRepository.save(usuario);
-        return usuario;
+            usuario.setSenha(senhaEscondida);
+            usuarioRepository.save(usuario);
+            return usuario;
+        }
+
     }
 
     public List<Usuario> buscarUsuarios() {
