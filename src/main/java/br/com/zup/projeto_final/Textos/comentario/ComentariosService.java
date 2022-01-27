@@ -24,7 +24,8 @@ public class ComentariosService {
     public void salvarComentario(String idUsuario, Comentario comentario){
         Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
         if (usuario.isEmpty()){
-            throw new UsuarioNaoEncontradoException("");
+            throw new UsuarioNaoEncontradoException("Usuário não encontrado");
+
         }
         comentarioRepository.save(comentario);
         livroService.atualizarComentariosDoLivro(comentario.getLivro_id(), comentario);
