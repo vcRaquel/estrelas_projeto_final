@@ -7,6 +7,7 @@ import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class LivroService {
         livroRepository.save(livroOptional.get());
     }
 
-    public List<Livro> exibirTodosOsLivros(Genero genero, Tags tags) {
+    public List<Livro> exibirTodosOsLivros(Genero genero, Tags tags, String nome) {
 
         if (genero != null) {
             return livroRepository.findAllByGenero(genero);
@@ -45,6 +46,10 @@ public class LivroService {
 
         if (tags!=null) {
             return livroRepository.findAllByTags(tags);
+        }
+
+        if (nome!= null) {
+            return livroRepository.findAllByNome(nome);
         }
 
         List<Livro> livros = (List<Livro>) livroRepository.findAll();
