@@ -77,4 +77,8 @@ public class LivroServiceTest {
         livroService.atualizarLivro(Mockito.anyInt(), livro);
     }
 
+    //testar atualizar livro que não existe
+
+
+
 }
