@@ -45,11 +45,12 @@ public class LivroController {
 
     @GetMapping
     public List<LivroDTO> exibirTodosOsLivros(@RequestParam(required = false) Genero genero,
-                                              @RequestParam(required = false) Tags tags) {
+                                              @RequestParam(required = false) Tags tags,
+                                              @RequestParam(required = false) String nome) {
 
         List<LivroDTO> livrosDTO = new ArrayList<>();
 
-        for (Livro livro : livroService.exibirTodosOsLivros(genero, tags)) {
+        for (Livro livro : livroService.exibirTodosOsLivros(genero, tags, nome)) {
             LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
             livrosDTO.add(livroDTO);
         }
