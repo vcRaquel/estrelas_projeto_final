@@ -1,6 +1,6 @@
 package br.com.zup.projeto_final.Autor;
 
-import br.com.zup.projeto_final.Autor.customException.AutorNaoEncontradoException;
+import br.com.zup.projeto_final.customException.AutorNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

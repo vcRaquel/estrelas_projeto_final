@@ -1,4 +1,4 @@
-package br.com.zup.projeto_final.Usuario.customException;
+package br.com.zup.projeto_final.customException;
 
 public class UsuarioJaCadastradoException extends RuntimeException{
     public UsuarioJaCadastradoException(String message) {
