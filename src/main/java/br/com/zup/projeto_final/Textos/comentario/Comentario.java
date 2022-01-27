@@ -12,10 +12,9 @@ public class Comentario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int idLivro;
-    @OneToOne
+    @ManyToOne
     private Usuario quemComentou;
     private String texto;
-
+    private int livro_id;
 
 }
