@@ -1,6 +1,5 @@
 package br.com.zup.projeto_final.Livro;
 
-
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
@@ -32,18 +31,6 @@ public class LivroController {
         return modelMapper.map(livro, LivroDTO.class);
     }
 
-    /*@GetMapping
-    public List<LivroDTO> exibirLivros() {
-        List<LivroDTO> livrosDTO = new ArrayList<>();
-
-        for (Livro livro : livroService.buscarLivros()) {
-            LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
-            livrosDTO.add(livroDTO);
-        }
-
-        return livrosDTO;
-    }*/
-
     @GetMapping
     public List<LivroDTO> exibirTodosOsLivros(@RequestParam(required = false) Genero genero,
                                               @RequestParam(required = false) Tags tags,
@@ -58,6 +45,15 @@ public class LivroController {
         }
 
         return livrosDTO;
+    }
+
+    //buscar livro
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public LivroDTO exibirLivro(@PathVariable int id) {
+        Livro livro  = livroService.buscarLivro(id);
+        return modelMapper.map(livro, LivroDTO.class);
+
     }
 
     @PutMapping(path = {"/{id}"})
