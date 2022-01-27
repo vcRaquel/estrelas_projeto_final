@@ -1,8 +1,8 @@
 package br.com.zup.projeto_final.Autor;
 
-import br.com.zup.projeto_final.Autor.customException.AutorNaoEncontradoException;
 import br.com.zup.projeto_final.Autor.dto.AutorDTO;
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.customException.AutorNaoEncontradoException;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import com.fasterxml.jackson.core.type.TypeReference;
