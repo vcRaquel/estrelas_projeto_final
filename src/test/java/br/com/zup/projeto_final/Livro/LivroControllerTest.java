@@ -4,6 +4,7 @@ import br.com.zup.projeto_final.Components.ConversorModelMapper;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
+import br.com.zup.projeto_final.Usuario.UsuarioController;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
@@ -33,6 +34,8 @@ public class LivroControllerTest {
     private UsuarioLoginService usuarioLoginService;
     @MockBean
     private JWTComponent jwtComponent;
+    @MockBean
+    UsuarioController usuarioController;
 
     @Autowired
     MockMvc mockMvc;
@@ -51,14 +54,12 @@ public class LivroControllerTest {
         livro.setGenero(Genero.AVENTURA);
         livro.setId(1);
         livro.setLido(true);
-        livro.setCurtidas(1);
         livro.setTags(Tags.LEITURA_LEVE);
 
         livroDTO = new LivroDTO();
         livroDTO.setNome("Livro");
         livroDTO.setGenero(Genero.AVENTURA);
         livroDTO.setLido(true);
-        livroDTO.setCurtidas(1);
         livroDTO.setTags(Tags.LEITURA_LEVE);
 
     }
@@ -66,7 +67,7 @@ public class LivroControllerTest {
     @Test
     @WithMockUser("user@user.com")
     public void testarCadastroDeLivro() throws Exception {
-        Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class))).thenReturn(livro);
+        Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
         String json = objectMapper.writeValueAsString(livroDTO);
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/livros")
@@ -76,6 +77,7 @@ public class LivroControllerTest {
         String jsonDeResposta = resultado.andReturn().getResponse().getContentAsString();
         LivroDTO livroDTO = objectMapper.readValue(jsonDeResposta, LivroDTO.class);
     }
+
     //testar validação nome
     //testar validação genero
     //testar validação livro repetido
