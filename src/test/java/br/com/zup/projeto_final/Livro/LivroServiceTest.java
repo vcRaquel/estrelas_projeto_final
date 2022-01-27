@@ -31,7 +31,6 @@ public class LivroServiceTest {
         livro.setGenero(Genero.AVENTURA);
         livro.setId(1);
         livro.setLido(true);
-        livro.setCurtidas(1);
         livro.setTags(Tags.LEITURA_LEVE);
 
     }
@@ -40,11 +39,13 @@ public class LivroServiceTest {
     public void testarSalvarLivro(){
         Mockito.when(livroRepository.save(livro)).thenAnswer(objto -> objto.getArgument(0,Livro.class));
 
-        livroService.salvarLivro(livro);
+        livroService.salvarLivro(livro,Mockito.anyString());
 
         Mockito.verify(livroRepository, Mockito.times(1)).save(livro);
 
     }
+
+
     //testar salvar livro repetido
 
     @Test
