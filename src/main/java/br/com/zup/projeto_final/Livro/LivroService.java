@@ -39,7 +39,7 @@ public class LivroService {
         livroRepository.save(livroOptional.get());
     }
 
-    public List<Livro> exibirTodosOsLivros(Genero genero, Tags tags, String nome) {
+    public List<Livro> exibirTodosOsLivros(Genero genero, Tags tags, String nome, String autor) {
 
         if (genero != null) {
             return livroRepository.findAllByGenero(genero);
@@ -51,6 +51,10 @@ public class LivroService {
 
         if (nome != null) {
             return livroRepository.findAllByNome(nome);
+        }
+
+        if (autor != null) {
+            return livroRepository.findAllByAutor(autor);
         }
 
         List<Livro> livros = (List<Livro>) livroRepository.findAll();
