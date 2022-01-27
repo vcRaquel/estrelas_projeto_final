@@ -1,7 +1,8 @@
 package br.com.zup.projeto_final.Livro;
-import br.com.zup.projeto_final.Usuario.UsuarioController;
+
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.Usuario.UsuarioController;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,11 +47,12 @@ public class LivroController {
     @GetMapping
     public List<LivroDTO> exibirTodosOsLivros(@RequestParam(required = false) Genero genero,
                                               @RequestParam(required = false) Tags tags,
-                                              @RequestParam(required = false) String nome) {
+                                              @RequestParam(required = false) String nome,
+                                              @RequestParam(required = false) String autor) {
 
         List<LivroDTO> livrosDTO = new ArrayList<>();
 
-        for (Livro livro : livroService.exibirTodosOsLivros(genero, tags, nome)) {
+        for (Livro livro : livroService.exibirTodosOsLivros(genero, tags, nome, autor)) {
             LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
             livrosDTO.add(livroDTO);
         }
