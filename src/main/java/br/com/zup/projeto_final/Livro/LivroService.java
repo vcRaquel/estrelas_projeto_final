@@ -2,6 +2,7 @@ package br.com.zup.projeto_final.Livro;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Usuario.UsuarioService;
 import br.com.zup.projeto_final.Enun.Genero;
+import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +37,14 @@ public class LivroService {
         livroRepository.save(livroOptional.get());
     }
 
-    public List<Livro> exibirTodosOsLivros(Genero genero) {
+    public List<Livro> exibirTodosOsLivros(Genero genero, Tags tags) {
+
         if (genero != null) {
             return livroRepository.findAllByGenero(genero);
+        }
+
+        if (tags!=null) {
+            return livroRepository.findAllByTags(tags);
         }
 
         List<Livro> livros = (List<Livro>) livroRepository.findAll();
