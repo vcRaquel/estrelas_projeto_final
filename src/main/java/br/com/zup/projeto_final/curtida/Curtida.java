@@ -4,18 +4,18 @@ package br.com.zup.projeto_final.curtida;
 import br.com.zup.projeto_final.Enun.Tipo;
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
+@Entity
+@Table(name = "curtidas")
 public class Curtida {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int id_recurso;
-    private int id_usuario;
+    private Long id_curtida;
+    private Long id_recurso;
+    private Long id_usuario;
     private Tipo tipo;
 
 }
