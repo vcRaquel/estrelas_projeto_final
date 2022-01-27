@@ -11,5 +11,5 @@ public interface LivroRepository extends CrudRepository <Livro, Integer> {
     List <Livro> findAllByGenero (Genero genero);
     List<Livro> findAllByTags (Tags tags);
     List<Livro> findAllByNome(String nome);
-
+    List<Livro> findAllByAutor(String autor);
 }
