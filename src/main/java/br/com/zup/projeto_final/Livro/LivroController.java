@@ -1,6 +1,6 @@
 package br.com.zup.projeto_final.Livro;
-
 import br.com.zup.projeto_final.Usuario.UsuarioController;
+import br.com.zup.projeto_final.Enun.Genero;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class LivroController {
         return modelMapper.map(livro, LivroDTO.class);
     }
 
-    @GetMapping
+    /*@GetMapping
     public List<LivroDTO> exibirLivros() {
         List<LivroDTO> livrosDTO = new ArrayList<>();
 
@@ -40,18 +40,19 @@ public class LivroController {
         }
 
         return livrosDTO;
-    }
+    }*/
 
     @GetMapping
-    public List<LivroDTO> exibirTodosOsLivros() {
-        List<LivroDTO> livrosDTOS = new ArrayList<>();
+    public List<LivroDTO> exibirTodosOsLivros(@RequestParam (required = false)Genero genero) {
 
-        for (Livro livro : livroService.exibirTodosOsLivros()) {
+        List<LivroDTO> livrosDTO = new ArrayList<>();
+
+        for (Livro livro : livroService.exibirTodosOsLivros(genero)) {
             LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
-            livrosDTOS.add(livroDTO);
+            livrosDTO.add(livroDTO);
         }
 
-        return livrosDTOS;
+        return livrosDTO;
     }
 
     @PutMapping(path = {"/{id}"})
