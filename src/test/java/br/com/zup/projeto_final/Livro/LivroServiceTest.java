@@ -83,7 +83,6 @@ public class LivroServiceTest {
 
     }
 
-
     //testar salvar livro repetido
 
     @Test
@@ -105,7 +104,6 @@ public class LivroServiceTest {
         Assertions.assertEquals(livro.getId(), livroResposta.getId());
     }
 
-    //testar buscar livro que não existe
     @Test
     public void testarBuscarLivroNaoEncontrado(){
         Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
@@ -118,7 +116,6 @@ public class LivroServiceTest {
 
     }
 
-    //testar atualizar comentários do livro
     @Test
     public void testarAtualizarComentariosDoLivro(){
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
@@ -141,7 +138,6 @@ public class LivroServiceTest {
         Mockito.verify(livroRepository, Mockito.times(1)).save(livro);
     }
 
-    //testar atualizar livro que não existe
     @Test
     public void testarAtualizarLivroNaoEncontrado(){
         Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
@@ -151,6 +147,17 @@ public class LivroServiceTest {
                 () -> livroService.atualizarLivro(0,livro));
 
         Assertions.assertEquals("Livro não cadastrado.", exception.getMessage());
+
+    }
+
+    @Test
+    public void testarDeletarLivro(){
+        Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
+        Mockito.doNothing().when(livroRepository).deleteById(Mockito.anyInt());
+
+        livroService.deletarLivro(Mockito.anyInt());
+
+        Mockito.verify(livroRepository, Mockito.times(1)).deleteById(Mockito.anyInt());
 
     }
 
