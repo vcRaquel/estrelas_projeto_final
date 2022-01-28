@@ -117,16 +117,6 @@ public class LivroControllerTest {
 
     }
 
-    //        Mockito.when(musicaService.cadastrarMusica(Mockito.any(Musica.class))).thenReturn(musica);
-    //        String json = objectMapper.writeValueAsString(musicaCadastroDTO);
-    //        json = json.replace("\"estilo\":\"ROCK\"}", "\"estilo\":\"Teste\"}");
-    //
-    //        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/musicas")
-    //                .content(json).contentType(MediaType.APPLICATION_JSON))
-    //                .andExpect(MockMvcResultMatchers.status().is(422));
-    //
-    //    }
-
     @Test
     @WithMockUser("user@user.com")
     public void testarCadastroDeLivroValidacaoGeneroInvalido() throws Exception {
