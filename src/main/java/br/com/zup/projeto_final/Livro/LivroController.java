@@ -3,6 +3,7 @@ package br.com.zup.projeto_final.Livro;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Usuario.UsuarioController;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ public class LivroController {
     LivroService livroService;
     @Autowired
     UsuarioController usuarioController;
+    @Autowired
+    UsuarioLogadoService usuarioLogado;
 
     @Autowired
     ModelMapper modelMapper;
@@ -26,8 +29,8 @@ public class LivroController {
     @ResponseStatus(HttpStatus.CREATED)
     public LivroDTO cadastrarLivro(@RequestBody Livro livroDTO) {
         Livro livro = modelMapper.map(livroDTO, Livro.class);
-        usuarioController.pegarId();
-        livroService.salvarLivro(livro, usuarioController.pegarId());
+        usuarioLogado.pegarId();
+        livroService.salvarLivro(livro, usuarioLogado.pegarId());
 
         return modelMapper.map(livro, LivroDTO.class);
     }

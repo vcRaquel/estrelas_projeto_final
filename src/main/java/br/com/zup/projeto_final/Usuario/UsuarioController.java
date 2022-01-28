@@ -19,13 +19,10 @@ public class UsuarioController {
     UsuarioService usuarioService;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    UsuarioLogado usuarioLogado;
 
 
-    public String pegarId() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UsuarioLogado usuarioLogado = (UsuarioLogado) principal;
-        return usuarioLogado.getId();
-    }
 
 
     @PostMapping
