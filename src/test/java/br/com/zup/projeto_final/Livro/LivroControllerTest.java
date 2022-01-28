@@ -106,7 +106,7 @@ public class LivroControllerTest {
 
     @Test
     @WithMockUser("user@user.com")
-    public void testarCadastroDeLivroValidacaoGenero() throws Exception {
+    public void testarCadastroDeLivroValidacaoGeneroNull() throws Exception {
         livro.setGenero(null);
         Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
         String json = objectMapper.writeValueAsString(livroDTO);
@@ -117,6 +117,28 @@ public class LivroControllerTest {
 
     }
 
+    //        Mockito.when(musicaService.cadastrarMusica(Mockito.any(Musica.class))).thenReturn(musica);
+    //        String json = objectMapper.writeValueAsString(musicaCadastroDTO);
+    //        json = json.replace("\"estilo\":\"ROCK\"}", "\"estilo\":\"Teste\"}");
+    //
+    //        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/musicas")
+    //                .content(json).contentType(MediaType.APPLICATION_JSON))
+    //                .andExpect(MockMvcResultMatchers.status().is(422));
+    //
+    //    }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarCadastroDeLivroValidacaoGeneroInvalido() throws Exception {
+        Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
+        String json = objectMapper.writeValueAsString(livroDTO);
+        json = json.replace("\"genero\":\"AVENTURA\"}", "\"genero\":\"Teste\"}");
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/livros")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+
+    }
 
     @Test
     @WithMockUser("user@user.com")
