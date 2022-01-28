@@ -78,7 +78,6 @@ public class LivroControllerTest {
         LivroDTO livroDTO = objectMapper.readValue(jsonDeResposta, LivroDTO.class);
     }
 
-    //testar validação nome
     @Test
     @WithMockUser("user@user.com")
     public void testarCadastroDeLivroValidacaoNome() throws Exception {
@@ -91,10 +90,21 @@ public class LivroControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is(422));
 
     }
-    //testar validação autor
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarCadastroDeLivroValidacaoAutor() throws Exception {
+        livro.setAutor("");
+        Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
+        String json = objectMapper.writeValueAsString(livroDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/livros")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+
+    }
 
     //testar validação genero
-
 
     @Test
     @WithMockUser("user@user.com")
