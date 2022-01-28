@@ -79,8 +79,8 @@ public class LivroControllerTest {
     }
 
     //testar validação nome
+    //testar validação autor
     //testar validação genero
-    //testar validação livro repetido
 
     @Test
     @WithMockUser("user@user.com")
@@ -115,6 +115,16 @@ public class LivroControllerTest {
 
     }
     //testar buscar livro que não existe
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarExibirLivroNaoEncontrado() throws Exception{
+        Mockito.doThrow(LivroNaoEncontradoException.class).when(livroService).buscarLivro(Mockito.anyInt());
+
+        String json = objectMapper.writeValueAsString(livroDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/livros/0")
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().is(404));
+    }
 
     @Test
     @WithMockUser("user@user.com")
@@ -131,8 +141,10 @@ public class LivroControllerTest {
 
     }
 
-    //testar atualizar livro sem ser o usuario que cadastrou
     //testar atualizar livro que não existe
+
+    //testar atualizar livro sem ser o usuario que cadastrou
+
 
     @Test
     @WithMockUser("user@user.com")
@@ -146,6 +158,8 @@ public class LivroControllerTest {
         Mockito.verify(livroService, Mockito.times(1)).deletarLivro(Mockito.anyInt());
 
     }
+
+    //testar deletar livro sem ser o usuario que cadastrou
 
     @Test
     @WithMockUser("user@user.com")
