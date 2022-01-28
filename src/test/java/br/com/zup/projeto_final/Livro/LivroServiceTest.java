@@ -161,4 +161,13 @@ public class LivroServiceTest {
 
     }
 
+    @Test
+    public void testarDeletarLivroNaoEncontrado(){
+        Mockito.doNothing().when(livroRepository).deleteById(Mockito.anyInt());
+
+        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () ->{
+            livroService.deletarLivro(0);
+        });
+    }
+
 }
