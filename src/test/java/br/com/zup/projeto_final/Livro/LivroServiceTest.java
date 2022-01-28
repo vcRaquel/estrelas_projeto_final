@@ -142,6 +142,16 @@ public class LivroServiceTest {
     }
 
     //testar atualizar livro que não existe
+    @Test
+    public void testarAtualizarLivroNaoEncontrado(){
+        Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
+        Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
+        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class,
+                () -> livroService.atualizarLivro(0,livro));
+
+        Assertions.assertEquals("Livro não cadastrado.", exception.getMessage());
+
+    }
 
 }
