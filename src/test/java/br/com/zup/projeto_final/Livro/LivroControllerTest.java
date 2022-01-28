@@ -99,6 +99,21 @@ public class LivroControllerTest {
     }
 
     //testar buscar livro por id
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarExibicaoDeLivro() throws Exception {
+
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/livros/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        LivroDTO livroDTO = objectMapper.readValue(jsonResposta,
+                LivroDTO.class);
+
+    }
     //testar buscar livro que não existe
 
     @Test
