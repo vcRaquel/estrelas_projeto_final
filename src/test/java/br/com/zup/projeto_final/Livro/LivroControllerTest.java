@@ -79,8 +79,22 @@ public class LivroControllerTest {
     }
 
     //testar validação nome
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarCadastroDeLivroValidacaoNome() throws Exception {
+        livro.setNome("");
+        Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
+        String json = objectMapper.writeValueAsString(livroDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/livros")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+
+    }
     //testar validação autor
+
     //testar validação genero
+
 
     @Test
     @WithMockUser("user@user.com")
