@@ -7,6 +7,9 @@ import br.com.zup.projeto_final.Textos.comentario.ComentariosService;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioRepository;
 import br.com.zup.projeto_final.Usuario.UsuarioService;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
+import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -57,5 +60,15 @@ public class ComentarioServiceTest {
         Mockito.when(comentarioRepository.save(comentario)).thenReturn(comentario);
 
         comentariosService.salvarComentario(Mockito.anyString(), comentario);
+    }
+
+    @Test
+    public void testarSalvarComentarioUsuarioNaoEncontrado(){
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.empty())
+                .thenThrow(new UsuarioNaoEncontradoException(""));
+
+        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () ->{
+            comentariosService.salvarComentario(Mockito.anyString(), comentario);
+        });
     }
 }
