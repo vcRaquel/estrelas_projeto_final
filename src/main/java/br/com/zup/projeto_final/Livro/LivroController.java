@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,8 @@ public class LivroController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LivroDTO cadastrarLivro(@RequestBody LivroDTO livroDTO) {
+
+    public LivroDTO cadastrarLivro(@Valid @RequestBody LivroDTO livroDTO) {
         Livro livro = modelMapper.map(livroDTO, Livro.class);
         livroService.salvarLivro(livro, usuarioLogado.pegarId());
 
