@@ -4,7 +4,9 @@ import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Usuario.UsuarioService;
-import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;
+
+import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
