@@ -83,7 +83,7 @@ public class LivroServiceTest {
 
     }
 
-    //testar salvar livro repetido
+    //testar salvar livro repetido (implementar regra)
 
     @Test
     public void testarBuscarLivros() {
@@ -92,6 +92,7 @@ public class LivroServiceTest {
         List<Livro> livrosResposta = livroService.buscarLivros();
         Assertions.assertNotNull(livrosResposta);
         Mockito.verify(livroRepository, Mockito.times(1)).findAll();
+
     }
 
     @Test
@@ -102,6 +103,7 @@ public class LivroServiceTest {
         Assertions.assertNotNull(livroResposta);
         Assertions.assertEquals(Livro.class, livroResposta.getClass());
         Assertions.assertEquals(livro.getId(), livroResposta.getId());
+
     }
 
     @Test
@@ -128,6 +130,19 @@ public class LivroServiceTest {
     }
 
     @Test
+    public void testarAtualizarComentariosDoLivroNaoEncontrado(){
+        Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
+
+        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () ->{
+            livroService.atualizarComentariosDoLivro(Mockito.anyInt(), comentario);
+        });
+
+        Assertions.assertEquals("Livro não encontrado", exception.getMessage());
+
+    }
+
+    @Test
     public void testarAtualizarLivro() {
         Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
 
@@ -136,6 +151,7 @@ public class LivroServiceTest {
         livroService.atualizarLivro(Mockito.anyInt(), livro);
 
         Mockito.verify(livroRepository, Mockito.times(1)).save(livro);
+
     }
 
     @Test
@@ -168,6 +184,7 @@ public class LivroServiceTest {
         LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () ->{
             livroService.deletarLivro(0);
         });
+
     }
 
 }
