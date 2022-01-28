@@ -20,10 +20,10 @@ public class ComentariosService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    public void salvarComentario(String idUsuario, int idLivro, Comentario comentario){
+    public void salvarComentario(String idUsuario, int idLivro, Comentario comentario) throws UsuarioNaoEncontradoException {
         Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
         if (usuario.isEmpty()){
-            throw new UsuarioNaoEncontradoException();
+            throw new UsuarioNaoEncontradoException("Usuario nao encontrado.");
         }
         livroService.atualizarComentariosDoLivro(idLivro, comentario);
         comentario.setQuemComentou(usuario.get());
