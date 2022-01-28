@@ -98,7 +98,6 @@ public class LivroControllerTest {
 
     }
 
-    //testar buscar livro por id
     @Test
     @WithMockUser("user@user.com")
     public void testarExibicaoDeLivro() throws Exception {
@@ -114,7 +113,7 @@ public class LivroControllerTest {
                 LivroDTO.class);
 
     }
-    //testar buscar livro que não existe
+
     @Test
     @WithMockUser("user@user.com")
     public void testarExibirLivroNaoEncontrado() throws Exception{
@@ -141,10 +140,19 @@ public class LivroControllerTest {
 
     }
 
-    //testar atualizar livro que não existe
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarAtualizarLivroNaoEncontrado() throws Exception{
+        Mockito.doThrow(LivroNaoEncontradoException.class).when(livroService)
+                .atualizarLivro(Mockito.anyInt(),Mockito.any(Livro.class));
+
+        String json = objectMapper.writeValueAsString(livroDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/livros/0").content(json)
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().is(404));
+    }
 
     //testar atualizar livro sem ser o usuario que cadastrou
-
 
     @Test
     @WithMockUser("user@user.com")
