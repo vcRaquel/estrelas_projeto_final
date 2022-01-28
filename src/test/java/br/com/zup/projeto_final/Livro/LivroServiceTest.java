@@ -2,6 +2,7 @@ package br.com.zup.projeto_final.Livro;
 
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.Review;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Usuario.Usuario;
@@ -105,6 +106,17 @@ public class LivroServiceTest {
     }
 
     //testar buscar livro que não existe
+    @Test
+    public void testarBuscarLivroNaoEncontrado(){
+        Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
+        Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () ->{
+            livroService.buscarLivro(0);
+        });
+
+        Assertions.assertEquals("Livro não encontrado", exception.getMessage());
+
+    }
 
     //testar atualizar comentários do livro
     @Test
