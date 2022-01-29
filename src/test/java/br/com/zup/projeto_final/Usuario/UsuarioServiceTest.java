@@ -1,7 +1,8 @@
 package br.com.zup.projeto_final.Usuario;
 
-import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
-import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
+
+import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
+import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

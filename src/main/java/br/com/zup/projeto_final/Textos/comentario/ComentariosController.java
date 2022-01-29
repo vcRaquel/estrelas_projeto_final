@@ -24,7 +24,7 @@ public class ComentariosController {
     @ResponseStatus(HttpStatus.CREATED)
     public void cadastrarComentario(@RequestBody ComentarioDTO comentarioDTO) {
         Comentario comentario = modelMapper.map(comentarioDTO, Comentario.class);
-        comentariosService.salvarComentario(usuarioController.pegarId(), comentario.getIdLivro(), comentario);
+        comentariosService.salvarComentario(usuarioController.pegarId(), comentario.getLivro_id(), comentario);
 
     }
 

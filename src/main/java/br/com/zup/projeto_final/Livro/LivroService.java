@@ -1,5 +1,4 @@
 package br.com.zup.projeto_final.Livro;
-
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
@@ -95,10 +94,6 @@ public class LivroService {
 
         livroRepository.save(livroParaAtualizar);
 
-        livroParaAtualizar.setNome(livro.getNome());
-        livroParaAtualizar.setTags(livro.getTags());
-        livroParaAtualizar.setLido(livro.isLido());
-        livroParaAtualizar.setGenero(livro.getGenero());
 
         return livroParaAtualizar;
     }

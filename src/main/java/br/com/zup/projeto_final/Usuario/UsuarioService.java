@@ -1,8 +1,10 @@
 
 package br.com.zup.projeto_final.Usuario;
-import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
+
 import br.com.zup.projeto_final.Livro.Livro;
-import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
+
+import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
+import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

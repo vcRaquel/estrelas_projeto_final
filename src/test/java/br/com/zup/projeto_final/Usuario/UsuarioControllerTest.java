@@ -1,10 +1,11 @@
 package br.com.zup.projeto_final.Usuario;
 
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
-import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
-import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
+
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
+import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
+import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import com.fasterxml.jackson.core.type.TypeReference;
