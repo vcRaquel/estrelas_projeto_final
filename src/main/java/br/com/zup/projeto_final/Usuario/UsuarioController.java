@@ -66,10 +66,10 @@ public class UsuarioController {
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletarUsuario(@PathVariable String id) {
-        usuarioService.deletarusuario(id);
+    public void deletarUsuario() {
+        usuarioService.deletarusuario(usuarioLogadoService.pegarId());
     }
 
 
