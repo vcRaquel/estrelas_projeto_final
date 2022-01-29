@@ -15,7 +15,7 @@ public class Curtida {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_curtida;
     private Long id_recurso;
-    private Long id_usuario;
+    private String id_usuario;
     private Tipo tipo;
 
 }

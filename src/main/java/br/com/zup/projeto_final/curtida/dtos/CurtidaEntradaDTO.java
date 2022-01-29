@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class CurtidaEntradaDTO {
 
-    private Long id_usuario;
+    private String id_usuario;
     private Long id_recurso;
     private Tipo tipo;
 
