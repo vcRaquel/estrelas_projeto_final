@@ -6,13 +6,10 @@ import br.com.zup.projeto_final.Textos.comentario.ComentarioRepository;
 import br.com.zup.projeto_final.Textos.comentario.ComentariosService;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioRepository;
-import br.com.zup.projeto_final.Usuario.UsuarioService;
-import br.com.zup.projeto_final.Usuario.customException.UsuarioJaCadastradoException;
-import br.com.zup.projeto_final.Usuario.customException.UsuarioNaoEncontradoException;
+import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,7 +45,7 @@ public class ComentarioServiceTest {
         comentario = new Comentario();
         comentario.setQuemComentou(usuario);
         comentario.setId(1);
-        comentario.setIdLivro(1);
+        comentario.setLivro_id(1);
         comentario.setTexto("a");
 
     }
