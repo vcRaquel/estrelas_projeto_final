@@ -17,8 +17,6 @@ public class ComentariosController {
     @Autowired
     ComentariosService comentariosService;
     @Autowired
-    UsuarioController usuarioController;
-    @Autowired
     ModelMapper modelMapper;
     @Autowired
     UsuarioLogadoService usuarioLogadoService;

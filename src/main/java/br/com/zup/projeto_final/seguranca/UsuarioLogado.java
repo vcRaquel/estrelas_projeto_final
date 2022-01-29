@@ -1,13 +1,14 @@
 package br.com.zup.projeto_final.seguranca;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-
 @Data
 public class UsuarioLogado implements UserDetails {
     private String id;

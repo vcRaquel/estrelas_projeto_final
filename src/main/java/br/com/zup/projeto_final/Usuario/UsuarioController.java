@@ -19,10 +19,6 @@ public class UsuarioController {
     UsuarioService usuarioService;
     @Autowired
     ModelMapper modelMapper;
-    @Autowired
-    UsuarioLogado usuarioLogado;
-
-
 
 
     @PostMapping
