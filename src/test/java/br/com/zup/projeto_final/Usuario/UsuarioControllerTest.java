@@ -262,9 +262,10 @@ public class UsuarioControllerTest {
     @Test
     @WithMockUser("user@user.com")
     public void testarDeletarUsuario() throws Exception {
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn("1");
         Mockito.doNothing().when(usuarioService).deletarusuario(Mockito.anyString());
 
-        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/" + usuario.getId())
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(204));
 
