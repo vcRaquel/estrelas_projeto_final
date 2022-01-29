@@ -79,8 +79,18 @@ public class UsuarioService {
 
 
     public void deletarusuario(String id){
-        buscarUsuario(id);
+        Usuario usuarioQueEstaSendoDeletado = buscarUsuario(id);
+        substituirUsuarioParaUsuarioDeletado(usuarioQueEstaSendoDeletado);
         usuarioRepository.deleteById(id);
+    }
+
+    public void substituirUsuarioParaUsuarioDeletado(Usuario usuario){
+        List <Livro> livrosSemDono = usuario.getLivrosCadastrados();
+        Optional <Usuario> usuarioDeletadoOptional = usuarioRepository.findByEmail("usuario_deletado@zupreaders.com");
+        Usuario usuarioDeletado = usuarioDeletadoOptional.get();
+        for (Livro referencia : livrosSemDono){
+            usuarioDeletado.getLivrosCadastrados().add(referencia);
+        }
     }
 
 }
