@@ -2,6 +2,7 @@ package br.com.zup.projeto_final.Usuario;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.UsuarioLogado;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ public class UsuarioController {
     UsuarioService usuarioService;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    UsuarioLogadoService usuarioLogadoService;
 
 
     @PostMapping
@@ -52,10 +55,11 @@ public class UsuarioController {
 
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public UsuarioSaidaDTO atualizarUsuario(@PathVariable String id, @RequestBody UsuarioDTO usuarioDTO) throws Exception {
-        Usuario usuario = usuarioService.atualizarUsuario(id, modelMapper.map(usuarioDTO, Usuario.class));
+    public UsuarioSaidaDTO atualizarUsuario(@RequestBody UsuarioDTO usuarioDTO){
+        Usuario usuario = usuarioService.atualizarUsuario(usuarioLogadoService.pegarId(),
+                modelMapper.map(usuarioDTO, Usuario.class));
 
 
         return modelMapper.map(usuario, UsuarioSaidaDTO.class);
