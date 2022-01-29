@@ -1,8 +1,9 @@
 package br.com.zup.projeto_final.Livro;
 
+
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
-import br.com.zup.projeto_final.Usuario.UsuarioController;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,20 +15,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/livros")
 public class LivroController {
+
     @Autowired
     LivroService livroService;
     @Autowired
-    UsuarioController usuarioController;
-
+    UsuarioLogadoService usuarioLogado;
     @Autowired
     ModelMapper modelMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LivroDTO cadastrarLivro(@RequestBody Livro livroDTO) {
+    public LivroDTO cadastrarLivro(@RequestBody LivroDTO livroDTO) {
         Livro livro = modelMapper.map(livroDTO, Livro.class);
-        usuarioController.pegarId();
-        livroService.salvarLivro(livro, usuarioController.pegarId());
+        livroService.salvarLivro(livro, usuarioLogado.pegarId());
 
         return modelMapper.map(livro, LivroDTO.class);
     }

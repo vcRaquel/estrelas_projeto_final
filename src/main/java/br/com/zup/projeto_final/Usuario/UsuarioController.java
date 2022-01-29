@@ -21,13 +21,6 @@ public class UsuarioController {
     ModelMapper modelMapper;
 
 
-    public String pegarId() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UsuarioLogado usuarioLogado = (UsuarioLogado) principal;
-        return usuarioLogado.getId();
-    }
-
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioSaidaDTO cadastrarUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) {
