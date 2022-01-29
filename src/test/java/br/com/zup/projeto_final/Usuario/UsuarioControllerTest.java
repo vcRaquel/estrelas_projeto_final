@@ -8,6 +8,7 @@ import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,8 @@ public class UsuarioControllerTest {
     private UsuarioLoginService usuarioLoginService;
     @MockBean
     private JWTComponent jwtComponent;
+    @MockBean
+    private UsuarioLogadoService usuarioLogadoService;
 
     @Autowired
     MockMvc mockMvc;
@@ -229,10 +232,11 @@ public class UsuarioControllerTest {
     @Test
     @WithMockUser("user@user.com")
     public void testarAtualizarUsuario() throws Exception {
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn("1");
         Mockito.when(usuarioService.atualizarUsuario(Mockito.anyString(), Mockito.any(Usuario.class))).thenReturn(usuario);
         String json = objectMapper.writeValueAsString(usuarioDTO);
 
-        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/usuarios/1")
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/usuarios")
                         .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(200));
 
