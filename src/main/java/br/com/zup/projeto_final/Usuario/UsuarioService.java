@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,6 +89,10 @@ public class UsuarioService {
         List <Livro> livrosSemDono = usuario.getLivrosCadastrados();
         Optional <Usuario> usuarioDeletadoOptional = usuarioRepository.findByEmail("usuario_deletado@zupreaders.com");
         Usuario usuarioDeletado = usuarioDeletadoOptional.get();
+        if (usuarioDeletado.getLivrosCadastrados() == null){
+            usuarioDeletado.setLivrosCadastrados(new ArrayList<>());
+        }
+
         for (Livro referencia : livrosSemDono){
             usuarioDeletado.getLivrosCadastrados().add(referencia);
         }
