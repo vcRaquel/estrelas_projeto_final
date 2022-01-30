@@ -44,5 +44,13 @@ public class CurtidaServiceTest {
         curtidaService.impedirCurtidaRepetida(curtida);
     }
 
-
+    @Test
+    public void testarImpedirCurtidaRepetidaCaminhoNegativo(){
+        Mockito.when(curtidaRepository.curtidaRepetida(Mockito.anyString(), Mockito.anyLong(), Mockito.anyString()))
+                .thenReturn(curtida);
+        CurtidaRepetidaException exception = Assertions.assertThrows(CurtidaRepetidaException.class, () ->{
+            curtidaService.salvarCurtida(curtida);
+        });
+        Assertions.assertEquals("Este COMENTARIO já foi curtido por este usuário", exception.getMessage());
+    }
 }
