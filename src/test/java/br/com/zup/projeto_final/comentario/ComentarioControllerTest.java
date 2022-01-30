@@ -67,7 +67,7 @@ public class ComentarioControllerTest {
 
 
         comentarioDTO = new ComentarioDTO();
-        comentarioDTO.setIdLivro(1);
+        comentarioDTO.setLivro_id(1);
         comentarioDTO.setTexto("a");
 
         objectMapper = new ObjectMapper();
