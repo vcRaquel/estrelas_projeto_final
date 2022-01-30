@@ -11,7 +11,16 @@ public class CurtidaService {
     CurtidaRepository curtidaRepository;
 
     public void salvarCurtida(Curtida curtida){
+        impedirCurtidaRepetida(curtida);
         curtidaRepository.save(curtida);
+    }
+
+    public void impedirCurtidaRepetida(Curtida curtida){
+        Curtida curtidaEncontrada = curtidaRepository.curtidaRepetida(curtida.getId_usuario(),
+                curtida.getId_recurso(), String.valueOf(curtida.getTipo()));
+        if (curtidaEncontrada != null){
+            throw new CurtidaRepetidaException("Este " + curtida.getTipo() + " já foi curtido por este usuário");
+        }
     }
 
 
