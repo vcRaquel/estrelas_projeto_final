@@ -26,10 +26,11 @@ public class ComentariosService {
         if (usuario.isEmpty()){
             throw new UsuarioNaoEncontradoException("");
         }
+        comentarioRepository.save(comentario);
         livroService.atualizarComentariosDoLivro(comentario.getLivro_id(), comentario);
 
         comentario.setQuemComentou(usuario.get());
-        comentarioRepository.save(comentario);
+
     }
 
 

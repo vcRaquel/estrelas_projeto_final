@@ -6,6 +6,6 @@ import lombok.Data;
 public class ComentarioDTO {
 
     private String texto;
-    private int idLivro;
+    private int livro_id;
 
 }
