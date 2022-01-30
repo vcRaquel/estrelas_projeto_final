@@ -1,6 +1,9 @@
 package br.com.zup.projeto_final.curtida;
 
 import br.com.zup.projeto_final.Enun.Tipo;
+import br.com.zup.projeto_final.customException.CurtidaRepetidaException;
+import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -33,4 +36,13 @@ public class CurtidaServiceTest {
         curtidaService.salvarCurtida(curtida);
         Mockito.verify(curtidaRepository, Mockito.times(1)).save(curtida);
     }
+
+    @Test
+    public void testarImpedirCurtidaRepetidaCaminhoPositivo(){
+        Mockito.when(curtidaRepository.curtidaRepetida(Mockito.anyString(), Mockito.anyLong(), Mockito.anyString()))
+                .thenReturn(null);
+        curtidaService.impedirCurtidaRepetida(curtida);
+    }
+
+
 }
