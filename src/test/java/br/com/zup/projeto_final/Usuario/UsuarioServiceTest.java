@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,26 +36,44 @@ public class UsuarioServiceTest {
     }
 
     @Test
+    public void testarUsuarioExistePorEmail() {
+        Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        Boolean resposta = usuarioService.usuarioExistePorEmail(Mockito.anyString());
+        Assertions.assertTrue(resposta);
+
+        Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+        resposta = usuarioService.usuarioExistePorEmail(Mockito.anyString());
+        Assertions.assertFalse(resposta);
+
+    }
+
+    @Test
     public void testarSalvarUsuario() {
+        //caso o usuário esteja cadastrado
+        Mockito.when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(Optional.of(usuario));
+        Assertions.assertThrows(UsuarioJaCadastradoException.class, () -> usuarioService.salvarUsuario(usuario));
+
+        //caso o usuário não esteja cadastrado
+        Mockito.when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(Optional.empty());
         Mockito.when(usuarioRepository.save(usuario))
                 .thenAnswer(objto -> objto.getArgument(0, Usuario.class));
 
-        usuarioService.salvarUsuario(usuario);
+        Usuario usuarioResposta = usuarioService.salvarUsuario(usuario);
 
         Mockito.verify(usuarioRepository, Mockito.times(1)).save(usuario);
+        Assertions.assertNotNull(usuarioResposta);
 
     }
 
     //testar salvar usuário repetido
     @Test
-    public void testarSalvarUsuarioRepetido(){
+    public void testarSalvarUsuarioRepetido() {
         Mockito.when(usuarioRepository.save(usuario))
                 .thenThrow(new UsuarioJaCadastradoException("Usuário já cadastrado"));
 
-        UsuarioJaCadastradoException exception = Assertions.assertThrows(UsuarioJaCadastradoException.class, () ->{
+        UsuarioJaCadastradoException exception = Assertions.assertThrows(UsuarioJaCadastradoException.class, () -> {
             usuarioService.salvarUsuario(usuario);
         });
-
 
     }
 
@@ -69,27 +88,31 @@ public class UsuarioServiceTest {
 
     //testar exibir usuário
     @Test
-    public void testarBuscarUsuario(){
+    public void testarBuscarUsuario() {
         Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
         Usuario usuarioResposta = usuarioService.buscarUsuario(Mockito.anyString());
 
         Assertions.assertNotNull(usuarioResposta);
-        Assertions.assertEquals(Usuario.class,usuarioResposta.getClass());
-        Assertions.assertEquals(usuario.getId(),usuarioResposta.getId());
 
         Mockito.verify(usuarioRepository, Mockito.times(1)).findById(Mockito.anyString());
+
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> usuarioService.buscarUsuario(Mockito.anyString()));
+
+        Mockito.verify(usuarioRepository, Mockito.times(2)).findById(Mockito.anyString());
+
     }
 
     //testar exibir usuário que não existe
     @Test
-    public void testarExibirUsuarioNaoEncontrado(){
+    public void testarExibirUsuarioNaoEncontrado() {
         Mockito.when(usuarioRepository.save(Mockito.any()))
                 .thenReturn(usuario);
 
         Mockito.when(usuarioRepository.findById(Mockito.anyString()))
                 .thenReturn(Optional.empty());
 
-        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () ->{
+        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
             usuarioService.buscarUsuario("0");
         });
 
@@ -115,14 +138,14 @@ public class UsuarioServiceTest {
 
     //testar atualizar usuário que não existe
     @Test
-    public void testarAtualizarUsuarioNaoEncontrado(){
+    public void testarAtualizarUsuarioNaoEncontrado() {
         Mockito.when(usuarioRepository.save(Mockito.any()))
                 .thenReturn(usuario);
 
         Mockito.when(usuarioRepository.findById(Mockito.anyString()))
                 .thenReturn(Optional.empty());
 
-        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () ->{
+        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
             usuarioService.atualizarUsuario("0", usuario);
         });
 
@@ -132,7 +155,7 @@ public class UsuarioServiceTest {
 
     //testar deletar usuario
     @Test
-    public void testarDeletarUsuarioSucesso(){
+    public void testarDeletarUsuarioSucesso() {
         Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
         Mockito.doNothing().when(usuarioRepository).deleteById(Mockito.anyString());
 
@@ -144,10 +167,10 @@ public class UsuarioServiceTest {
 
     //testar deletar usuário que não existe
     @Test
-    public void testarDeletarUsuarioNaoEncontrado(){
+    public void testarDeletarUsuarioNaoEncontrado() {
         Mockito.doNothing().when(usuarioRepository).deleteById(Mockito.anyString());
 
-        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () ->{
+        UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
             usuarioService.deletarusuario("0");
         });
 

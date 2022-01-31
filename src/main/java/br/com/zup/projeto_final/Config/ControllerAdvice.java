@@ -1,7 +1,10 @@
 package br.com.zup.projeto_final.Config;
+
 import br.com.zup.projeto_final.customException.CurtidaRepetidaException;
 import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
+import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,6 +38,14 @@ public class ControllerAdvice {
     public ErroDeValidacao tratarUsuarioJaCadastradoException(
             CurtidaRepetidaException exception) {
         return new ErroDeValidacao(exception.getMessage());
+
+    }
+
+    @ExceptionHandler(LivroNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroDeValidacao tratarLivroNaoEncontradoException(
+            LivroNaoEncontradoException livroNaoEncontradoException) {
+        return new ErroDeValidacao(livroNaoEncontradoException.getMessage());
 
     }
 

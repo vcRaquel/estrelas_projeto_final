@@ -1,6 +1,5 @@
 package br.com.zup.projeto_final.Livro;
 
-
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,24 +25,13 @@ public class LivroController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LivroDTO cadastrarLivro(@RequestBody LivroDTO livroDTO) {
+
+    public LivroDTO cadastrarLivro(@Valid @RequestBody LivroDTO livroDTO) {
         Livro livro = modelMapper.map(livroDTO, Livro.class);
         livroService.salvarLivro(livro, usuarioLogado.pegarId());
 
         return modelMapper.map(livro, LivroDTO.class);
     }
-
-    /*@GetMapping
-    public List<LivroDTO> exibirLivros() {
-        List<LivroDTO> livrosDTO = new ArrayList<>();
-
-        for (Livro livro : livroService.buscarLivros()) {
-            LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
-            livrosDTO.add(livroDTO);
-        }
-
-        return livrosDTO;
-    }*/
 
     @GetMapping
     public List<LivroDTO> exibirTodosOsLivros(@RequestParam(required = false) Genero genero,
@@ -58,6 +47,15 @@ public class LivroController {
         }
 
         return livrosDTO;
+    }
+
+    //buscar livro
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public LivroDTO exibirLivro(@PathVariable int id) {
+        Livro livro  = livroService.buscarLivro(id);
+        return modelMapper.map(livro, LivroDTO.class);
+
     }
 
     @PutMapping(path = {"/{id}"})
