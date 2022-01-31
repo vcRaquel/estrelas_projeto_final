@@ -42,29 +42,33 @@ public class LivroService {
     }
 
     public List<Livro> exibirTodosOsLivros(Genero genero, Tags tags, String nome, String autor) {
+        List<Livro> livros = new ArrayList<>();
 
         if (genero != null) {
-            return livroRepository.findAllByGenero(genero);
+            livros.addAll(livroRepository.findAllByGenero(genero)) ;
         }
 
-        if (tags != null) {
-            return livroRepository.findAllByTags(tags);
+        else if (tags != null) {
+           livros.addAll(livroRepository.findAllByTags(tags)) ;
         }
 
-        if (nome != null) {
-            return livroRepository.findAllByNome(nome);
+        else if (nome != null) {
+            livros.addAll(livroRepository.findAllByNome(nome)) ;
         }
 
-        if (autor != null) {
-            return livroRepository.findAllByAutor(autor);
+        else if (autor != null) {
+            livros.addAll(livroRepository.findAllByAutor(autor)) ;
         }
 
-        List<Livro> livros = (List<Livro>) livroRepository.findAll();
+        else {
+            livros = (List<Livro>) livroRepository.findAll();
+        }
 
         List<Livro> livrosOrdenados = new ArrayList<>();
         Livro livroMaisComentado = null;
+        int qtdLivros = livros.size();
 
-        while (livros.size() != livrosOrdenados.size()) {
+        while (qtdLivros != livrosOrdenados.size()) {
 
             for (Livro referencia : livros) {
                 if (livroMaisComentado == null) {
@@ -74,6 +78,7 @@ public class LivroService {
                 }
             }
             livrosOrdenados.add(livroMaisComentado);
+            livros.remove(livroMaisComentado);
             livroMaisComentado = null;
         }
         return livrosOrdenados;
