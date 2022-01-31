@@ -1,6 +1,9 @@
 package br.com.zup.projeto_final.Usuario;
 
 
+import br.com.zup.projeto_final.Enun.Genero;
+import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.Livro.Livro;
 import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -24,14 +28,39 @@ public class UsuarioServiceTest {
     UsuarioService usuarioService;
 
     private Usuario usuario;
+    private Usuario usuarioDeletado;
+    private List<Livro> livrosSemDono;
+    private Livro livro;
 
     @BeforeEach
     public void setup() {
+
+        livro = new Livro();
+        livro.setNome("Livro");
+        livro.setGenero(Genero.AVENTURA);
+        livro.setId(1);
+        livro.setLido(true);
+        livro.setTags(Tags.LEITURA_LEVE);
+        livro.setAutor("Autor");
+
+        livrosSemDono = new ArrayList<>();
+        livrosSemDono.add(livro);
+
         usuario = new Usuario();
         usuario.setId("1");
         usuario.setEmail("zupper@zup.com");
         usuario.setNome("Zupper");
         usuario.setSenha("aviao11");
+        usuario.setLivrosCadastrados(new ArrayList<>());
+        usuario.getLivrosCadastrados().add(livro);
+
+
+        usuarioDeletado = new Usuario();
+        usuarioDeletado.setId("2");
+        usuarioDeletado.setNome("USUARIO DELETADO");
+        usuarioDeletado.setEmail("usuario_deletado@zupreaders.com");
+        usuario.setSenha("usuario_deletado");
+
 
     }
 
@@ -91,14 +120,12 @@ public class UsuarioServiceTest {
     public void testarBuscarUsuario() {
         Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
         Usuario usuarioResposta = usuarioService.buscarUsuario(Mockito.anyString());
-
         Assertions.assertNotNull(usuarioResposta);
-
+        Assertions.assertEquals(Usuario.class, usuarioResposta.getClass());
+        Assertions.assertEquals(usuario.getId(), usuarioResposta.getId());
         Mockito.verify(usuarioRepository, Mockito.times(1)).findById(Mockito.anyString());
-
         Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
         Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> usuarioService.buscarUsuario(Mockito.anyString()));
-
         Mockito.verify(usuarioRepository, Mockito.times(2)).findById(Mockito.anyString());
 
     }
@@ -157,9 +184,9 @@ public class UsuarioServiceTest {
     @Test
     public void testarDeletarUsuarioSucesso() {
         Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(usuarioDeletado));
         Mockito.doNothing().when(usuarioRepository).deleteById(Mockito.anyString());
-
-        usuarioService.deletarusuario(Mockito.anyString());
+        usuarioService.deletarusuario(usuario.getId());
 
         Mockito.verify(usuarioRepository, Mockito.times(1)).deleteById(Mockito.anyString());
 

@@ -66,7 +66,7 @@ public class LivroServiceTest {
         comentario = new Comentario();
         comentario.setQuemComentou(usuario);
         comentario.setId(1);
-        comentario.setIdLivro(1);
+        comentario.setLivro_id(1);
         comentario.setTexto("Algum comentário");
 
     }

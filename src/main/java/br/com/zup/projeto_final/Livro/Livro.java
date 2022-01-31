@@ -4,6 +4,7 @@ import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Textos.Review;
+import br.com.zup.projeto_final.Usuario.Usuario;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +22,8 @@ public class Livro {
     private String autor;
     private Genero genero;
     private Tags tags;
+    @ManyToOne
+    private Usuario quemCadastrou;
     @OneToOne (cascade = CascadeType.PERSIST)
     private Review review;
     @OneToMany
