@@ -8,6 +8,7 @@ import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,8 @@ public class UsuarioControllerTest {
     private UsuarioLoginService usuarioLoginService;
     @MockBean
     private JWTComponent jwtComponent;
+    @MockBean
+    private UsuarioLogadoService usuarioLogadoService;
 
     @Autowired
     MockMvc mockMvc;
@@ -229,10 +232,11 @@ public class UsuarioControllerTest {
     @Test
     @WithMockUser("user@user.com")
     public void testarAtualizarUsuario() throws Exception {
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn("1");
         Mockito.when(usuarioService.atualizarUsuario(Mockito.anyString(), Mockito.any(Usuario.class))).thenReturn(usuario);
         String json = objectMapper.writeValueAsString(usuarioDTO);
 
-        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/usuarios/1")
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/usuarios")
                         .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(200));
 
@@ -244,26 +248,24 @@ public class UsuarioControllerTest {
     //testar atualizar usuario que não existe
     @Test //TDD
     @WithMockUser("user@user.com")
-    public void testarAtualizarUsuarioNaoEncontrado() throws Exception {
-
-        Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService)
-                .atualizarUsuario(Mockito.anyString(), Mockito.any(Usuario.class));
+    public void testarAtualizarUsuarioNaoPermitido() throws Exception {
 
         String json = objectMapper.writeValueAsString(usuarioDTO);
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
-                        .put("/usuarios/0").content(json)
+                        .put("/usuarios/1").content(json)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().is(404));
+                .andExpect(MockMvcResultMatchers.status().is(405));
 
     }
 
     @Test
     @WithMockUser("user@user.com")
     public void testarDeletarUsuario() throws Exception {
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn("1");
         Mockito.doNothing().when(usuarioService).deletarusuario(Mockito.anyString());
 
-        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/" + usuario.getId())
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(204));
 
