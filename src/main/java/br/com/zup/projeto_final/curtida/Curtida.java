@@ -16,6 +16,7 @@ public class Curtida {
     private Long id_curtida;
     private Long id_recurso;
     private String id_usuario;
+    @Enumerated(EnumType.STRING)
     private Tipo tipo;
 
 }
