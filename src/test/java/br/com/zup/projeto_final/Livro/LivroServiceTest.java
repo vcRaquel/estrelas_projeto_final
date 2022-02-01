@@ -11,6 +11,7 @@ import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -221,6 +222,114 @@ public class LivroServiceTest {
     public void testarOrdenarLista(){
         List<Livro> livrosOrdenados = livroService.ordenarLista(livros);
         Assertions.assertEquals(livrosOrdenados.get(0), livro2);
+    }
+
+    @Test
+    public void testarAplicarFiltrosFindAll(){
+        livro.setGenero(null);
+        livro.setAutor("");
+        livro.setTags(null);
+        livro.setNome("");
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+
+        Mockito.verify(livroRepository, Mockito.times(1)).findAll();
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroGenero(
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroTags(
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroNomeEAutor(
+                livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+
+    }
+
+    @Test
+    public void testarAplicarFiltrosNomeEAutor(){
+        livro.setGenero(null);
+        livro.setTags(null);
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+
+        Mockito.verify(livroRepository, Mockito.times(0)).findAll();
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroGenero(
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroTags(
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(1)).aplicarFiltroNomeEAutor(
+                livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+
+    }
+
+    @Test
+    public void testarAplicarFiltroGenero(){
+        livro.setAutor("");
+        livro.setTags(null);
+        livro.setNome("");
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+
+        Mockito.verify(livroRepository, Mockito.times(0)).findAll();
+        Mockito.verify(livroRepository, Mockito.times(1)).aplicarFiltroGenero(
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroTags(
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroNomeEAutor(
+                livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+
+    }
+
+    @Test
+    public void testarAplicarFiltrosTags(){
+        livro.setGenero(null);
+        livro.setAutor("");
+        livro.setNome("");
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+
+        Mockito.verify(livroRepository, Mockito.times(0)).findAll();
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroGenero(
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(1)).aplicarFiltroTags(
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroNomeEAutor(
+                livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+
+    }
+
+    @Test
+    public void testarAplicarTodosOsFiltros(){
+        livro.setAutor("");
+        livro.setNome("");
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+
+        Mockito.verify(livroRepository, Mockito.times(0)).findAll();
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroGenero(
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroTags(
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroNomeEAutor(
+                livro.getNome(), livro.getAutor());
+        Mockito.verify(livroRepository, Mockito.times(1)).aplicarTodosFiltros(
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+
+    }
+
+    @Test
+    public void testarExibirTodosOsLivros(){
+        livro.setNome("");
+        livro.setAutor("");
+        livroService.exibirTodosOsLivros(Genero.TECNICO, Tags.LEITURA_LEVE, livro.getNome(), livro.getAutor());
+        Assertions.assertNotNull(livro.getNome(), livro.getAutor());
+
     }
 
 }
