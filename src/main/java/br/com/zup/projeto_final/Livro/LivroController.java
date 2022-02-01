@@ -39,8 +39,14 @@ public class LivroController {
                                               @RequestParam(required = false) String nome,
                                               @RequestParam(required = false) String autor) {
 
-        List<LivroDTO> livrosDTO = new ArrayList<>();
+        if (nome == null){
+            nome = "";
+        }
+        if (autor == null){
+            autor = "";
+        }
 
+        List<LivroDTO> livrosDTO = new ArrayList<>();
         for (Livro livro : livroService.exibirTodosOsLivros(genero, tags, nome, autor)) {
             LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
             livrosDTO.add(livroDTO);

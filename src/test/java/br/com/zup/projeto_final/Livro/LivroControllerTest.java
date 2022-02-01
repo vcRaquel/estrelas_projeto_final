@@ -8,6 +8,7 @@ import br.com.zup.projeto_final.Usuario.UsuarioController;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,8 @@ public class LivroControllerTest {
     private JWTComponent jwtComponent;
     @MockBean
     UsuarioController usuarioController;
+    @MockBean
+    private UsuarioLogadoService usuarioLogadoService;
 
     @Autowired
     MockMvc mockMvc;
@@ -51,6 +54,7 @@ public class LivroControllerTest {
 
         livro = new Livro();
         livro.setNome("Livro");
+        livro.setAutor("autor");
         livro.setGenero(Genero.AVENTURA);
         livro.setId(1);
         livro.setLido(true);
@@ -58,6 +62,7 @@ public class LivroControllerTest {
 
         livroDTO = new LivroDTO();
         livroDTO.setNome("Livro");
+        livroDTO.setAutor("autor");
         livroDTO.setGenero(Genero.AVENTURA);
         livroDTO.setLido(true);
         livroDTO.setTags(Tags.LEITURA_LEVE);
@@ -82,6 +87,7 @@ public class LivroControllerTest {
     @WithMockUser("user@user.com")
     public void testarCadastroDeLivroValidacaoNome() throws Exception {
         livro.setNome("");
+        livroDTO.setNome("");
         Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
         String json = objectMapper.writeValueAsString(livroDTO);
 
@@ -95,6 +101,7 @@ public class LivroControllerTest {
     @WithMockUser("user@user.com")
     public void testarCadastroDeLivroValidacaoAutor() throws Exception {
         livro.setAutor("");
+        livroDTO.setAutor("");
         Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
         String json = objectMapper.writeValueAsString(livroDTO);
 
@@ -108,6 +115,7 @@ public class LivroControllerTest {
     @WithMockUser("user@user.com")
     public void testarCadastroDeLivroValidacaoGeneroNull() throws Exception {
         livro.setGenero(null);
+        livroDTO.setGenero(null);
         Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
         String json = objectMapper.writeValueAsString(livroDTO);
 
@@ -122,7 +130,7 @@ public class LivroControllerTest {
     public void testarCadastroDeLivroValidacaoGeneroInvalido() throws Exception {
         Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
         String json = objectMapper.writeValueAsString(livroDTO);
-        json = json.replace("\"genero\":\"AVENTURA\"}", "\"genero\":\"Teste\"}");
+        json = json.replace("AVENTURA","TESTE");;
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/livros")
                         .content(json).contentType(MediaType.APPLICATION_JSON))

@@ -275,12 +275,12 @@ public class UsuarioControllerTest {
 
     @Test //TDD
     @WithMockUser("user@user.com")
-    public void testarDeletarUsuarioNaoEncontrado() throws Exception {
+    public void testarDeletarOutroUsuario() throws Exception {
         Mockito.doThrow(UsuarioNaoEncontradoException.class).when(usuarioService).deletarusuario(Mockito.anyString());
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/" + usuario.getId())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().is(404));
+                .andExpect(MockMvcResultMatchers.status().is(405));
 
     }
 

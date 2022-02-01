@@ -6,6 +6,7 @@ import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -60,6 +61,12 @@ public class ControllerAdvice {
         }
         return erros;
 
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroDeValidacao naoLegivelException (){
+        return new ErroDeValidacao("Informação do JSON ilegível");
     }
 
 }

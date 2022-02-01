@@ -41,32 +41,43 @@ public class LivroService {
         livroRepository.save(livroOptional.get());
     }
 
+
+
+
     public List<Livro> exibirTodosOsLivros(Genero genero, Tags tags, String nome, String autor) {
+        List<Livro> listaFiltrada = aplicarFiltros(genero, tags, nome, autor);
+        return ordenarLista(listaFiltrada);
 
-        if (genero != null) {
-            return livroRepository.findAllByGenero(genero);
+    }
+
+    public List<Livro> aplicarFiltros(Genero genero, Tags tags, String nome, String autor){
+
+        List<Livro> livros = new ArrayList<>();
+
+        if (genero == null & tags == null & autor.equals("") & nome.equals("")) {
+            livros = (List<Livro>) livroRepository.findAll();
+        }else if (genero == null & tags == null){
+            livros = livroRepository.aplicarFiltroNomeEAutor(nome, autor);
+        }else if (genero == null) {
+            livros = livroRepository.aplicarFiltroTags(String.valueOf(tags), nome, autor);
+        }else if (tags == null) {
+            livros = livroRepository.aplicarFiltroGenero(String.valueOf(genero), nome, autor);
+        } else if (!autor.equals("") | nome.equals("")){
+            livros = livroRepository.aplicarTodosFiltros(String.valueOf(genero), String.valueOf(tags), nome, autor);
         }
 
-        if (tags != null) {
-            return livroRepository.findAllByTags(tags);
-        }
+        return livros;
 
-        if (nome != null) {
-            return livroRepository.findAllByNome(nome);
-        }
+    }
 
-        if (autor != null) {
-            return livroRepository.findAllByAutor(autor);
-        }
-
-        List<Livro> livros = (List<Livro>) livroRepository.findAll();
+    public List <Livro> ordenarLista(List<Livro> listaFiltrada){
 
         List<Livro> livrosOrdenados = new ArrayList<>();
         Livro livroMaisComentado = null;
+        int qtdLivros = listaFiltrada.size();
 
-        while (livros.size() != livrosOrdenados.size()) {
-
-            for (Livro referencia : livros) {
+        while (qtdLivros != livrosOrdenados.size()) {
+            for (Livro referencia : listaFiltrada) {
                 if (livroMaisComentado == null) {
                     livroMaisComentado = referencia;
                 } else if (referencia.getComentarios().size() > livroMaisComentado.getComentarios().size()) {
@@ -74,10 +85,10 @@ public class LivroService {
                 }
             }
             livrosOrdenados.add(livroMaisComentado);
+            listaFiltrada.remove(livroMaisComentado);
             livroMaisComentado = null;
         }
         return livrosOrdenados;
-
     }
 
     public Livro buscarLivro(int id) {

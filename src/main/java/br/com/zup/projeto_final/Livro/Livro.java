@@ -20,7 +20,9 @@ public class Livro {
     private int id;
     private String nome;
     private String autor;
+    @Enumerated(EnumType.STRING)
     private Genero genero;
+    @Enumerated(EnumType.STRING)
     private Tags tags;
     @ManyToOne
     private Usuario quemCadastrou;
