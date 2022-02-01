@@ -130,7 +130,7 @@ public class LivroControllerTest {
     public void testarCadastroDeLivroValidacaoGeneroInvalido() throws Exception {
         Mockito.when(livroService.salvarLivro(Mockito.any(Livro.class), Mockito.anyString())).thenReturn(livro);
         String json = objectMapper.writeValueAsString(livroDTO);
-        json = json.replace("\"genero\":\"AVENTURA\"}", "\"genero\":\"Teste\"}");
+        json = json.replace("AVENTURA","TESTE");;
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/livros")
                         .content(json).contentType(MediaType.APPLICATION_JSON))
