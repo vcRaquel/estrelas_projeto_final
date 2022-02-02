@@ -3,9 +3,11 @@ package br.com.zup.projeto_final.comentario;
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
 import br.com.zup.projeto_final.Livro.Livro;
 import br.com.zup.projeto_final.Livro.LivroDTO;
+import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Textos.comentario.ComentariosController;
 import br.com.zup.projeto_final.Textos.comentario.ComentariosService;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.ComentarioNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.comentario.dtos.ComentarioDTO;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioController;
@@ -149,5 +151,16 @@ public class ComentarioControllerTest {
         ComentarioDTO comentarioDTO = objectMapper.readValue(jsonDeResposta,
                 ComentarioDTO.class);
 
+    }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarExibirComentarioNaoEncontrado() throws Exception{
+        Mockito.doThrow(ComentarioNaoEncontradoException.class).when(comentariosService).buscarComentario(Mockito.anyInt());
+
+        String json = objectMapper.writeValueAsString(comentarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/livros/0")
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().is(404));
     }
 }
