@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class ComentariosController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void cadastrarComentario(@RequestBody ComentarioDTO comentarioDTO) {
+    public void cadastrarComentario(@RequestBody @Valid ComentarioDTO comentarioDTO) {
         Comentario comentario = modelMapper.map(comentarioDTO, Comentario.class);
         comentariosService.salvarComentario(usuarioLogadoService.pegarId(), comentario);
 
@@ -53,7 +54,7 @@ public class ComentariosController {
 
     @PutMapping(path = {"/{id}"})
     @ResponseStatus(HttpStatus.OK)
-    public ComentarioDTO atualizarComentario(@PathVariable int id, @RequestBody ComentarioDTO comentarioDTO) {
+    public ComentarioDTO atualizarComentario(@PathVariable int id, @Valid @RequestBody ComentarioDTO comentarioDTO) {
         Comentario comentario = comentariosService.atualizarComentario(id, modelMapper.map(comentarioDTO, Comentario.class));
         return modelMapper.map(comentario, ComentarioDTO.class);
     }

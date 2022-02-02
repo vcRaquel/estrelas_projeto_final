@@ -1,6 +1,8 @@
 package br.com.zup.projeto_final.comentario;
 
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.Livro.Livro;
+import br.com.zup.projeto_final.Livro.LivroDTO;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Textos.comentario.ComentariosController;
 import br.com.zup.projeto_final.Textos.comentario.ComentariosService;
@@ -10,6 +12,7 @@ import br.com.zup.projeto_final.Usuario.UsuarioController;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +27,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+import java.util.List;
 
 @WebMvcTest({ComentariosController.class, ConversorModelMapper.class, UsuarioLoginService.class, JWTComponent.class})
 public class ComentarioControllerTest {
@@ -86,4 +92,32 @@ public class ComentarioControllerTest {
                 .andExpect((MockMvcResultMatchers.status().is(201)));
 
     }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarCadastroDeComentarioValidacaoNome() throws Exception {
+        comentarioDTO.setTexto("");
+        Mockito.doNothing().when(comentariosService).salvarComentario(Mockito.anyString(), Mockito.any(Comentario.class));
+        String json = objectMapper.writeValueAsString(comentarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/comentarios")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+
+    }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarCadastroDeComentarioValidacaoIdLivro() throws Exception {
+        comentarioDTO.setLivro_id(null);
+        Mockito.doNothing().when(comentariosService).salvarComentario(Mockito.anyString(), Mockito.any(Comentario.class));
+        String json = objectMapper.writeValueAsString(comentarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/comentarios")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(422));
+
+    }
+
+
 }
