@@ -119,5 +119,35 @@ public class ComentarioControllerTest {
 
     }
 
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarExibirComentarios() throws Exception {
+        Mockito.when(comentariosService.buscarComentarios()).thenReturn(Arrays.asList(comentario));
 
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/comentarios")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+        String jsonDeResposta = resultado.andReturn().getResponse().getContentAsString();
+        List<ComentarioDTO> comentarioDTOS = objectMapper.readValue(jsonDeResposta,
+                new TypeReference<List<ComentarioDTO>>() {});
+
+    }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarExibirComentario() throws Exception {
+        Mockito.when(comentariosService.buscarComentario(Mockito.anyInt())).thenReturn(comentario);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/comentarios/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+
+        String jsonDeResposta = resultado.andReturn().getResponse().getContentAsString();
+        ComentarioDTO comentarioDTO = objectMapper.readValue(jsonDeResposta,
+                ComentarioDTO.class);
+
+    }
 }
