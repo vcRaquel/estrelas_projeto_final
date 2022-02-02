@@ -3,11 +3,13 @@ package br.com.zup.projeto_final.Textos.comentario;
 import br.com.zup.projeto_final.Livro.Livro;
 import br.com.zup.projeto_final.Livro.LivroService;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.AtualizacaoInvalidaException;
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.ComentarioNaoEncontradoException;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioRepository;
 
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class ComentariosService {
     LivroService livroService;
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    UsuarioLogadoService usuarioLogadoService;
 
 
     public void salvarComentario(String idUsuario, Comentario comentario){
@@ -51,6 +55,22 @@ public class ComentariosService {
             throw new ComentarioNaoEncontradoException("Comentario não encontrado");
         }
 
+    }
+
+    public Comentario atualizarComentario(int id, Comentario comentario) {
+
+        Optional<Comentario> comentarioOptional = comentarioRepository.findById(id);
+        if (comentarioOptional.isEmpty()) {
+            throw new ComentarioNaoEncontradoException("Comentario não cadastrado.");
+        }
+        Comentario comentarioParaAtualizar = comentarioOptional.get();
+        if (!comentarioParaAtualizar.getQuemComentou().getId().equals(usuarioLogadoService.pegarId())){
+            throw new AtualizacaoInvalidaException("Você só pode atualizar os seus comentários");
+        }
+        comentarioParaAtualizar.setTexto(comentario.getTexto());
+        comentarioRepository.save(comentarioParaAtualizar);
+
+        return comentarioParaAtualizar;
     }
 
 }
