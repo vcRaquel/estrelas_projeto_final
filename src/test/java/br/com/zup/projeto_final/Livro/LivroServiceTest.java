@@ -112,6 +112,14 @@ public class LivroServiceTest {
 
     }
 
+    @Test
+    public void testarLivroExistePorNomeFalse() {
+        Mockito.when(livroRepository.buscarLivroPorNomeTratadoEAutorTratado(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertFalse(livroService.livroExistePorNome(Mockito.anyString(), Mockito.anyString()));
+
+    }
 
     @Test
     public void testarSalvarLivro() {
