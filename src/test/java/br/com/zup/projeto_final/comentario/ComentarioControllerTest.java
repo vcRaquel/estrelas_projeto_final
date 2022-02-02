@@ -163,4 +163,19 @@ public class ComentarioControllerTest {
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/livros/0")
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().is(404));
     }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarAtualizarComentario() throws Exception {
+        Mockito.when(comentariosService.atualizarComentario(Mockito.anyInt(), Mockito.any(Comentario.class))).thenReturn(comentario);
+        String json = objectMapper.writeValueAsString(comentarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/comentarios/1")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+        String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+        ComentarioDTO livroResposta = objectMapper.readValue(jsonResposta, ComentarioDTO.class);
+
+    }
 }
