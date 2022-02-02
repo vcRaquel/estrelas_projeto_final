@@ -175,7 +175,34 @@ public class ComentarioControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is(200));
 
         String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
-        ComentarioDTO livroResposta = objectMapper.readValue(jsonResposta, ComentarioDTO.class);
+        ComentarioDTO comentarioResposta = objectMapper.readValue(jsonResposta, ComentarioDTO.class);
 
     }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarDeletarLivro() throws Exception{
+        Mockito.doNothing().when(comentariosService).deletarComentario(Mockito.anyInt());
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/comentarios/" + comentario.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(204));
+
+        Mockito.verify(comentariosService, Mockito.times(1)).deletarComentario(Mockito.anyInt());
+
+    }
+
+    @Test
+    @WithMockUser("user@user.com")
+    public void testarDeletarLivroNaoEncontrado() throws Exception {
+        Mockito.doThrow(ComentarioNaoEncontradoException.class).when(comentariosService)
+                .deletarComentario(Mockito.anyInt());
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/comentarios/" + comentario.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
+
+    }
+
+
 }
