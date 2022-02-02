@@ -3,6 +3,7 @@ package br.com.zup.projeto_final.Livro;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
+import java.util.Optional;
 
 public interface LivroRepository extends CrudRepository <Livro, Integer> {
 
@@ -21,5 +22,9 @@ public interface LivroRepository extends CrudRepository <Livro, Integer> {
     @Query(value = "select * from livros l WHERE l.nome like %?1% AND l.autor like %?2%",
             nativeQuery = true)
     List<Livro> aplicarFiltroNomeEAutor(String nome, String autor);
+
+    @Query(value = "select * from livros  WHERE nome_tratado = :nome AND autor_tratado = :autor",
+            nativeQuery = true)
+    Optional<Livro> buscarLivroPorNomeTratadoEAutorTratado(String nome, String autor);
 
 }
