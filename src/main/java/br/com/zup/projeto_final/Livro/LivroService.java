@@ -3,6 +3,7 @@ package br.com.zup.projeto_final.Livro;
 import br.com.zup.projeto_final.Components.TratarString;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.Livro.customException.LivroJaCadastradoException;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Usuario.UsuarioService;
 
@@ -40,10 +41,21 @@ public class LivroService {
 
 
     public Livro salvarLivro(Livro livro, String idUsuario) {
+        String nomeLivro = tratarString.tratarString(livro.getNome());
+        String nomeAutor = tratarString.tratarString(livro.getAutor());
+
+        if (livroExistePorNome(nomeLivro, nomeAutor)){
+            throw new LivroJaCadastradoException("Livro já cadastrado");
+        }
+
+        livro.setNomeTratado(nomeLivro);
+        livro.setAutorTratado(nomeAutor);
         livroRepository.save(livro);
         usuarioService.atualizarLivrosDoUsuario(idUsuario, livro);
         return livro;
+
     }
+
 
     public List<Livro> buscarLivros() {
         Iterable<Livro> livros = livroRepository.findAll();
