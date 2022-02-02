@@ -81,7 +81,7 @@ public class ComentariosService {
         }
         Comentario comentarioParaDeletar = comentarioOptional.get();
         if (!comentarioParaDeletar.getQuemComentou().getId().equals(usuarioLogadoService.pegarId())){
-            throw new DelecaoInvalidaException("Você só pode atualizar os seus comentários");
+            throw new DelecaoInvalidaException("Você só pode deletar os seus comentários");
         }
         comentarioRepository.delete(comentarioParaDeletar);
     }

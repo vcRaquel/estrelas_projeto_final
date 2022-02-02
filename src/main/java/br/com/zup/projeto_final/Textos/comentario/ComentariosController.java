@@ -1,6 +1,8 @@
 package br.com.zup.projeto_final.Textos.comentario;
 
 
+import br.com.zup.projeto_final.Livro.Livro;
+import br.com.zup.projeto_final.Livro.LivroDTO;
 import br.com.zup.projeto_final.Textos.comentario.dtos.ComentarioDTO;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.modelmapper.ModelMapper;
@@ -47,5 +49,13 @@ public class ComentariosController {
         }
         return comentarios;
     }
+
+    @PutMapping(path = {"/{id}"})
+    @ResponseStatus(HttpStatus.OK)
+    public ComentarioDTO atualizarComentario(@PathVariable int id, @RequestBody ComentarioDTO comentarioDTO) {
+        Comentario comentario = comentariosService.atualizarComentario(id, modelMapper.map(comentarioDTO, Comentario.class));
+        return modelMapper.map(comentario, ComentarioDTO.class);
+    }
+
 
 }
