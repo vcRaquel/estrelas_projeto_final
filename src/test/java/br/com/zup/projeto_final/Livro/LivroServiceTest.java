@@ -125,6 +125,8 @@ public class LivroServiceTest {
     public void testarSalvarLivro() {
         Mockito.when(livroRepository.save(livro))
                 .thenAnswer(objto -> objto.getArgument(0, Livro.class));
+        Mockito.when(livroRepository.buscarLivroPorNomeTratadoEAutorTratado(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.empty());
         Mockito.doNothing().when(usuarioService).atualizarLivrosDoUsuario(usuario.getId(), livro);
 
         livroService.salvarLivro(livro, usuario.getId());
