@@ -103,6 +103,17 @@ public class LivroServiceTest {
     }
 
     @Test
+    public void testarLivroExistePorNomeTrue() {
+        Mockito.when(livroRepository.buscarLivroPorNomeTratadoEAutorTratado(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(livro));
+
+        Assertions.assertTrue(livroService.livroExistePorNome(Mockito.anyString(), Mockito.anyString()));
+        Assertions.assertEquals(Livro.class, livro.getClass());
+
+    }
+
+
+    @Test
     public void testarSalvarLivro() {
         Mockito.when(livroRepository.save(livro))
                 .thenAnswer(objto -> objto.getArgument(0, Livro.class));
