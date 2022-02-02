@@ -5,6 +5,7 @@ import br.com.zup.projeto_final.Livro.LivroService;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.AtualizacaoInvalidaException;
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.ComentarioNaoEncontradoException;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvalidaException;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioRepository;
 
@@ -71,6 +72,18 @@ public class ComentariosService {
         comentarioRepository.save(comentarioParaAtualizar);
 
         return comentarioParaAtualizar;
+    }
+
+    public void deletarComentario(int id){
+        Optional<Comentario> comentarioOptional = comentarioRepository.findById(id);
+        if (comentarioOptional.isEmpty()) {
+            throw new ComentarioNaoEncontradoException("Comentario não cadastrado.");
+        }
+        Comentario comentarioParaDeletar = comentarioOptional.get();
+        if (!comentarioParaDeletar.getQuemComentou().getId().equals(usuarioLogadoService.pegarId())){
+            throw new DelecaoInvalidaException("Você só pode atualizar os seus comentários");
+        }
+        comentarioRepository.delete(comentarioParaDeletar);
     }
 
 }
