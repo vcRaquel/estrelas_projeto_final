@@ -9,6 +9,7 @@ import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvali
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioRepository;
 
+import br.com.zup.projeto_final.Usuario.UsuarioService;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +26,18 @@ public class ComentariosService {
     @Autowired
     LivroService livroService;
     @Autowired
-    UsuarioRepository usuarioRepository;
+    UsuarioService usuarioService;
     @Autowired
     UsuarioLogadoService usuarioLogadoService;
 
 
     public void salvarComentario(String idUsuario, Comentario comentario){
-        Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
-        if (usuario.isEmpty()){
-            throw new UsuarioNaoEncontradoException("Usuário não encontrado");
-
-        }
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+        comentario.setQuemComentou(usuario);
         comentarioRepository.save(comentario);
         livroService.atualizarComentariosDoLivro(comentario.getLivro_id(), comentario);
 
-        comentario.setQuemComentou(usuario.get());
+
 
     }
 
@@ -75,14 +73,17 @@ public class ComentariosService {
     }
 
     public void deletarComentario(int id){
+        Usuario usuario = usuarioService.buscarUsuario(usuarioLogadoService.pegarId());
         Optional<Comentario> comentarioOptional = comentarioRepository.findById(id);
         if (comentarioOptional.isEmpty()) {
             throw new ComentarioNaoEncontradoException("Comentario não cadastrado.");
         }
         Comentario comentarioParaDeletar = comentarioOptional.get();
-        if (!comentarioParaDeletar.getQuemComentou().getId().equals(usuarioLogadoService.pegarId())){
+        if (!comentarioParaDeletar.getQuemComentou().getId().equals(usuario.getId())){
             throw new DelecaoInvalidaException("Você só pode deletar os seus comentários");
         }
+        Livro livro = livroService.buscarLivro(comentarioParaDeletar.getLivro_id());
+        livro.getComentarios().remove(comentarioParaDeletar);
         comentarioRepository.delete(comentarioParaDeletar);
     }
 

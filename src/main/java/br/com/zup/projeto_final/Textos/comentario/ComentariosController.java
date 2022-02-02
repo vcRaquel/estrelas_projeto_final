@@ -34,8 +34,9 @@ public class ComentariosController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void exibirUsuario(@PathVariable int id) {
-        Comentario usuario  = comentariosService.buscarComentario(id);
+    public ComentarioDTO exibirUsuario(@PathVariable int id) {
+        Comentario comentario  = comentariosService.buscarComentario(id);
+        return modelMapper.map(comentario, ComentarioDTO.class);
     }
 
     @GetMapping
@@ -55,6 +56,12 @@ public class ComentariosController {
     public ComentarioDTO atualizarComentario(@PathVariable int id, @RequestBody ComentarioDTO comentarioDTO) {
         Comentario comentario = comentariosService.atualizarComentario(id, modelMapper.map(comentarioDTO, Comentario.class));
         return modelMapper.map(comentario, ComentarioDTO.class);
+    }
+
+    @DeleteMapping(path = {"/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletarComentario(@PathVariable int id) {
+        comentariosService.deletarComentario(id);
     }
 
 
