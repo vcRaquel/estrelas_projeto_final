@@ -4,6 +4,7 @@ import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.AtualizacaoInvalidaException;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvalidaException;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioService;
 
@@ -132,7 +133,11 @@ public class LivroService {
     }
 
     public void deletarLivro(int id) {
-        buscarLivro(id);
+        Usuario usuarioLogado = usuarioService.buscarUsuario(usuarioLogadoService.pegarId());
+        Livro livro = buscarLivro(id);
+        if (livro.getQuemCadastrou() != usuarioLogado){
+            throw new DelecaoInvalidaException("Você só pode deletar seus próprios livros");
+        }
         livroRepository.deleteById(id);
     }
 
