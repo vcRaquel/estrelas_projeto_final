@@ -1,5 +1,8 @@
 package br.com.zup.projeto_final.comentario;
 
+import br.com.zup.projeto_final.Enun.Genero;
+import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.Livro.Livro;
 import br.com.zup.projeto_final.Livro.LivroService;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
@@ -7,8 +10,10 @@ import br.com.zup.projeto_final.Textos.comentario.ComentarioRepository;
 import br.com.zup.projeto_final.Textos.comentario.ComentariosService;
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.AtualizacaoInvalidaException;
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.ComentarioNaoEncontradoException;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvalidaException;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioRepository;
+import br.com.zup.projeto_final.Usuario.UsuarioService;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.junit.jupiter.api.Assertions;
@@ -21,6 +26,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -33,6 +39,8 @@ public class ComentarioServiceTest {
     @MockBean
     UsuarioRepository usuarioRepository;
     @MockBean
+    UsuarioService usuarioService;
+    @MockBean
     UsuarioLogadoService usuarioLogadoService;
 
     @Autowired
@@ -41,6 +49,8 @@ public class ComentarioServiceTest {
     private Comentario comentario;
     private Usuario usuario;
     private Usuario usuario2;
+    private Livro livro;
+    private List<Comentario> comentarios;
 
     @BeforeEach
     public void setup(){
@@ -62,6 +72,18 @@ public class ComentarioServiceTest {
         comentario.setId(1);
         comentario.setLivro_id(1);
         comentario.setTexto("a");
+
+        comentarios = new ArrayList<>();
+        comentarios.add(comentario);
+
+        livro = new Livro();
+        livro.setNome("Livro");
+        livro.setGenero(Genero.AVENTURA);
+        livro.setId(1);
+        livro.setLido(true);
+        livro.setTags(Tags.LEITURA_LEVE);
+        livro.setAutor("Autor");
+        livro.setComentarios(comentarios);
 
     }
 
@@ -145,7 +167,20 @@ public class ComentarioServiceTest {
         AtualizacaoInvalidaException exception = Assertions.assertThrows(AtualizacaoInvalidaException.class, () ->{
             comentariosService.atualizarComentario(Mockito.anyInt(), comentario);
         });
+    }
+
+    @Test
+    public void testarDeletarComentario(){
+        Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario.getId());
+        Mockito.when(comentarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(comentario));
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+        comentariosService.deletarComentario(comentario.getId());
+
+        Mockito.verify(comentarioRepository, Mockito.times(1)).delete(comentario);
 
     }
+
+
 
 }
