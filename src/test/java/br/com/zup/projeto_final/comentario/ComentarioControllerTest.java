@@ -181,6 +181,19 @@ public class ComentarioControllerTest {
 
     @Test
     @WithMockUser("user@user.com")
+    public void testarAtualizarComentarioNaoEncontrado() throws Exception {
+        Mockito.doThrow(ComentarioNaoEncontradoException.class).when(comentariosService)
+                .atualizarComentario(Mockito.anyInt(), Mockito.any(Comentario.class));
+        String json = objectMapper.writeValueAsString(comentarioDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/comentarios/1")
+                        .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(404));
+
+    }
+
+    @Test
+    @WithMockUser("user@user.com")
     public void testarDeletarLivro() throws Exception{
         Mockito.doNothing().when(comentariosService).deletarComentario(Mockito.anyInt());
 
