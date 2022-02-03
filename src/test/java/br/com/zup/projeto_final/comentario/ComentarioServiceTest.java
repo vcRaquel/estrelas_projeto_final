@@ -195,5 +195,19 @@ public class ComentarioServiceTest {
         Mockito.verify(comentarioRepository, Mockito.times(0)).delete(comentario);
     }
 
+    @Test
+    public void testarDeletarComentarioDeOutroUsuario(){
+
+        Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario2);
+        Mockito.when(comentarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(comentario));
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario2.getId());
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+        Assertions.assertThrows(DelecaoInvalidaException.class, () ->{
+            comentariosService.deletarComentario(comentario.getId());
+        });
+
+        Mockito.verify(comentarioRepository, Mockito.times(0)).delete(comentario);
+    }
+
 
 }
