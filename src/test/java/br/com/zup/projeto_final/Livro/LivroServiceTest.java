@@ -5,6 +5,7 @@ import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.Review;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.AtualizacaoInvalidaException;
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvalidaException;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioService;
@@ -208,6 +209,16 @@ public class LivroServiceTest {
         Assertions.assertEquals("Livro não cadastrado.", exception.getMessage());
 
     }
+    @Test
+    public void testarAtualizarLivroDeOutroUsuario(){
+        Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario2);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario2.getId());
+        Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
+        Assertions.assertThrows(AtualizacaoInvalidaException.class, () ->{
+            livroService.atualizarLivro(livro.getId(), livro);
+        });
+
+    }
 
     @Test
     public void testarDeletarLivro(){
@@ -236,7 +247,7 @@ public class LivroServiceTest {
         Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario2.getId());
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
         Assertions.assertThrows(DelecaoInvalidaException.class, () ->{
-            livroService.deletarLivro(comentario.getId());
+            livroService.deletarLivro(livro.getId());
         });
 
 
