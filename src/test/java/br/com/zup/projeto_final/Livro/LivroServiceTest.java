@@ -192,7 +192,7 @@ public class LivroServiceTest {
 
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
 
-        livroService.atualizarLivro(Mockito.anyInt(), livro);
+        livroService.atualizarLivro(livro.getId(), livro);
 
         Mockito.verify(livroRepository, Mockito.times(1)).save(livro);
 
@@ -225,7 +225,7 @@ public class LivroServiceTest {
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
         Mockito.doNothing().when(livroRepository).deleteById(Mockito.anyInt());
 
-        livroService.deletarLivro(Mockito.anyInt());
+        livroService.deletarLivro(livro.getId());
 
         Mockito.verify(livroRepository, Mockito.times(1)).deleteById(Mockito.anyInt());
 
