@@ -5,8 +5,10 @@ import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.Review;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvalidaException;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioService;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +30,8 @@ public class LivroServiceTest {
     LivroRepository livroRepository;
     @MockBean
     UsuarioService usuarioService;
+    @MockBean
+    UsuarioLogadoService usuarioLogadoService;
 
     @Autowired
     LivroService livroService;
@@ -36,11 +40,13 @@ public class LivroServiceTest {
     private Livro livro2;
     private List <Livro> livros;
     private Usuario usuario;
+    private Usuario usuario2;
     private Comentario comentario;
     private Comentario comentario2;
     private List<Comentario> umComentario;
     private List<Comentario> doisComentarios;
     private Review review;
+
 
     @BeforeEach
     public void setup() {
@@ -97,6 +103,12 @@ public class LivroServiceTest {
         usuario.setEmail("zupper@zup.com");
         usuario.setNome("Zupper");
         usuario.setLivrosCadastrados(Arrays.asList(livro));
+
+        usuario2 = new Usuario();
+        usuario2.setId("2");
+        usuario2.setSenha("aviao12");
+        usuario2.setEmail("usuario2@@@@");
+        usuario2.setNome("usuario2");
 
 
 
@@ -215,6 +227,18 @@ public class LivroServiceTest {
         LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () ->{
             livroService.deletarLivro(0);
         });
+
+    }
+
+    @Test
+    public void testarDeletarLivroDeOutroUsuario(){
+        Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario2);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario2.getId());
+        Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
+        Assertions.assertThrows(DelecaoInvalidaException.class, () ->{
+            livroService.deletarLivro(comentario.getId());
+        });
+
 
     }
 
