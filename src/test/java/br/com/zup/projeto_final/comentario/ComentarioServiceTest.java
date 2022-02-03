@@ -113,4 +113,15 @@ public class ComentarioServiceTest {
         Assertions.assertEquals("Comentario não encontrado", exception.getMessage());
     }
 
+    @Test
+    public void testarAtualizarComentarios(){
+
+        Mockito.when(comentarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(comentario));
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario.getId());
+        Mockito.when(comentarioRepository.save(Mockito.any(Comentario.class))).thenReturn(comentario);
+
+        comentariosService.atualizarComentario(comentario.getId(), comentario);
+        Mockito.verify(comentarioRepository, Mockito.times(1)).save(Mockito.any(Comentario.class));
+    }
+
 }
