@@ -1,11 +1,20 @@
 package br.com.zup.projeto_final.Textos.comentario.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ComentarioDTO {
 
+    @NotBlank
     private String texto;
-    private int livro_id;
+    @NotNull
+    private Integer livro_id;
 
 }

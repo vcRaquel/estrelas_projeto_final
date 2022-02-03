@@ -1,5 +1,8 @@
 package br.com.zup.projeto_final.Config;
 
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.AtualizacaoInvalidaException;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.ComentarioNaoEncontradoException;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvalidaException;
 import br.com.zup.projeto_final.customException.CurtidaRepetidaException;
 import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
@@ -67,6 +70,30 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErroDeValidacao naoLegivelException (){
         return new ErroDeValidacao("Informação do JSON ilegível");
+    }
+
+    @ExceptionHandler(ComentarioNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroDeValidacao tratarComentarioNaoEncontradoException(
+            ComentarioNaoEncontradoException exception) {
+        return new ErroDeValidacao(exception.getMessage());
+
+    }
+
+    @ExceptionHandler(AtualizacaoInvalidaException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroDeValidacao tratarAtualizacaoInvalidaException(
+            AtualizacaoInvalidaException exception) {
+        return new ErroDeValidacao(exception.getMessage());
+
+    }
+
+    @ExceptionHandler(DelecaoInvalidaException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroDeValidacao tratarDelecaoInvalidaException(
+            DelecaoInvalidaException exception) {
+        return new ErroDeValidacao(exception.getMessage());
+
     }
 
 }
