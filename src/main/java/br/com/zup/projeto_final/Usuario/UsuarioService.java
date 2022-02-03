@@ -43,9 +43,15 @@ public class UsuarioService {
 
     }
 
-    public List<Usuario> buscarUsuarios() {
-        Iterable<Usuario> usuarios = usuarioRepository.findAll();
-        return (List<Usuario>)usuarios ;
+    public List<Usuario> buscarUsuarios(String nomeUsuario) {
+        List<Usuario> usuarios = new ArrayList<>();
+        usuarios = aplicarFiltroUsuario(nomeUsuario);
+        if (nomeUsuario == null){
+            usuarios = (List<Usuario>) usuarioRepository.findAll();
+
+        }
+        return usuarios;
+
     }
 
     public Usuario buscarUsuario(String id) {
