@@ -85,4 +85,12 @@ public class ComentarioServiceTest {
         });
     }
 
+    @Test
+    public void testarBuscarComentarios(){
+        Mockito.when(comentarioRepository.findAll()).thenReturn(Arrays.asList(comentario));
+        comentariosService.buscarComentarios();
+        Mockito.verify(comentarioRepository, Mockito.times(1)).findAll();
+
+    }
+
 }
