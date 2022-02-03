@@ -99,8 +99,7 @@ public class ComentarioServiceTest {
 
     @Test
     public void testarSalvarComentarioUsuarioNaoEncontrado(){
-        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.empty())
-                .thenThrow(new UsuarioNaoEncontradoException(""));
+        Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenThrow(new UsuarioNaoEncontradoException(""));
 
         UsuarioNaoEncontradoException exception = Assertions.assertThrows(UsuarioNaoEncontradoException.class, () ->{
             comentariosService.salvarComentario(Mockito.anyString(), comentario);
