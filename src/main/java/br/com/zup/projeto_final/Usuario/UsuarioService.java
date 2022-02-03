@@ -34,6 +34,15 @@ public class UsuarioService {
 
     }
 
+    public List<Usuario> aplicarFiltroUsuario(String nomeUsuario) {
+        List<Usuario> usuarios = new ArrayList<>();
+        if (nomeUsuario != null) {
+            usuarios = usuarioRepository.aplicarFiltroNome(nomeUsuario);
+        }
+        return usuarios;
+
+    }
+
     public List<Usuario> buscarUsuarios() {
         Iterable<Usuario> usuarios = usuarioRepository.findAll();
         return (List<Usuario>)usuarios ;
