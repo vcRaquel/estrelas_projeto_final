@@ -136,4 +136,16 @@ public class ComentarioServiceTest {
 
     }
 
+    @Test
+    public void testarAtualizarComentarioDeOutraPessoa(){
+
+        Mockito.when(comentarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(comentario));
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario2.getId());
+
+        AtualizacaoInvalidaException exception = Assertions.assertThrows(AtualizacaoInvalidaException.class, () ->{
+            comentariosService.atualizarComentario(Mockito.anyInt(), comentario);
+        });
+
+    }
+
 }
