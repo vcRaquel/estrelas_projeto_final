@@ -93,4 +93,13 @@ public class ComentarioServiceTest {
 
     }
 
+
+    @Test
+    public void testarBuscarComentario(){
+        Mockito.when(comentarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(comentario));
+        comentariosService.buscarComentario(Mockito.anyInt());
+        Mockito.verify(comentarioRepository, Mockito.times(1)).findById(Mockito.anyInt());
+
+    }
+
 }
