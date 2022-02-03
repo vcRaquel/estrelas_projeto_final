@@ -108,10 +108,11 @@ public class UsuarioServiceTest {
 
     //testar exibir usuários
     @Test
-    public void testarBuscarUsuarios() {
+    public void testarBuscarUsuariosSemFiltro() {
+        String nomeUsuario = null;
         List<Usuario> usuarios = Arrays.asList(usuario);
         Mockito.when(usuarioRepository.findAll()).thenReturn(usuarios);
-        List<Usuario> usuariosResposta = usuarioService.buscarUsuarios();
+        List<Usuario> usuariosResposta = usuarioService.buscarUsuarios(nomeUsuario);
         Mockito.verify(usuarioRepository, Mockito.times(1)).findAll();
     }
 
