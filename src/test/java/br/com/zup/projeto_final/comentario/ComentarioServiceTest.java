@@ -124,4 +124,16 @@ public class ComentarioServiceTest {
         Mockito.verify(comentarioRepository, Mockito.times(1)).save(Mockito.any(Comentario.class));
     }
 
+    @Test
+    public void testarAtualizarComentarioNaoEncontrado(){
+
+        Mockito.when(comentarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        ComentarioNaoEncontradoException exception = Assertions.assertThrows(ComentarioNaoEncontradoException.class, () ->{
+            comentariosService.atualizarComentario(Mockito.anyInt(), comentario);
+        });
+        Mockito.verify(comentarioRepository, Mockito.times(1)).findById(Mockito.anyInt());
+        Assertions.assertEquals("Comentario não cadastrado.", exception.getMessage());
+
+    }
+
 }
