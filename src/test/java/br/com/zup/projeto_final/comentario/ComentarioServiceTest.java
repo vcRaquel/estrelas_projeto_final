@@ -181,6 +181,19 @@ public class ComentarioServiceTest {
 
     }
 
+    @Test
+    public void testarDeletarComentarioNaoEncontrado(){
+
+        Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario.getId());
+        Mockito.when(comentarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+        Assertions.assertThrows(ComentarioNaoEncontradoException.class, () ->{
+            comentariosService.deletarComentario(comentario.getId());
+        });
+
+        Mockito.verify(comentarioRepository, Mockito.times(0)).delete(comentario);
+    }
 
 
 }
