@@ -102,4 +102,15 @@ public class ComentarioServiceTest {
 
     }
 
+    @Test
+    public void testarBuscarComentarioNaoEncontrado(){
+        Mockito.when(comentarioRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+
+        ComentarioNaoEncontradoException exception = Assertions.assertThrows(ComentarioNaoEncontradoException.class, () ->{
+            comentariosService.buscarComentario(0);
+        });
+        Mockito.verify(comentarioRepository, Mockito.times(1)).findById(Mockito.anyInt());
+        Assertions.assertEquals("Comentario não encontrado", exception.getMessage());
+    }
+
 }
