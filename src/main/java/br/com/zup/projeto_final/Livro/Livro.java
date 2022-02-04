@@ -19,7 +19,9 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
+    private String nomeTratado;
     private String autor;
+    private String autorTratado;
     @Enumerated(EnumType.STRING)
     private Genero genero;
     @Enumerated(EnumType.STRING)
