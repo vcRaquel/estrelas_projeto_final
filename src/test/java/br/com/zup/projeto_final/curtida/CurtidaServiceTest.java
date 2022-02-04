@@ -24,8 +24,8 @@ public class CurtidaServiceTest {
     @BeforeEach
     public void setup(){
         curtida = new Curtida();
-        curtida.setId_curtida(1L);
-        curtida.setId_recurso(1L);
+        curtida.setId_curtida(1);
+        curtida.setId_recurso(1);
         curtida.setId_usuario("1");
         curtida.setTipo(Tipo.COMENTARIO);
     }
@@ -39,14 +39,14 @@ public class CurtidaServiceTest {
 
     @Test
     public void testarImpedirCurtidaRepetidaCaminhoPositivo(){
-        Mockito.when(curtidaRepository.curtidaRepetida(Mockito.anyString(), Mockito.anyLong(), Mockito.anyString()))
+        Mockito.when(curtidaRepository.curtidaRepetida(Mockito.anyString(), Mockito.anyInt(), Mockito.anyString()))
                 .thenReturn(null);
         curtidaService.impedirCurtidaRepetida(curtida);
     }
 
     @Test
     public void testarImpedirCurtidaRepetidaCaminhoNegativo(){
-        Mockito.when(curtidaRepository.curtidaRepetida(Mockito.anyString(), Mockito.anyLong(), Mockito.anyString()))
+        Mockito.when(curtidaRepository.curtidaRepetida(Mockito.anyString(), Mockito.anyInt(), Mockito.anyString()))
                 .thenReturn(curtida);
         CurtidaRepetidaException exception = Assertions.assertThrows(CurtidaRepetidaException.class, () ->{
             curtidaService.salvarCurtida(curtida);
