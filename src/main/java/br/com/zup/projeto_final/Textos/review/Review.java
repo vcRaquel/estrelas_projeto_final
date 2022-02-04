@@ -1,4 +1,4 @@
-package br.com.zup.projeto_final.Textos;
+package br.com.zup.projeto_final.Textos.review;
 
 import lombok.Data;
 

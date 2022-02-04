@@ -20,5 +20,6 @@ public class Comentario {
     private String texto;
     @NotNull
     private int livro_id;
+    private int curtidas;
 
 }

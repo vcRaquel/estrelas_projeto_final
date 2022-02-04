@@ -3,7 +3,7 @@ package br.com.zup.projeto_final.Livro;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
-import br.com.zup.projeto_final.Textos.Review;
+import br.com.zup.projeto_final.Textos.review.Review;
 import br.com.zup.projeto_final.Usuario.Usuario;
 import lombok.Data;
 

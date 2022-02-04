@@ -13,8 +13,8 @@ public class Curtida {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_curtida;
-    private Long id_recurso;
+    private int id_curtida;
+    private int id_recurso;
     private String id_usuario;
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
