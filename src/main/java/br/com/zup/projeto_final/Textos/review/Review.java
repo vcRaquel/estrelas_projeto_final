@@ -1,4 +1,4 @@
-package br.com.zup.projeto_final.Textos;
+package br.com.zup.projeto_final.Textos.review;
 
 import lombok.Data;
 
@@ -12,6 +12,6 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String texto;
-
+    private int curtidas;
 
 }

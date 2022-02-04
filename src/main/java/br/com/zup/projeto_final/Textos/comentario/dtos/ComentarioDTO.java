@@ -16,5 +16,6 @@ public class ComentarioDTO {
     private String texto;
     @NotNull
     private Integer livro_id;
+    private int curtidas;
 
 }

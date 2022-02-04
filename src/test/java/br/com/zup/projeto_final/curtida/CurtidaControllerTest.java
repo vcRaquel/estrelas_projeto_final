@@ -43,13 +43,13 @@ public class CurtidaControllerTest {
         objectMapper = new ObjectMapper();
 
         curtida = new Curtida();
-        curtida.setId_curtida(1L);
-        curtida.setId_recurso(1L);
+        curtida.setId_curtida(1);
+        curtida.setId_recurso(1);
         curtida.setId_usuario("1");
         curtida.setTipo(Tipo.COMENTARIO);
 
         curtidaEntradaDTO = new CurtidaEntradaDTO();
-        curtidaEntradaDTO.setId_recurso(1L);
+        curtidaEntradaDTO.setId_recurso(1);
         curtidaEntradaDTO.setTipo(Tipo.COMENTARIO);
         curtidaEntradaDTO.setId_usuario("1");
     }

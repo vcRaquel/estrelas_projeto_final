@@ -4,6 +4,7 @@ import br.com.zup.projeto_final.Textos.comentario.customExceptions.AtualizacaoIn
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.ComentarioNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvalidaException;
 import br.com.zup.projeto_final.customException.CurtidaRepetidaException;
+import br.com.zup.projeto_final.customException.RecursoInexistente;
 import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
@@ -45,6 +46,14 @@ public class ControllerAdvice {
 
     }
 
+    @ExceptionHandler(RecursoInexistente.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroDeValidacao tratarUsuarioJaCadastradoException(
+            RecursoInexistente exception) {
+        return new ErroDeValidacao(exception.getMessage());
+
+    }
+
     @ExceptionHandler(LivroNaoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErroDeValidacao tratarLivroNaoEncontradoException(
@@ -81,7 +90,7 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler(AtualizacaoInvalidaException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErroDeValidacao tratarAtualizacaoInvalidaException(
             AtualizacaoInvalidaException exception) {
         return new ErroDeValidacao(exception.getMessage());
@@ -89,7 +98,7 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler(DelecaoInvalidaException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErroDeValidacao tratarDelecaoInvalidaException(
             DelecaoInvalidaException exception) {
         return new ErroDeValidacao(exception.getMessage());
