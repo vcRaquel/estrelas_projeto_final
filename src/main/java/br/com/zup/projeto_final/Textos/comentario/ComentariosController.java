@@ -46,7 +46,8 @@ public class ComentariosController {
 
         List<ComentarioDTO> comentarios = new ArrayList<>();
         for (Comentario comentario : comentariosService.buscarComentarios()) {
-            ComentarioDTO comentarioDTO = new ComentarioDTO(comentario.getTexto(), comentario.getLivro_id());
+            ComentarioDTO comentarioDTO = new ComentarioDTO(comentario.getTexto(), comentario.getLivro_id()
+                    , comentario.getCurtidas());
             comentarios.add(comentarioDTO);
         }
         return comentarios;
