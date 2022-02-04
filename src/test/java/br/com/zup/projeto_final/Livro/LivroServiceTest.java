@@ -2,6 +2,7 @@ package br.com.zup.projeto_final.Livro;
 
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.Livro.customException.LivroJaCadastradoException;
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.Textos.Review;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
@@ -103,9 +104,30 @@ public class LivroServiceTest {
     }
 
     @Test
+    public void testarLivroExistePorNomeTrue() {
+        Mockito.when(livroRepository.buscarLivroPorNomeTratadoEAutorTratado(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(livro));
+
+        Assertions.assertTrue(livroService.livroExistePorNome(Mockito.anyString(), Mockito.anyString()));
+        Assertions.assertEquals(Livro.class, livro.getClass());
+
+    }
+
+    @Test
+    public void testarLivroExistePorNomeFalse() {
+        Mockito.when(livroRepository.buscarLivroPorNomeTratadoEAutorTratado(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertFalse(livroService.livroExistePorNome(Mockito.anyString(), Mockito.anyString()));
+
+    }
+
+    @Test
     public void testarSalvarLivro() {
         Mockito.when(livroRepository.save(livro))
                 .thenAnswer(objto -> objto.getArgument(0, Livro.class));
+        Mockito.when(livroRepository.buscarLivroPorNomeTratadoEAutorTratado(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.empty());
         Mockito.doNothing().when(usuarioService).atualizarLivrosDoUsuario(usuario.getId(), livro);
 
         livroService.salvarLivro(livro, usuario.getId());
@@ -114,7 +136,18 @@ public class LivroServiceTest {
 
     }
 
-    //testar salvar livro repetido (implementar regra)
+    @Test
+    public void testarSalvarLivroRepetido() {
+        Mockito.when(livroRepository.buscarLivroPorNomeTratadoEAutorTratado(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Optional.of(livro));
+
+        LivroJaCadastradoException exception = Assertions.assertThrows(LivroJaCadastradoException.class, ()->
+                livroService.salvarLivro(livro,"1"));
+
+        Assertions.assertEquals("Livro já cadastrado", exception.getMessage());
+
+    }
+
 
     @Test
     public void testarBuscarLivros() {
