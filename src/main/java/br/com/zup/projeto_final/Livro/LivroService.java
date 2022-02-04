@@ -5,10 +5,14 @@ import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Livro.customException.LivroJaCadastradoException;
 import br.com.zup.projeto_final.Textos.comentario.Comentario;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.AtualizacaoInvalidaException;
+import br.com.zup.projeto_final.Textos.comentario.customExceptions.DelecaoInvalidaException;
+import br.com.zup.projeto_final.Usuario.Usuario;
 import br.com.zup.projeto_final.Usuario.UsuarioService;
 
 import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,8 @@ public class LivroService {
     LivroRepository livroRepository;
     @Autowired
     UsuarioService usuarioService;
+    @Autowired
+    UsuarioLogadoService usuarioLogadoService;
     @Autowired
     TratarString tratarString;
 
@@ -38,6 +44,7 @@ public class LivroService {
             return false;
         }
     }
+
 
 
     public Livro salvarLivro(Livro livro, String idUsuario) {
@@ -133,10 +140,14 @@ public class LivroService {
 
     public Livro atualizarLivro(int id, Livro livro) {
 
+        Usuario usuarioLogado = usuarioService.buscarUsuario(usuarioLogadoService.pegarId());
         Optional<Livro> livroOptional = livroRepository.findById(id);
-
         if (livroOptional.isEmpty()) {
             throw new LivroNaoEncontradoException("Livro não cadastrado.");
+        }
+
+        if (livroOptional.get().getQuemCadastrou() != usuarioLogado){
+            throw new AtualizacaoInvalidaException("Você só pode atualizar os livros que você cadastrou");
         }
 
         Livro livroParaAtualizar = livroOptional.get();
@@ -152,7 +163,11 @@ public class LivroService {
     }
 
     public void deletarLivro(int id) {
-        buscarLivro(id);
+        Usuario usuarioLogado = usuarioService.buscarUsuario(usuarioLogadoService.pegarId());
+        Livro livro = buscarLivro(id);
+        if (livro.getQuemCadastrou() != usuarioLogado){
+            throw new DelecaoInvalidaException("Você só pode deletar seus próprios livros");
+        }
         livroRepository.deleteById(id);
     }
 
