@@ -109,7 +109,8 @@ public class LivroService {
             for (Livro livro : livroRepository.aplicarFiltroGenero(String.valueOf(genero), nome, autor, pageable))
                 livros.add(livro);
         } else if (!autor.equals("") | nome.equals("")){
-            for (Livro livro : livroRepository.aplicarTodosFiltros(String.valueOf(genero), String.valueOf(tags), nome, autor, pageable))
+            for (Livro livro : livroRepository.aplicarTodosFiltros(String.valueOf(genero), String.valueOf(tags), nome,
+                    autor, pageable))
                 livros.add(livro);
         }
 
