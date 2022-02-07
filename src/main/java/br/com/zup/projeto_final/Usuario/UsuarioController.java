@@ -34,12 +34,13 @@ public class UsuarioController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UsuarioSaidaDTO> exibirUsuarios(@RequestParam(required = false) String nomeUsuario) {
+    public List<UsuarioSaidaDTO> exibirUsuarios(@RequestParam(required = false) String nomeUsuario,
+                                                @RequestParam(required = false) boolean orderByPontuacao) {
         System.out.println(nomeUsuario);
         List<UsuarioSaidaDTO> usuarios = new ArrayList<>();
 
-        for (Usuario usuario : usuarioService.buscarUsuarios(nomeUsuario)) {
-            UsuarioSaidaDTO usuarioSaidaDTO = new UsuarioSaidaDTO(usuario.getNome(), usuario.getEmail());
+        for (Usuario usuario : usuarioService.buscarUsuarios(nomeUsuario, orderByPontuacao)) {
+            UsuarioSaidaDTO usuarioSaidaDTO = new UsuarioSaidaDTO(usuario.getNome(), usuario.getEmail(), usuario.getPontuacao());
             usuarios.add(usuarioSaidaDTO);
         }
 

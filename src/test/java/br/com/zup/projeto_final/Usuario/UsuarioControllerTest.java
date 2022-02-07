@@ -181,7 +181,8 @@ public class UsuarioControllerTest {
     @Test
     @WithMockUser("user@user.com")
     public void testarExibicaoDeUsuarios() throws Exception {
-        Mockito.when(usuarioService.buscarUsuarios(Mockito.anyString())).thenReturn(Arrays.asList(usuario));
+        Mockito.when(usuarioService.buscarUsuarios(Mockito.anyString(), Mockito.anyBoolean()))
+                .thenReturn(Arrays.asList(usuario));
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/usuarios")
                         .contentType(MediaType.APPLICATION_JSON))

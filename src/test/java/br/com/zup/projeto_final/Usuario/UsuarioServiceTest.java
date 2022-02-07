@@ -110,17 +110,19 @@ public class UsuarioServiceTest {
     @Test
     public void testarBuscarUsuariosSemFiltro() {
         String nomeUsuario = null;
+        boolean orderByPontuacao = false;
         List<Usuario> usuarios = Arrays.asList(usuario);
         Mockito.when(usuarioRepository.findAll()).thenReturn(usuarios);
-        List<Usuario> usuariosResposta = usuarioService.buscarUsuarios(nomeUsuario);
+        List<Usuario> usuariosResposta = usuarioService.buscarUsuarios(nomeUsuario, orderByPontuacao);
         Mockito.verify(usuarioRepository, Mockito.times(1)).findAll();
     }
 
     @Test
     public void testarBuscarUsuariosComFiltro() {
+        boolean orderByPontuacao = false;
         List<Usuario> usuarios = Arrays.asList(usuario);
         Mockito.when(usuarioRepository.aplicarFiltroNome(Mockito.anyString())).thenReturn(usuarios);
-        List<Usuario> usuariosResposta = usuarioService.buscarUsuarios(Mockito.anyString());
+        List<Usuario> usuariosResposta = usuarioService.buscarUsuarios(usuario.getId(),false);
         Mockito.verify(usuarioRepository, Mockito.times(1)).aplicarFiltroNome(Mockito.anyString());
     }
 

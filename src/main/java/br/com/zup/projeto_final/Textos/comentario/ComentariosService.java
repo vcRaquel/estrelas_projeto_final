@@ -29,16 +29,31 @@ public class ComentariosService {
     UsuarioService usuarioService;
     @Autowired
     UsuarioLogadoService usuarioLogadoService;
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
 
     public void salvarComentario(String idUsuario, Comentario comentario){
         Usuario usuario = usuarioService.buscarUsuario(idUsuario);
         comentario.setQuemComentou(usuario);
         comentarioRepository.save(comentario);
+        pontuarUsuario(usuario, comentario.getLivro_id());
         livroService.atualizarComentariosDoLivro(comentario.getLivro_id(), comentario);
 
+    }
 
-
+    public void pontuarUsuario(Usuario usuario, int livro_id){
+        Livro livro = livroService.buscarLivro(livro_id);
+        boolean primeiroComentario = true;
+        for (Comentario comentario : livro.getComentarios()){
+            if (comentario.getQuemComentou() == usuario){
+                primeiroComentario = false;
+            }
+        }
+        if (primeiroComentario){
+            usuario.setPontuacao(usuario.getPontuacao() + 20);
+            usuarioRepository.save(usuario);
+        }
     }
 
     public List<Comentario> buscarComentarios() {
