@@ -90,6 +90,7 @@ public class UsuarioService {
             throw new UsuarioNaoEncontradoException("Usuario não encontrado");
         }
         usuarioOptional.get().getLivrosCadastrados().add(livro);
+        usuarioOptional.get().setPontuacao(usuarioOptional.get().getPontuacao() + 100);
         usuarioRepository.save(usuarioOptional.get());
     }
 
