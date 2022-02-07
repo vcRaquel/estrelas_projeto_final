@@ -34,21 +34,22 @@ public class UsuarioService {
 
     }
 
-    public List<Usuario> aplicarFiltroUsuario(String nomeUsuario) {
+
+
+    public List<Usuario> buscarUsuarios(String nomeUsuario, boolean orderByPontuacao) {
         List<Usuario> usuarios = new ArrayList<>();
-        if (nomeUsuario != null) {
+
+        if (nomeUsuario == null & !orderByPontuacao){
+            usuarios = (List<Usuario>) usuarioRepository.findAll();
+        }
+        else if (nomeUsuario == null){
+            usuarios = usuarioRepository.findAllByOrderByPontuacaoDesc();
+        }
+        else if (!orderByPontuacao){
             usuarios = usuarioRepository.aplicarFiltroNome(nomeUsuario);
         }
-        return usuarios;
-
-    }
-
-    public List<Usuario> buscarUsuarios(String nomeUsuario) {
-        List<Usuario> usuarios = new ArrayList<>();
-        usuarios = aplicarFiltroUsuario(nomeUsuario);
-        if (nomeUsuario == null){
-            usuarios = (List<Usuario>) usuarioRepository.findAll();
-
+        else{
+            usuarios = usuarioRepository.aplicarFiltroNomeByOrderByPontuacaoDesc(nomeUsuario);
         }
         return usuarios;
 
