@@ -14,6 +14,9 @@ import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoExceptio
 
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -81,33 +84,41 @@ public class LivroService {
 
 
 
-    public List<Livro> exibirTodosOsLivros(Genero genero, Tags tags, String nome, String autor) {
-        List<Livro> listaFiltrada = aplicarFiltros(genero, tags, nome, autor);
-        return ordenarLista(listaFiltrada);
+    public Page<Livro> exibirTodosOsLivros(Genero genero, Tags tags, String nome, String autor, Pageable pageable) {
+        List<Livro> listaFiltrada = aplicarFiltros(genero, tags, nome, autor, pageable);
+        return ordenarLista(listaFiltrada, pageable);
 
     }
 
-    public List<Livro> aplicarFiltros(Genero genero, Tags tags, String nome, String autor){
+    public List<Livro> aplicarFiltros(Genero genero, Tags tags, String nome, String autor, Pageable pageable){
 
         List<Livro> livros = new ArrayList<>();
 
         if (genero == null & tags == null & autor.equals("") & nome.equals("")) {
-            livros = (List<Livro>) livroRepository.findAll();
+            for (Livro livro : livroRepository.findAll(pageable)){
+                livros.add(livro);
+            }
         }else if (genero == null & tags == null){
-            livros = livroRepository.aplicarFiltroNomeEAutor(nome, autor);
+            for (Livro livro : livroRepository.aplicarFiltroNomeEAutor(nome, autor, pageable)){
+                livros.add(livro);
+            }
         }else if (genero == null) {
-            livros = livroRepository.aplicarFiltroTags(String.valueOf(tags), nome, autor);
+            for (Livro livro : livroRepository.aplicarFiltroTags(String.valueOf(tags), nome, autor, pageable))
+            livros.add(livro);
         }else if (tags == null) {
-            livros = livroRepository.aplicarFiltroGenero(String.valueOf(genero), nome, autor);
+            for (Livro livro : livroRepository.aplicarFiltroGenero(String.valueOf(genero), nome, autor, pageable))
+                livros.add(livro);
         } else if (!autor.equals("") | nome.equals("")){
-            livros = livroRepository.aplicarTodosFiltros(String.valueOf(genero), String.valueOf(tags), nome, autor);
+            for (Livro livro : livroRepository.aplicarTodosFiltros(String.valueOf(genero), String.valueOf(tags), nome,
+                    autor, pageable))
+                livros.add(livro);
         }
 
         return livros;
 
     }
 
-    public List <Livro> ordenarLista(List<Livro> listaFiltrada){
+    public Page <Livro> ordenarLista(List<Livro> listaFiltrada, Pageable pageable){
 
         List<Livro> livrosOrdenados = new ArrayList<>();
         Livro livroMaisComentado = null;
@@ -125,7 +136,7 @@ public class LivroService {
             listaFiltrada.remove(livroMaisComentado);
             livroMaisComentado = null;
         }
-        return livrosOrdenados;
+        return new PageImpl<>(livrosOrdenados, pageable, livrosOrdenados.size());
     }
 
     public Livro buscarLivro(int id) {

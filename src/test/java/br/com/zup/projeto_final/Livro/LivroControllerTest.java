@@ -1,5 +1,6 @@
 package br.com.zup.projeto_final.Livro;
 
+import br.com.zup.projeto_final.Components.ConversorDeLivroComPaginacao;
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
@@ -9,23 +10,27 @@ import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
 import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.Arrays;
-import java.util.List;
+
 
 @WebMvcTest({LivroController.class, ConversorModelMapper.class, UsuarioLoginService.class, JWTComponent.class})
 public class LivroControllerTest {
@@ -39,6 +44,9 @@ public class LivroControllerTest {
     UsuarioController usuarioController;
     @MockBean
     private UsuarioLogadoService usuarioLogadoService;
+    @MockBean
+    private ConversorDeLivroComPaginacao conversorDeLivroComPaginacao;
+    @MockBean LivroRepository livroRepository;
 
     @Autowired
     MockMvc mockMvc;
@@ -140,19 +148,29 @@ public class LivroControllerTest {
 
     @Test
     @WithMockUser("user@user.com")
-    public void testarExibirLivros() throws Exception {
-        Mockito.when(livroService.buscarLivros()).thenReturn(Arrays.asList(livro));
+    public void testarPaginacaoLivros() throws Exception {
 
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/livros")
+                        .param("page", "2")
+                        .param("size", "5")
+                        .param("genero", "AVENTURA")
+                        .param("tags", "SPRING")
+                        .param("nome", "aaa")
+                        .param("autor", "bbb")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+                .andExpect(MockMvcResultMatchers.status().is(200));
 
-        String jsonDeResposta = resultado.andReturn().getResponse().getContentAsString();
-        List<LivroDTO> livros = objectMapper.readValue(jsonDeResposta, new TypeReference<List<LivroDTO>>() {
-        });
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+        Mockito.verify(livroService).exibirTodosOsLivros(Mockito.any(Genero.class), Mockito.any(Tags.class),
+                Mockito.anyString(), Mockito.anyString(), pageableCaptor.capture());
+        PageRequest pageable = (PageRequest) pageableCaptor.getValue();
+
+        Assertions.assertNotNull(pageable);
+        Assertions.assertEquals(pageable.getPageSize(), 5);
+        Assertions.assertEquals(pageable.getPageNumber(), 2);
 
     }
+
 
     @Test
     @WithMockUser("user@user.com")

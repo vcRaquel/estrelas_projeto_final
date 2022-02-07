@@ -18,6 +18,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,9 +40,11 @@ public class LivroServiceTest {
     @Autowired
     LivroService livroService;
 
+    private Pageable pageable;
     private Livro livro;
     private Livro livro2;
-    private List <Livro> livros;
+    private List<Livro> livros;
+    private Page<Livro> pageLivros;
     private Usuario usuario;
     private Usuario usuario2;
     private Comentario comentario;
@@ -50,6 +56,53 @@ public class LivroServiceTest {
 
     @BeforeEach
     public void setup() {
+        pageable = new Pageable() {
+            @Override
+            public int getPageNumber() {
+                return 0;
+            }
+
+            @Override
+            public int getPageSize() {
+                return 0;
+            }
+
+            @Override
+            public long getOffset() {
+                return 0;
+            }
+
+            @Override
+            public Sort getSort() {
+                return null;
+            }
+
+            @Override
+            public Pageable next() {
+                return null;
+            }
+
+            @Override
+            public Pageable previousOrFirst() {
+                return null;
+            }
+
+            @Override
+            public Pageable first() {
+                return null;
+            }
+
+            @Override
+            public Pageable withPage(int pageNumber) {
+                return null;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+        };
+
         review = new Review();
         review.setId(1);
         review.setTexto("Este é um exemplo de review");
@@ -97,6 +150,8 @@ public class LivroServiceTest {
         livros.add(livro);
         livros.add(livro2);
 
+        pageLivros = new PageImpl<>(livros, pageable, livros.size());
+
         usuario = new Usuario();
         usuario.setId("1");
         usuario.setSenha("aviao11");
@@ -109,7 +164,6 @@ public class LivroServiceTest {
         usuario2.setSenha("aviao12");
         usuario2.setEmail("usuario2@@@@");
         usuario2.setNome("usuario2");
-
 
 
     }
@@ -152,8 +206,8 @@ public class LivroServiceTest {
         Mockito.when(livroRepository.buscarLivroPorNomeTratadoEAutorTratado(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Optional.of(livro));
 
-        LivroJaCadastradoException exception = Assertions.assertThrows(LivroJaCadastradoException.class, ()->
-                livroService.salvarLivro(livro,"1"));
+        LivroJaCadastradoException exception = Assertions.assertThrows(LivroJaCadastradoException.class, () ->
+                livroService.salvarLivro(livro, "1"));
 
         Assertions.assertEquals("Livro já cadastrado", exception.getMessage());
 
@@ -182,10 +236,10 @@ public class LivroServiceTest {
     }
 
     @Test
-    public void testarBuscarLivroNaoEncontrado(){
+    public void testarBuscarLivroNaoEncontrado() {
         Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
-        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () ->{
+        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () -> {
             livroService.buscarLivro(0);
         });
 
@@ -194,7 +248,7 @@ public class LivroServiceTest {
     }
 
     @Test
-    public void testarAtualizarComentariosDoLivro(){
+    public void testarAtualizarComentariosDoLivro() {
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
         Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
 
@@ -205,11 +259,11 @@ public class LivroServiceTest {
     }
 
     @Test
-    public void testarAtualizarComentariosDoLivroNaoEncontrado(){
+    public void testarAtualizarComentariosDoLivroNaoEncontrado() {
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
         Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
 
-        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () ->{
+        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () -> {
             livroService.atualizarComentariosDoLivro(Mockito.anyInt(), comentario);
         });
 
@@ -230,29 +284,30 @@ public class LivroServiceTest {
     }
 
     @Test
-    public void testarAtualizarLivroNaoEncontrado(){
+    public void testarAtualizarLivroNaoEncontrado() {
         Mockito.when(livroRepository.save(Mockito.any())).thenReturn(livro);
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class,
-                () -> livroService.atualizarLivro(0,livro));
+                () -> livroService.atualizarLivro(0, livro));
 
         Assertions.assertEquals("Livro não cadastrado.", exception.getMessage());
 
     }
+
     @Test
-    public void testarAtualizarLivroDeOutroUsuario(){
+    public void testarAtualizarLivroDeOutroUsuario() {
         Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario2);
         Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario2.getId());
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
-        Assertions.assertThrows(AtualizacaoInvalidaException.class, () ->{
+        Assertions.assertThrows(AtualizacaoInvalidaException.class, () -> {
             livroService.atualizarLivro(livro.getId(), livro);
         });
 
     }
 
     @Test
-    public void testarDeletarLivro(){
+    public void testarDeletarLivro() {
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
         Mockito.doNothing().when(livroRepository).deleteById(Mockito.anyInt());
 
@@ -263,21 +318,21 @@ public class LivroServiceTest {
     }
 
     @Test
-    public void testarDeletarLivroNaoEncontrado(){
+    public void testarDeletarLivroNaoEncontrado() {
         Mockito.doNothing().when(livroRepository).deleteById(Mockito.anyInt());
 
-        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () ->{
+        LivroNaoEncontradoException exception = Assertions.assertThrows(LivroNaoEncontradoException.class, () -> {
             livroService.deletarLivro(0);
         });
 
     }
 
     @Test
-    public void testarDeletarLivroDeOutroUsuario(){
+    public void testarDeletarLivroDeOutroUsuario() {
         Mockito.when(usuarioService.buscarUsuario(Mockito.anyString())).thenReturn(usuario2);
         Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario2.getId());
         Mockito.when(livroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(livro));
-        Assertions.assertThrows(DelecaoInvalidaException.class, () ->{
+        Assertions.assertThrows(DelecaoInvalidaException.class, () -> {
             livroService.deletarLivro(livro.getId());
         });
 
@@ -285,117 +340,130 @@ public class LivroServiceTest {
     }
 
     @Test
-    public void testarOrdenarLista(){
-        List<Livro> livrosOrdenados = livroService.ordenarLista(livros);
-        Assertions.assertEquals(livrosOrdenados.get(0), livro2);
+    public void testarOrdenarLista() {
+        Page<Livro> livrosOrdenados = livroService.ordenarLista(livros, pageable);
+        Optional<Livro> primeiroLivro = livrosOrdenados.stream().findFirst();
+        Assertions.assertEquals(primeiroLivro.get(), livro2);
     }
 
+
     @Test
-    public void testarAplicarFiltrosFindAll(){
+    public void testarAplicarFiltrosFindAll() {
         livro.setGenero(null);
         livro.setAutor("");
         livro.setTags(null);
         livro.setNome("");
 
-        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+        Mockito.when(livroRepository.findAll(pageable)).thenReturn(pageLivros);
 
-        Mockito.verify(livroRepository, Mockito.times(1)).findAll();
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor(), pageable);
+
+        Mockito.verify(livroRepository, Mockito.times(1)).findAll(pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroGenero(
-                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroTags(
-                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroNomeEAutor(
-                livro.getNome(), livro.getAutor());
+                livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(
-                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(),
+                pageable);
 
     }
 
     @Test
-    public void testarAplicarFiltrosNomeEAutor(){
+    public void testarAplicarFiltrosNomeEAutor() {
         livro.setGenero(null);
         livro.setTags(null);
 
-        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+        Mockito.when(livroRepository.aplicarFiltroNomeEAutor(livro.getNome(), livro.getAutor(), pageable))
+                .thenReturn(pageLivros);
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor(), pageable);
 
         Mockito.verify(livroRepository, Mockito.times(0)).findAll();
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroGenero(
-                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroTags(
-                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(1)).aplicarFiltroNomeEAutor(
-                livro.getNome(), livro.getAutor());
-        Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(
-                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                livro.getNome(), livro.getAutor(), pageable);
+        Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(String
+                .valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(), pageable);
 
     }
 
     @Test
-    public void testarAplicarFiltroGenero(){
+    public void testarAplicarFiltroGenero() {
         livro.setAutor("");
         livro.setTags(null);
         livro.setNome("");
 
-        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+        Mockito.when(livroRepository.aplicarFiltroGenero(String.valueOf(Genero.AVENTURA), livro.getNome(),
+                livro.getAutor(), pageable)).thenReturn(pageLivros);
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor(), pageable);
 
         Mockito.verify(livroRepository, Mockito.times(0)).findAll();
         Mockito.verify(livroRepository, Mockito.times(1)).aplicarFiltroGenero(
-                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroTags(
-                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroNomeEAutor(
-                livro.getNome(), livro.getAutor());
+                livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(
-                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(),
+                pageable);
 
     }
 
     @Test
-    public void testarAplicarFiltrosTags(){
+    public void testarAplicarFiltrosTags() {
         livro.setGenero(null);
         livro.setAutor("");
         livro.setNome("");
 
-        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+        Mockito.when(livroRepository.aplicarFiltroTags(
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(), pageable)).thenReturn(pageLivros);
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor(), pageable);
 
         Mockito.verify(livroRepository, Mockito.times(0)).findAll();
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroGenero(
-                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(1)).aplicarFiltroTags(
-                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroNomeEAutor(
-                livro.getNome(), livro.getAutor());
+                livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarTodosFiltros(
-                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(),
+                pageable);
 
     }
 
     @Test
-    public void testarAplicarTodosOsFiltros(){
+    public void testarAplicarTodosOsFiltros() {
         livro.setAutor("");
         livro.setNome("");
 
-        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor());
+        Mockito.when(livroRepository.aplicarTodosFiltros(String.valueOf(Genero.AVENTURA),
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(), pageable)).thenReturn(pageLivros);
+
+        livroService.aplicarFiltros(livro.getGenero(), livro.getTags(), livro.getNome(), livro.getAutor(), pageable);
 
         Mockito.verify(livroRepository, Mockito.times(0)).findAll();
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroGenero(
-                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroTags(
-                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(0)).aplicarFiltroNomeEAutor(
-                livro.getNome(), livro.getAutor());
+                livro.getNome(), livro.getAutor(), pageable);
         Mockito.verify(livroRepository, Mockito.times(1)).aplicarTodosFiltros(
-                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor());
+                String.valueOf(Genero.AVENTURA), String.valueOf(Tags.LEITURA_LEVE), livro.getNome(), livro.getAutor(),
+                pageable);
 
     }
 
-    @Test
-    public void testarExibirTodosOsLivros(){
-        livro.setNome("");
-        livro.setAutor("");
-        livroService.exibirTodosOsLivros(Genero.TECNICO, Tags.LEITURA_LEVE, livro.getNome(), livro.getAutor());
-        Assertions.assertNotNull(livro.getNome(), livro.getAutor());
 
-    }
 
 }

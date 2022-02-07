@@ -1,10 +1,14 @@
 package br.com.zup.projeto_final.Livro;
 
+import br.com.zup.projeto_final.Components.ConversorDeLivroComPaginacao;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +26,8 @@ public class LivroController {
     UsuarioLogadoService usuarioLogado;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    ConversorDeLivroComPaginacao conversorDeLivroComPaginacao;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,10 +40,11 @@ public class LivroController {
     }
 
     @GetMapping
-    public List<LivroDTO> exibirTodosOsLivros(@RequestParam(required = false) Genero genero,
+    public Page<LivroDTO> exibirTodosOsLivros(@RequestParam(required = false) Genero genero,
                                               @RequestParam(required = false) Tags tags,
                                               @RequestParam(required = false) String nome,
-                                              @RequestParam(required = false) String autor) {
+                                              @RequestParam(required = false) String autor,
+                                              Pageable pageable) {
 
         if (nome == null){
             nome = "";
@@ -46,13 +53,10 @@ public class LivroController {
             autor = "";
         }
 
-        List<LivroDTO> livrosDTO = new ArrayList<>();
-        for (Livro livro : livroService.exibirTodosOsLivros(genero, tags, nome, autor)) {
-            LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
-            livrosDTO.add(livroDTO);
-        }
+        var tarefas = livroService.exibirTodosOsLivros(genero, tags, nome, autor, pageable);
+        List<LivroDTO> livrosDTO = conversorDeLivroComPaginacao.converterPaginaEmLista(tarefas);
 
-        return livrosDTO;
+        return new PageImpl<>(livrosDTO, pageable, livrosDTO.size());
     }
 
     //buscar livro
