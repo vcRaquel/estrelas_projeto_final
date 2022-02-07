@@ -21,5 +21,6 @@ public class Usuario {
     private String senha;
     @OneToMany
     private List<Livro> livrosCadastrados;
+    private int pontuacao;
 
 }
