@@ -1,4 +1,5 @@
 package br.com.zup.projeto_final.Usuario;
+import br.com.zup.projeto_final.Usuario.dto.AtualizarInteressesDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.UsuarioLogado;
@@ -68,11 +69,19 @@ public class UsuarioController {
 
     }
 
+    @PatchMapping
+    public void atualizarListaDeInteresses(@RequestBody AtualizarInteressesDTO atualizarInteressesDTO){
+
+        usuarioService.atualizarListaDeInteresses(atualizarInteressesDTO.getId_livro(),
+                atualizarInteressesDTO.getOperacao());
+    }
+
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarUsuario() {
         usuarioService.deletarusuario(usuarioLogadoService.pegarId());
     }
+
 
 
 }

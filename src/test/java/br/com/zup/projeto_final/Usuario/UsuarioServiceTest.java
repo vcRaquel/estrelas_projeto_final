@@ -2,10 +2,14 @@ package br.com.zup.projeto_final.Usuario;
 
 
 import br.com.zup.projeto_final.Enun.Genero;
+import br.com.zup.projeto_final.Enun.Operacao;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.Livro.Livro;
+import br.com.zup.projeto_final.Livro.LivroService;
+import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,12 +28,17 @@ import java.util.Optional;
 public class UsuarioServiceTest {
     @MockBean
     UsuarioRepository usuarioRepository;
+    @MockBean
+    LivroService livroService;
+    @MockBean
+    UsuarioLogadoService usuarioLogadoService;
     @Autowired
     UsuarioService usuarioService;
 
     private Usuario usuario;
     private Usuario usuarioDeletado;
     private List<Livro> livrosSemDono;
+    private List<Livro> listaDeInteresses;
     private Livro livro;
 
     @BeforeEach
@@ -46,6 +55,8 @@ public class UsuarioServiceTest {
         livrosSemDono = new ArrayList<>();
         livrosSemDono.add(livro);
 
+        listaDeInteresses = new ArrayList<>();
+
         usuario = new Usuario();
         usuario.setId("1");
         usuario.setEmail("zupper@zup.com");
@@ -53,6 +64,7 @@ public class UsuarioServiceTest {
         usuario.setSenha("aviao11");
         usuario.setLivrosCadastrados(new ArrayList<>());
         usuario.getLivrosCadastrados().add(livro);
+        usuario.setListaDeInteresses(listaDeInteresses);
 
 
         usuarioDeletado = new Usuario();
@@ -214,6 +226,35 @@ public class UsuarioServiceTest {
 
         Assertions.assertEquals("Usuário não encontrado", exception.getMessage());
     }
+
+    @Test
+    public void testarAtualizarListaDeInteressesInserir(){
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario.getId());
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        usuarioService.atualizarListaDeInteresses(livro.getId(), Operacao.INSERIR);
+    }
+
+    @Test
+    public void testarAtualizarListaDeInteressesRemoverComSucesso(){
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario.getId());
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        usuario.getListaDeInteresses().add(livro);
+        usuarioService.atualizarListaDeInteresses(livro.getId(), Operacao.REMOVER);
+
+    }
+
+    @Test
+    public void testarAtualizarListaDeInteressesRemoverSemSucesso(){
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario.getId());
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        Assertions.assertThrows(LivroNaoEncontradoException.class, () -> {
+            usuarioService.atualizarListaDeInteresses(livro.getId(), Operacao.REMOVER);
+        });
+    }
+
 
 }
 
