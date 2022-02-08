@@ -2,6 +2,8 @@ package br.com.zup.projeto_final.Usuario;
 
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
 
+import br.com.zup.projeto_final.Enun.Operacao;
+import br.com.zup.projeto_final.Usuario.dto.AtualizarInteressesDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
@@ -46,6 +48,7 @@ public class UsuarioControllerTest {
     private Usuario usuario;
     private UsuarioDTO usuarioDTO;
     private UsuarioSaidaDTO usuarioSaidaDTO;
+    private AtualizarInteressesDTO atualizarInteressesDTO;
 
     @BeforeEach
     public void setup() {
@@ -63,6 +66,10 @@ public class UsuarioControllerTest {
         usuarioSaidaDTO = new UsuarioSaidaDTO();
         usuarioSaidaDTO.setNome("Zupper");
         usuarioSaidaDTO.setEmail("usuario@email.com");
+
+        atualizarInteressesDTO = new AtualizarInteressesDTO();
+        atualizarInteressesDTO.setId_livro(1);
+        atualizarInteressesDTO.setOperacao(Operacao.INSERIR);
 
         objectMapper = new ObjectMapper();
 
@@ -282,6 +289,22 @@ public class UsuarioControllerTest {
         ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/" + usuario.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().is(405));
+
+    }
+
+    @Test //TDD
+    @WithMockUser("user@user.com")
+    public void testarAtualizarListaDeInteresses() throws Exception {
+
+        Mockito.doNothing().when(usuarioService).atualizarListaDeInteresses(Mockito.anyInt()
+                , Mockito.any(Operacao.class));
+
+        String json = objectMapper.writeValueAsString(atualizarInteressesDTO);
+
+        ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+                        .patch("/usuarios").content(json)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(200));
 
     }
 
