@@ -1,10 +1,14 @@
 
 package br.com.zup.projeto_final.Usuario;
 
+import br.com.zup.projeto_final.Enun.Operacao;
 import br.com.zup.projeto_final.Livro.Livro;
 
+import br.com.zup.projeto_final.Livro.LivroService;
+import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
 import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
+import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,10 @@ import java.util.Optional;
 public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private LivroService livroService;
+    @Autowired
+    private UsuarioLogadoService usuarioLogadoService;
     @Autowired
     private BCryptPasswordEncoder encoder;
 
@@ -35,20 +43,16 @@ public class UsuarioService {
     }
 
 
-
     public List<Usuario> buscarUsuarios(String nomeUsuario, boolean orderByPontuacao) {
         List<Usuario> usuarios = new ArrayList<>();
 
-        if (nomeUsuario == null & !orderByPontuacao){
+        if (nomeUsuario == null & !orderByPontuacao) {
             usuarios = (List<Usuario>) usuarioRepository.findAll();
-        }
-        else if (nomeUsuario == null){
+        } else if (nomeUsuario == null) {
             usuarios = usuarioRepository.findAllByOrderByPontuacaoDesc();
-        }
-        else if (!orderByPontuacao){
+        } else if (!orderByPontuacao) {
             usuarios = usuarioRepository.aplicarFiltroNome(nomeUsuario);
-        }
-        else{
+        } else {
             usuarios = usuarioRepository.aplicarFiltroNomeByOrderByPontuacaoDesc(nomeUsuario);
         }
         return usuarios;
@@ -85,9 +89,9 @@ public class UsuarioService {
 
     }
 
-    public void atualizarLivrosDoUsuario(String id, Livro livro){
+    public void atualizarLivrosDoUsuario(String id, Livro livro) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
-        if (usuarioOptional.isEmpty()){
+        if (usuarioOptional.isEmpty()) {
             throw new UsuarioNaoEncontradoException("Usuario não encontrado");
         }
         usuarioOptional.get().getLivrosCadastrados().add(livro);
@@ -95,22 +99,38 @@ public class UsuarioService {
         usuarioRepository.save(usuarioOptional.get());
     }
 
+    public void atualizarListaDeInteresses(int id_livro, Operacao operacao) {
+        Livro livroAdicionado = livroService.buscarLivro(id_livro);
+        Usuario usuarioLogado = buscarUsuario(usuarioLogadoService.pegarId());
+        if (operacao == Operacao.INSERIR) {
+            usuarioLogado.getListaDeInteresses().add(livroAdicionado);
 
-    public void deletarusuario(String id){
+        } else if (operacao == Operacao.REMOVER) {
+            usuarioLogado.getListaDeInteresses().stream().filter(livro -> livro == livroAdicionado).findFirst()
+                    .orElseThrow(() -> new LivroNaoEncontradoException("Livro não consta na lista de interesses"));
+            usuarioLogado.getListaDeInteresses().remove(livroAdicionado);
+        }
+
+        usuarioRepository.save(usuarioLogado);
+
+    }
+
+
+    public void deletarusuario(String id) {
         Usuario usuarioQueEstaSendoDeletado = buscarUsuario(id);
         substituirUsuarioParaUsuarioDeletado(usuarioQueEstaSendoDeletado);
         usuarioRepository.deleteById(id);
     }
 
-    public void substituirUsuarioParaUsuarioDeletado(Usuario usuario){
-        List <Livro> livrosSemDono = usuario.getLivrosCadastrados();
-        Optional <Usuario> usuarioDeletadoOptional = usuarioRepository.findByEmail("usuario_deletado@zupreaders.com");
+    public void substituirUsuarioParaUsuarioDeletado(Usuario usuario) {
+        List<Livro> livrosSemDono = usuario.getLivrosCadastrados();
+        Optional<Usuario> usuarioDeletadoOptional = usuarioRepository.findByEmail("usuario_deletado@zupreaders.com");
         Usuario usuarioDeletado = usuarioDeletadoOptional.get();
-        if (usuarioDeletado.getLivrosCadastrados() == null){
+        if (usuarioDeletado.getLivrosCadastrados() == null) {
             usuarioDeletado.setLivrosCadastrados(new ArrayList<>());
         }
 
-        for (Livro referencia : livrosSemDono){
+        for (Livro referencia : livrosSemDono) {
             usuarioDeletado.getLivrosCadastrados().add(referencia);
         }
     }
