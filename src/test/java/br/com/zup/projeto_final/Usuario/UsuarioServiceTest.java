@@ -245,6 +245,16 @@ public class UsuarioServiceTest {
 
     }
 
+    @Test
+    public void testarAtualizarListaDeInteressesRemoverSemSucesso(){
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario.getId());
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        Assertions.assertThrows(LivroNaoEncontradoException.class, () -> {
+            usuarioService.atualizarListaDeInteresses(livro.getId(), Operacao.REMOVER);
+        });
+    }
+
 
 }
 
