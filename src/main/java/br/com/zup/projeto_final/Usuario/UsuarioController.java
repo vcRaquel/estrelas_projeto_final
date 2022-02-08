@@ -1,4 +1,5 @@
 package br.com.zup.projeto_final.Usuario;
+import br.com.zup.projeto_final.Usuario.dto.AtualizarInteressesDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioDTO;
 import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.seguranca.UsuarioLogado;
@@ -66,6 +67,13 @@ public class UsuarioController {
 
         return modelMapper.map(usuario, UsuarioSaidaDTO.class);
 
+    }
+
+    @PatchMapping
+    public void atualizarListaDeInteresses(@RequestBody AtualizarInteressesDTO atualizarInteressesDTO){
+
+        usuarioService.atualizarListaDeInteresses(atualizarInteressesDTO.getId_livro(),
+                atualizarInteressesDTO.getOperacao());
     }
 
     @DeleteMapping
