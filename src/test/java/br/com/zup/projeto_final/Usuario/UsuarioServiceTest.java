@@ -235,6 +235,15 @@ public class UsuarioServiceTest {
         usuarioService.atualizarListaDeInteresses(livro.getId(), Operacao.INSERIR);
     }
 
+    @Test
+    public void testarAtualizarListaDeInteressesRemoverComSucesso(){
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
+        Mockito.when(usuarioLogadoService.pegarId()).thenReturn(usuario.getId());
+        Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        usuario.getListaDeInteresses().add(livro);
+        usuarioService.atualizarListaDeInteresses(livro.getId(), Operacao.REMOVER);
+
+    }
 
 
 }
