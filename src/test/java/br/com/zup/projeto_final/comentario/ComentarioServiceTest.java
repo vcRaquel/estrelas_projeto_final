@@ -89,6 +89,7 @@ public class ComentarioServiceTest {
     @Test
     public void testarSalvarComentario(){
         Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+        Mockito.when(livroService.buscarLivro(Mockito.anyInt())).thenReturn(livro);
         Mockito.doNothing().when(livroService).atualizarComentariosDoLivro(Mockito.anyInt(), Mockito.any(Comentario.class));
         Mockito.when(comentarioRepository.save(comentario)).thenReturn(comentario);
 
