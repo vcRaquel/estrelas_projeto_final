@@ -5,6 +5,8 @@ import br.com.zup.projeto_final.Livro.Livro;
 import br.com.zup.projeto_final.Livro.LivroDTO;
 import br.com.zup.projeto_final.Textos.comentario.dtos.ComentarioDTO;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/comentarios")
+@Api(value = "Clube de leitura")
+@CrossOrigin(origins = "*")
 public class ComentariosController {
 
     @Autowired
@@ -26,6 +30,7 @@ public class ComentariosController {
     UsuarioLogadoService usuarioLogadoService;
 
     @PostMapping
+    @ApiOperation(value = "Cadastrar Comentário")
     @ResponseStatus(HttpStatus.CREATED)
     public void cadastrarComentario(@RequestBody @Valid ComentarioDTO comentarioDTO) {
         Comentario comentario = modelMapper.map(comentarioDTO, Comentario.class);
@@ -34,6 +39,7 @@ public class ComentariosController {
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "Exibir Comentário")
     @ResponseStatus(HttpStatus.OK)
     public ComentarioDTO exibirUsuario(@PathVariable int id) {
         Comentario comentario  = comentariosService.buscarComentario(id);
@@ -41,6 +47,7 @@ public class ComentariosController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Exibir Comentários")
     @ResponseStatus(HttpStatus.OK)
     public List<ComentarioDTO> exibirUsuarios() {
 
@@ -54,6 +61,7 @@ public class ComentariosController {
     }
 
     @PutMapping(path = {"/{id}"})
+    @ApiOperation(value = "Atualizar Comentário")
     @ResponseStatus(HttpStatus.OK)
     public ComentarioDTO atualizarComentario(@PathVariable int id, @Valid @RequestBody ComentarioDTO comentarioDTO) {
         Comentario comentario = comentariosService.atualizarComentario(id, modelMapper.map(comentarioDTO, Comentario.class));
@@ -61,6 +69,7 @@ public class ComentariosController {
     }
 
     @DeleteMapping(path = {"/{id}"})
+    @ApiOperation(value = "Deletar Comentário")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarComentario(@PathVariable int id) {
         comentariosService.deletarComentario(id);

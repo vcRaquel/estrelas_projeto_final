@@ -4,6 +4,8 @@ import br.com.zup.projeto_final.Components.ConversorDeLivroComPaginacao;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
 import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/livros")
+@Api(value = "Clube de leitura")
+@CrossOrigin(origins = "*")
 public class LivroController {
 
     @Autowired
@@ -29,6 +33,7 @@ public class LivroController {
     ConversorDeLivroComPaginacao conversorDeLivroComPaginacao;
 
     @PostMapping
+    @ApiOperation(value = "Cadastrar Livro")
     @ResponseStatus(HttpStatus.CREATED)
 
     public LivroDTO cadastrarLivro(@Valid @RequestBody LivroDTO livroDTO) {
@@ -39,6 +44,7 @@ public class LivroController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Exibir Livros")
     public Page<LivroDTO> exibirTodosOsLivros(@RequestParam(required = false) Genero genero,
                                               @RequestParam(required = false) Tags tags,
                                               @RequestParam(required = false) String nome,
@@ -58,8 +64,8 @@ public class LivroController {
         return new PageImpl<>(livrosDTO, pageable, livrosDTO.size());
     }
 
-    //buscar livro
     @GetMapping("/{id}")
+    @ApiOperation(value = "Exibir Livro")
     @ResponseStatus(HttpStatus.OK)
     public LivroDTO exibirLivro(@PathVariable int id) {
         Livro livro  = livroService.buscarLivro(id);
@@ -68,6 +74,7 @@ public class LivroController {
     }
 
     @PutMapping(path = {"/{id}"})
+    @ApiOperation(value = "Atualizar Livro")
     @ResponseStatus(HttpStatus.OK)
     public LivroDTO atualizarLivro(@PathVariable int id, @RequestBody LivroDTO livroDTO) {
         Livro livro = livroService.atualizarLivro(id, modelMapper.map(livroDTO, Livro.class));
@@ -75,6 +82,7 @@ public class LivroController {
     }
 
     @DeleteMapping(path = {"/{id}"})
+    @ApiOperation(value = "Deletar Livro")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarLivro(@PathVariable int id) {
         livroService.deletarLivro(id);
