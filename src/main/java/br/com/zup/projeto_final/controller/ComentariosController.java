@@ -40,7 +40,7 @@ public class ComentariosController {
     @GetMapping("/{id}")
     @ApiOperation(value = "Exibir Comentário")
     @ResponseStatus(HttpStatus.OK)
-    public ComentarioDTO exibirUsuario(@PathVariable int id) {
+    public ComentarioDTO exibirComentario(@PathVariable int id) {
         Comentario comentario  = comentariosService.buscarComentario(id);
         return modelMapper.map(comentario, ComentarioDTO.class);
     }
@@ -48,7 +48,7 @@ public class ComentariosController {
     @GetMapping
     @ApiOperation(value = "Exibir Comentários")
     @ResponseStatus(HttpStatus.OK)
-    public List<ComentarioDTO> exibirUsuarios() {
+    public List<ComentarioDTO> exibirComentarios() {
 
         List<ComentarioDTO> comentarios = new ArrayList<>();
         for (Comentario comentario : comentariosService.buscarComentarios()) {
