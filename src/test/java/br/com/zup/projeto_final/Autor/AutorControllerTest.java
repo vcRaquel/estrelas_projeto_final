@@ -1,10 +1,13 @@
 package br.com.zup.projeto_final.Autor;
 
-import br.com.zup.projeto_final.Autor.dto.AutorDTO;
-import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.dtos.AutorDTO;
+import br.com.zup.projeto_final.components.ConversorModelMapper;
+import br.com.zup.projeto_final.controller.AutorController;
 import br.com.zup.projeto_final.customException.AutorNaoEncontradoException;
-import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
-import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
+import br.com.zup.projeto_final.model.Autor;
+import br.com.zup.projeto_final.security.UsuarioLoginService;
+import br.com.zup.projeto_final.security.jwt.JWTComponent;
+import br.com.zup.projeto_final.service.AutorService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

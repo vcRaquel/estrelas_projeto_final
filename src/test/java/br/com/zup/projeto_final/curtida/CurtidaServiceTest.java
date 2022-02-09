@@ -1,8 +1,10 @@
 package br.com.zup.projeto_final.curtida;
 
-import br.com.zup.projeto_final.Enun.Tipo;
+import br.com.zup.projeto_final.enuns.Tipo;
 import br.com.zup.projeto_final.customException.CurtidaRepetidaException;
-import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
+import br.com.zup.projeto_final.model.Curtida;
+import br.com.zup.projeto_final.repository.CurtidaRepository;
+import br.com.zup.projeto_final.service.CurtidaService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
