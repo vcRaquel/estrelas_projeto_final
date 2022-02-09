@@ -1,13 +1,6 @@
 package br.com.zup.projeto_final.Config;
 
-import br.com.zup.projeto_final.customException.AtualizacaoInvalidaException;
-import br.com.zup.projeto_final.customException.ComentarioNaoEncontradoException;
-import br.com.zup.projeto_final.customException.DelecaoInvalidaException;
-import br.com.zup.projeto_final.customException.CurtidaRepetidaException;
-import br.com.zup.projeto_final.customException.RecursoInexistente;
-import br.com.zup.projeto_final.customException.UsuarioJaCadastradoException;
-import br.com.zup.projeto_final.customException.UsuarioNaoEncontradoException;
-import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;
+import br.com.zup.projeto_final.customException.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -101,6 +94,14 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErroDeValidacao tratarDelecaoInvalidaException(
             DelecaoInvalidaException exception) {
+        return new ErroDeValidacao(exception.getMessage());
+
+    }
+
+    @ExceptionHandler(LivroJaCadastradoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroDeValidacao tratarLivroJaCadastradoException(
+            LivroJaCadastradoException exception) {
         return new ErroDeValidacao(exception.getMessage());
 
     }
