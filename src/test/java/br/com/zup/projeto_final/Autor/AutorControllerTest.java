@@ -1,7 +1,7 @@
 package br.com.zup.projeto_final.Autor;
 
 import br.com.zup.projeto_final.dtos.AutorDTO;
-import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.components.ConversorModelMapper;
 import br.com.zup.projeto_final.controller.AutorController;
 import br.com.zup.projeto_final.customException.AutorNaoEncontradoException;
 import br.com.zup.projeto_final.model.Autor;

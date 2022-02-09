@@ -1,9 +1,9 @@
 package br.com.zup.projeto_final.Livro;
 
-import br.com.zup.projeto_final.Components.ConversorDeLivroComPaginacao;
-import br.com.zup.projeto_final.Components.ConversorModelMapper;
-import br.com.zup.projeto_final.Enun.Genero;
-import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.components.ConversorDeLivroComPaginacao;
+import br.com.zup.projeto_final.components.ConversorModelMapper;
+import br.com.zup.projeto_final.enuns.Genero;
+import br.com.zup.projeto_final.enuns.Tags;
 import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.controller.LivroController;
 import br.com.zup.projeto_final.controller.UsuarioController;

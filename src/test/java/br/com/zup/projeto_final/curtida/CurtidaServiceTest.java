@@ -1,6 +1,6 @@
 package br.com.zup.projeto_final.curtida;
 
-import br.com.zup.projeto_final.Enun.Tipo;
+import br.com.zup.projeto_final.enuns.Tipo;
 import br.com.zup.projeto_final.customException.CurtidaRepetidaException;
 import br.com.zup.projeto_final.model.Curtida;
 import br.com.zup.projeto_final.repository.CurtidaRepository;

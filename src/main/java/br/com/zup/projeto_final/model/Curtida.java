@@ -1,7 +1,7 @@
 package br.com.zup.projeto_final.model;
 
 
-import br.com.zup.projeto_final.Enun.Tipo;
+import br.com.zup.projeto_final.enuns.Tipo;
 import lombok.Data;
 
 import javax.persistence.*;

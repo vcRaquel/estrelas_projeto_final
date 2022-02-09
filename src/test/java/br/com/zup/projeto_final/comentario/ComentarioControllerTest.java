@@ -1,6 +1,6 @@
 package br.com.zup.projeto_final.comentario;
 
-import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.components.ConversorModelMapper;
 import br.com.zup.projeto_final.model.Comentario;
 import br.com.zup.projeto_final.controller.ComentariosController;
 import br.com.zup.projeto_final.service.ComentariosService;

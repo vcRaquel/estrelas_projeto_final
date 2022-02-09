@@ -1,7 +1,7 @@
 
 package br.com.zup.projeto_final.service;
 
-import br.com.zup.projeto_final.Enun.Operacao;
+import br.com.zup.projeto_final.enuns.Operacao;
 import br.com.zup.projeto_final.model.Livro;
 
 import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;

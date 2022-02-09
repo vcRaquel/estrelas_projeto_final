@@ -1,4 +1,4 @@
-package br.com.zup.projeto_final.Config;
+package br.com.zup.projeto_final.config;
 
 import br.com.zup.projeto_final.customException.*;
 

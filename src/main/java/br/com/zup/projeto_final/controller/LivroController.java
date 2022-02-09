@@ -1,10 +1,10 @@
 package br.com.zup.projeto_final.controller;
 
-import br.com.zup.projeto_final.Components.ConversorDeLivroComPaginacao;
-import br.com.zup.projeto_final.Enun.Genero;
-import br.com.zup.projeto_final.Enun.Tags;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import br.com.zup.projeto_final.components.ConversorDeLivroComPaginacao;
+import br.com.zup.projeto_final.enuns.Genero;
+import br.com.zup.projeto_final.enuns.Tags;
 import br.com.zup.projeto_final.dtos.LivroDTO;
 import br.com.zup.projeto_final.service.LivroService;
 import br.com.zup.projeto_final.model.Livro;

@@ -1,4 +1,4 @@
-package br.com.zup.projeto_final.Components;
+package br.com.zup.projeto_final.components;
 
 import br.com.zup.projeto_final.model.Livro;
 import br.com.zup.projeto_final.dtos.LivroDTO;

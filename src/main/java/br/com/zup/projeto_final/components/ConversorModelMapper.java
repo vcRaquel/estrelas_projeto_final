@@ -1,5 +1,5 @@
 
-package br.com.zup.projeto_final.Components;
+package br.com.zup.projeto_final.components;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

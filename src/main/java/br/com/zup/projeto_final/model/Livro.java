@@ -1,10 +1,7 @@
 package br.com.zup.projeto_final.model;
 
-import br.com.zup.projeto_final.Enun.Genero;
-import br.com.zup.projeto_final.Enun.Tags;
-import br.com.zup.projeto_final.model.Comentario;
-import br.com.zup.projeto_final.model.Review;
-import br.com.zup.projeto_final.model.Usuario;
+import br.com.zup.projeto_final.enuns.Genero;
+import br.com.zup.projeto_final.enuns.Tags;
 import lombok.Data;
 
 import javax.persistence.*;

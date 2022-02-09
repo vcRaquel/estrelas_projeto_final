@@ -1,7 +1,7 @@
 package br.com.zup.projeto_final.comentario;
 
-import br.com.zup.projeto_final.Enun.Genero;
-import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.enuns.Genero;
+import br.com.zup.projeto_final.enuns.Tags;
 import br.com.zup.projeto_final.model.Livro;
 import br.com.zup.projeto_final.service.LivroService;
 import br.com.zup.projeto_final.model.Comentario;

@@ -1,6 +1,6 @@
 package br.com.zup.projeto_final.dtos;
 
-import br.com.zup.projeto_final.Enun.Tipo;
+import br.com.zup.projeto_final.enuns.Tipo;
 import lombok.Data;
 
 @Data

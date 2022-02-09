@@ -1,7 +1,7 @@
 package br.com.zup.projeto_final.curtida;
 
-import br.com.zup.projeto_final.Components.ConversorModelMapper;
-import br.com.zup.projeto_final.Enun.Tipo;
+import br.com.zup.projeto_final.components.ConversorModelMapper;
+import br.com.zup.projeto_final.enuns.Tipo;
 import br.com.zup.projeto_final.controller.CurtidaController;
 import br.com.zup.projeto_final.dtos.CurtidaEntradaDTO;
 import br.com.zup.projeto_final.model.Curtida;

@@ -1,7 +1,7 @@
 package br.com.zup.projeto_final.Livro;
 
-import br.com.zup.projeto_final.Enun.Genero;
-import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.enuns.Genero;
+import br.com.zup.projeto_final.enuns.Tags;
 import br.com.zup.projeto_final.customException.LivroJaCadastradoException;
 import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;
 import br.com.zup.projeto_final.model.Livro;

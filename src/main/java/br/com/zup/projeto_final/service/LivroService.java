@@ -1,8 +1,8 @@
 package br.com.zup.projeto_final.service;
 
-import br.com.zup.projeto_final.Components.TratarString;
-import br.com.zup.projeto_final.Enun.Genero;
-import br.com.zup.projeto_final.Enun.Tags;
+import br.com.zup.projeto_final.components.TratarString;
+import br.com.zup.projeto_final.enuns.Genero;
+import br.com.zup.projeto_final.enuns.Tags;
 import br.com.zup.projeto_final.customException.LivroJaCadastradoException;
 import br.com.zup.projeto_final.model.Comentario;
 import br.com.zup.projeto_final.customException.AtualizacaoInvalidaException;

@@ -1,8 +1,8 @@
 package br.com.zup.projeto_final.Usuario;
 
-import br.com.zup.projeto_final.Components.ConversorModelMapper;
+import br.com.zup.projeto_final.components.ConversorModelMapper;
 
-import br.com.zup.projeto_final.Enun.Operacao;
+import br.com.zup.projeto_final.enuns.Operacao;
 import br.com.zup.projeto_final.dtos.AtualizarInteressesDTO;
 import br.com.zup.projeto_final.dtos.UsuarioDTO;
 import br.com.zup.projeto_final.dtos.UsuarioSaidaDTO;
