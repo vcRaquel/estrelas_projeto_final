@@ -1,7 +1,7 @@
 package br.com.zup.projeto_final.Components;
 
-import br.com.zup.projeto_final.Livro.Livro;
-import br.com.zup.projeto_final.Livro.LivroDTO;
+import br.com.zup.projeto_final.model.Livro;
+import br.com.zup.projeto_final.dtos.LivroDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

@@ -2,9 +2,12 @@ package br.com.zup.projeto_final.curtida;
 
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
 import br.com.zup.projeto_final.Enun.Tipo;
-import br.com.zup.projeto_final.curtida.dtos.CurtidaEntradaDTO;
-import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
-import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
+import br.com.zup.projeto_final.controller.CurtidaController;
+import br.com.zup.projeto_final.dtos.CurtidaEntradaDTO;
+import br.com.zup.projeto_final.model.Curtida;
+import br.com.zup.projeto_final.security.UsuarioLoginService;
+import br.com.zup.projeto_final.security.jwt.JWTComponent;
+import br.com.zup.projeto_final.service.CurtidaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

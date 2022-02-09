@@ -4,12 +4,17 @@ import br.com.zup.projeto_final.Components.ConversorDeLivroComPaginacao;
 import br.com.zup.projeto_final.Components.ConversorModelMapper;
 import br.com.zup.projeto_final.Enun.Genero;
 import br.com.zup.projeto_final.Enun.Tags;
-import br.com.zup.projeto_final.Livro.customException.LivroNaoEncontradoException;
-import br.com.zup.projeto_final.Usuario.UsuarioController;
-import br.com.zup.projeto_final.Usuario.dto.UsuarioSaidaDTO;
-import br.com.zup.projeto_final.seguranca.UsuarioLoginService;
-import br.com.zup.projeto_final.seguranca.jwt.JWTComponent;
-import br.com.zup.projeto_final.usuarioLogado.UsuarioLogadoService;
+import br.com.zup.projeto_final.customException.LivroNaoEncontradoException;
+import br.com.zup.projeto_final.controller.LivroController;
+import br.com.zup.projeto_final.controller.UsuarioController;
+import br.com.zup.projeto_final.dtos.LivroDTO;
+import br.com.zup.projeto_final.dtos.UsuarioSaidaDTO;
+import br.com.zup.projeto_final.model.Livro;
+import br.com.zup.projeto_final.repository.LivroRepository;
+import br.com.zup.projeto_final.security.UsuarioLoginService;
+import br.com.zup.projeto_final.security.jwt.JWTComponent;
+import br.com.zup.projeto_final.service.LivroService;
+import br.com.zup.projeto_final.service.UsuarioLogadoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import static org.hamcrest.CoreMatchers.*;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
@@ -46,7 +51,8 @@ public class LivroControllerTest {
     private UsuarioLogadoService usuarioLogadoService;
     @MockBean
     private ConversorDeLivroComPaginacao conversorDeLivroComPaginacao;
-    @MockBean LivroRepository livroRepository;
+    @MockBean
+    LivroRepository livroRepository;
 
     @Autowired
     MockMvc mockMvc;
