@@ -1,4 +1,4 @@
-package br.com.zup.Guardians_Bank.config;
+package br.com.zup.projeto_final.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,5 +58,6 @@ public class SwaggerConfig {
                 Collections.emptyList());
     }
 
-}
 
+
+}
