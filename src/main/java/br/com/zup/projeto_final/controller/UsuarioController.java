@@ -48,6 +48,7 @@ public class UsuarioController {
         for (Usuario usuario : usuarioService.buscarUsuarios(nomeUsuario, orderByPontuacao)) {
             UsuarioSaidaDTO usuarioSaidaDTO = new UsuarioSaidaDTO(usuario.getId(),usuario.getNome(), usuario.getEmail(),
                     usuario.getPontuacao());
+
             usuarios.add(usuarioSaidaDTO);
         }
 
