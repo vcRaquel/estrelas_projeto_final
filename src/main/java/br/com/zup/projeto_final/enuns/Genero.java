@@ -1,5 +1,32 @@
 package br.com.zup.projeto_final.enuns;
 
 public enum Genero {
-    AVENTURA, TECNICO
+    FANTASIA,
+    FICCAO_CIENTIFICA,
+    FICCAO_POLICIAL,
+    FICCAO_HISTORICA,
+    FICCAO_FEMININA,
+    FICCAO_CONTEPORANEA,
+    DISTOPIA,
+    ACAO,
+    AVENTURA,
+    HORROR,
+    SUSPENSE,
+    ROMANCE,
+    LGBTQ,
+    REALISMO_MAGICO,
+    CONTO,
+    INFANTIL,
+    GASTRONOMIA,
+    ARTE,
+    AUTO_AJUDA,
+    HISTORIA,
+    VIAGEM,
+    HUMOR,
+    POESIA,
+    RELIGIAO,
+    HUMANIDADE,
+    TECNOLOGIA,
+    TECNICO
+
 }
