@@ -31,13 +31,15 @@ Esta aplicação é uma rede social voltada pra interagir sobre livros. Os usuá
 
 #### CURTIDA
 - Não é possível curtir mais de uma vez o mesmo recurso;
-- Caso essa solicitação aconteça, a curtida será removida;
 - Ao curtir, o recurso curtido terá seu atributo curtidas incrementado em 1;
-- Se a curtida for removida, esse mesmo atributo é decrementado em 1.
 
 #### REVIEW
 - É impossível o cadastro de um livro sem uma review;
 - A review persistirá automaticamente no banco de dados no momento que o livro for cadastrado.
+
+###### Spring Validation
+- Validações NotNull, NotBlank, Min, Email e Size aplicadas nos atributos pertinentes.
+
 
 ## Como Rodar a API localmente
 
