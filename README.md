@@ -1,4 +1,4 @@
-Projeto Final Estrelas Fora da Caixa - ZUP READERS
+# Projeto Final Estrelas Fora da Caixa - ZUP READERS
 
 Esta aplicação é uma rede social voltada pra interagir sobre livros. Os usuários além de terem liberdade de criarem reviews para as obras que desejarem, podem também interagir com outros, através de comentários e curtidas.
 
@@ -67,4 +67,4 @@ Url da aplicação: localhost:8080
 
 Mapeamento de rotas disponibilizado via Swagger
 
-- Swagger:  localhost:8080/swagger-ui.html 
+- Swagger:  http://localhost:8080/swagger-ui/index.html#/
