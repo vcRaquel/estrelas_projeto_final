@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UsuarioSaidaDTO {
+    private String id;
     private String nome;
     private String email;
     private int pontuacao;
