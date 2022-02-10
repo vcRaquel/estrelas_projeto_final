@@ -5,6 +5,7 @@ import br.com.zup.projeto_final.enuns.Tags;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,7 @@ public class Livro {
     private Tags tags;
     @ManyToOne
     private Usuario quemCadastrou;
+    @NotNull
     @OneToOne (cascade = CascadeType.PERSIST)
     private Review review;
     @OneToMany
