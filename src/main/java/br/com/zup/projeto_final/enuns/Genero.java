@@ -27,6 +27,7 @@ public enum Genero {
     RELIGIAO,
     HUMANIDADE,
     TECNOLOGIA,
-    TECNICO
+    TECNICO,
+    OUTROS
 
 }
