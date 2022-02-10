@@ -22,6 +22,7 @@ public class LivroDTO {
     private Genero genero;
     private Tags tags;
     private Review review;
+    private boolean lido;
     private String imagem;
 
     public LivroDTO() {

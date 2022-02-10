@@ -29,6 +29,7 @@ public class Livro {
     private Review review;
     @OneToMany
     private List<Comentario> comentarios;
+    private  boolean lido;
     private String imagem;
 
 }
