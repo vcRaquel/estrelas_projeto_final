@@ -126,6 +126,7 @@ public class LivroServiceTest {
         livro.setGenero(Genero.AVENTURA);
         livro.setId(1);
         livro.setLido(true);
+        livro.setImagem("https://www.linkedit.com.br/wp-content/uploads/2018/11/capas-de-livros-viagem-ao-centro-da-terra-julio-verne.jpg");
         livro.setTags(Tags.LEITURA_LEVE);
         livro.setAutor("Autor");
         livro.setReview(review);
@@ -143,7 +144,6 @@ public class LivroServiceTest {
         livro2.setNome("Livro");
         livro2.setGenero(Genero.AVENTURA);
         livro2.setId(1);
-        livro2.setLido(true);
         livro2.setTags(Tags.LEITURA_LEVE);
         livro2.setAutor("Autor");
         livro2.setReview(review);
@@ -169,6 +169,14 @@ public class LivroServiceTest {
         usuario2.setNome("usuario2");
 
 
+    }
+
+    @Test
+    public void testaradicionarURLImagem(){
+        livro.setImagem(null);
+        livroService.adicionarURLImagem(livro);
+        Assertions.assertEquals("https://i.pinimg.com/236x/b4/9e/7a/b49e7a7298b855f8bf2cd3f5923ea7ab.jpg",
+                livro.getImagem());
     }
 
     @Test
@@ -466,7 +474,6 @@ public class LivroServiceTest {
                 pageable);
 
     }
-
 
 
 }

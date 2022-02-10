@@ -23,6 +23,7 @@ public class LivroDTO {
     private Tags tags;
     private Review review;
     private boolean lido;
+    private String imagem;
 
     public LivroDTO() {
     }

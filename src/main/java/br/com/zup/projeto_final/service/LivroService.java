@@ -48,6 +48,11 @@ public class LivroService {
         }
     }
 
+    public void adicionarURLImagem(Livro livro){
+        if (livro.getImagem() == null){
+            livro.setImagem("https://i.pinimg.com/236x/b4/9e/7a/b49e7a7298b855f8bf2cd3f5923ea7ab.jpg");
+        }
+    }
 
 
     public Livro salvarLivro(Livro livro, String idUsuario) {
@@ -58,6 +63,7 @@ public class LivroService {
             throw new LivroJaCadastradoException("Livro já cadastrado");
         }
 
+        adicionarURLImagem(livro);
         livro.setNomeTratado(nomeLivro);
         livro.setAutorTratado(nomeAutor);
         livroRepository.save(livro);
@@ -166,6 +172,7 @@ public class LivroService {
         livroParaAtualizar.setNome(livro.getNome());
         livroParaAtualizar.setGenero(livro.getGenero());
         livroParaAtualizar.setLido(livro.isLido());
+        livroParaAtualizar.setImagem(livro.getImagem());
         livroParaAtualizar.setTags(livro.getTags());
 
         livroRepository.save(livroParaAtualizar);
