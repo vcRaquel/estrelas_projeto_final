@@ -12,7 +12,7 @@ public class UsuarioSaidaDTO {
     private String nome;
     private String email;
     private int pontuacao;
-    private List<Livro> interesse;
+    private List<LivroDTO> interesse;
 
     public UsuarioSaidaDTO() {
     }

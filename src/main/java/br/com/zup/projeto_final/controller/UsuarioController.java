@@ -1,5 +1,7 @@
 
 package br.com.zup.projeto_final.controller;
+import br.com.zup.projeto_final.dtos.LivroDTO;
+import br.com.zup.projeto_final.model.Livro;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import br.com.zup.projeto_final.service.UsuarioService;
@@ -44,16 +46,17 @@ public class UsuarioController {
                                                 @RequestParam(required = false) boolean orderByPontuacao) {
         System.out.println(nomeUsuario);
         List<UsuarioSaidaDTO> usuarios = new ArrayList<>();
+        List<LivroDTO> listaDeInteressesDTO = new ArrayList<>();
 
         for (Usuario usuario : usuarioService.buscarUsuarios(nomeUsuario, orderByPontuacao)) {
-
-
-            UsuarioSaidaDTO usuarioSaidaDTO = new UsuarioSaidaDTO(usuario.getNome(), usuario.getEmail(), usuario.getPontuacao(), usuario.getListaDeInteresses());
-
+            for (Livro livro : usuario.getListaDeInteresses()){
+                LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
+                listaDeInteressesDTO.add(livroDTO);
+            }
+            UsuarioSaidaDTO usuarioSaidaDTO = new UsuarioSaidaDTO(usuario.getNome(), usuario.getEmail(),
+                    usuario.getPontuacao(), listaDeInteressesDTO);
             usuarios.add(usuarioSaidaDTO);
         }
-
-
         return usuarios;
     }
 
@@ -74,9 +77,7 @@ public class UsuarioController {
         Usuario usuario = usuarioService.atualizarUsuario(usuarioLogadoService.pegarId(),
                 modelMapper.map(usuarioDTO, Usuario.class));
 
-
         return modelMapper.map(usuario, UsuarioSaidaDTO.class);
-
     }
 
     @PatchMapping

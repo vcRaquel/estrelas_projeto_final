@@ -1,5 +1,6 @@
 package br.com.zup.projeto_final.model;
 
+import br.com.zup.projeto_final.dtos.LivroDTO;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
