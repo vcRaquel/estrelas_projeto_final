@@ -21,6 +21,7 @@ Esta aplicação é uma rede social voltada pra interagir sobre livros. Os usuá
 - O livro possui uma lista de comentários;
 - O livro possui os atributos nomeTratado e autorTratado, que padroniza os nomes inseridos. Esses atributos são utilizados nas operações de comparação;
 - A exibição dos livros possibilita a filtragem por genero, tags, nome e autor;
+- A exibição de livros é paginada
 - O livro só pode ser removido ou atualizado pelo usuário que o cadastrou.
 
 #### COMENTÁRIO
