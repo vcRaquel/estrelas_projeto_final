@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 @Data
 public class LivroDTO {
 
+    private int id;
     @NotBlank
     @Size(min = 2,message = "O nome do livro não pode ter menos de 2 caracteres")
     private String nome;
