@@ -2,6 +2,7 @@ package br.com.zup.projeto_final.Usuario;
 
 import br.com.zup.projeto_final.components.ConversorModelMapper;
 
+import br.com.zup.projeto_final.dtos.SaidaCadastroDTO;
 import br.com.zup.projeto_final.enuns.Operacao;
 import br.com.zup.projeto_final.dtos.AtualizarInteressesDTO;
 import br.com.zup.projeto_final.dtos.UsuarioDTO;
@@ -91,7 +92,7 @@ public class UsuarioControllerTest {
                 .andExpect((MockMvcResultMatchers.status().is(201)));
 
         String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
-        UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class);
+        SaidaCadastroDTO usuarioResposta = objectMapper.readValue(jsonResposta, SaidaCadastroDTO.class);
 
     }
 

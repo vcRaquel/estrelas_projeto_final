@@ -1,13 +1,10 @@
 
 package br.com.zup.projeto_final.controller;
-import br.com.zup.projeto_final.dtos.LivroDTO;
+import br.com.zup.projeto_final.dtos.*;
 import br.com.zup.projeto_final.model.Livro;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import br.com.zup.projeto_final.service.UsuarioService;
-import br.com.zup.projeto_final.dtos.AtualizarInteressesDTO;
-import br.com.zup.projeto_final.dtos.UsuarioDTO;
-import br.com.zup.projeto_final.dtos.UsuarioSaidaDTO;
 import br.com.zup.projeto_final.model.Usuario;
 import br.com.zup.projeto_final.service.UsuarioLogadoService;
 import org.modelmapper.ModelMapper;
@@ -33,10 +30,10 @@ public class UsuarioController {
     @PostMapping
     @ApiOperation(value = "Cadastrar Usuário")
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioSaidaDTO cadastrarUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) {
+    public SaidaCadastroDTO cadastrarUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) {
         Usuario usuario = modelMapper.map(usuarioDTO, Usuario.class);
         usuarioService.salvarUsuario(usuario);
-        return modelMapper.map(usuario, UsuarioSaidaDTO.class);
+        return modelMapper.map(usuario, SaidaCadastroDTO.class);
     }
 
     @GetMapping
