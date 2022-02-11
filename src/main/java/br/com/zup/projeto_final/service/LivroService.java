@@ -66,6 +66,7 @@ public class LivroService {
         adicionarURLImagem(livro);
         livro.setNomeTratado(nomeLivro);
         livro.setAutorTratado(nomeAutor);
+        livro.setQuemCadastrou(usuarioService.buscarUsuario(usuarioLogadoService.pegarId()));
         livroRepository.save(livro);
         usuarioService.atualizarLivrosDoUsuario(idUsuario, livro);
         return livro;
@@ -168,12 +169,17 @@ public class LivroService {
         }
 
         Livro livroParaAtualizar = livroOptional.get();
-
         livroParaAtualizar.setNome(livro.getNome());
+        livroParaAtualizar.setNomeTratado(tratarString.tratarString(livro.getNome()));
+        livroParaAtualizar.setAutor(livro.getAutor());
+        livroParaAtualizar.setAutorTratado(tratarString.tratarString(livro.getAutor()));
         livroParaAtualizar.setGenero(livro.getGenero());
         livroParaAtualizar.setLido(livro.isLido());
         livroParaAtualizar.setImagem(livro.getImagem());
         livroParaAtualizar.setTags(livro.getTags());
+        livroParaAtualizar.setComentarios(livro.getComentarios());
+        livroParaAtualizar.setReview(livro.getReview());
+        livroParaAtualizar.setQuemCadastrou(livroOptional.get().getQuemCadastrou());
 
         livroRepository.save(livroParaAtualizar);
 

@@ -3,13 +3,19 @@ package br.com.zup.projeto_final.model;
 import br.com.zup.projeto_final.enuns.Genero;
 import br.com.zup.projeto_final.enuns.Tags;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
 @Table(name = "livros")
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class Livro {
 
     @Id
@@ -25,6 +31,7 @@ public class Livro {
     private Tags tags;
     @ManyToOne
     private Usuario quemCadastrou;
+    @NotNull
     @OneToOne (cascade = CascadeType.PERSIST)
     private Review review;
     @OneToMany

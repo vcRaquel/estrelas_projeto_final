@@ -1,6 +1,7 @@
 package br.com.zup.projeto_final.model;
 
-import lombok.Data;
+import br.com.zup.projeto_final.dtos.LivroDTO;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -8,7 +9,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "usuarios")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Usuario {
 
     @Id
