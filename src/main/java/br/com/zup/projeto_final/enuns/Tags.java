@@ -39,6 +39,16 @@ public enum Tags {
     COMUNICACAO_EFETIVA,
     FERRAMENTA_DESENVOLVIMENTO,
     DIDATICA,
-    ORATORIA
+    ORATORIA,
+    JAVA_SCRIPT,
+    JAVA,
+    NODE,
+    MYSQL,
+    FRONT,
+    BACK,
+    ANGULAR,
+    REACT,
+    KOTLIN,
+    ANDROID
 
 }
